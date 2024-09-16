@@ -21,6 +21,8 @@ lfsr lfsr_inst (
 	.o_random_out(random_number)
 );
 
+assign o_random_out = o_random_out_r;
+
 // please check out the working example in lab1 README (or Top_exmaple.sv) first
 always_comb begin
 
