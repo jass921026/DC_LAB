@@ -16,7 +16,7 @@ logic [10:0] waiter_r, waiter_w; //waiter for the random number to be generated
 
 // please check out the working example in lab1 README (or Top_exmaple.sv) first
 always_comb begin
-
+	
 	initial begin
 		timer_w = 20'd0;
 		count_w = 5'd0;
@@ -25,7 +25,7 @@ always_comb begin
 	timer_w = timer_r + 1;
 	// FSM
 	case(state_r)
-	S_IDLE: begin /idle
+	S_IDLE: begin //idle
 		if (i_start) begin
 			state_w = S_PROC;
 			o_random_out_w = 4'd15;
@@ -60,7 +60,7 @@ end
 
 endmodule
 
-module lcg 
+module lfsr
 #(
 	parameter WIDTH = 16,
 )
@@ -69,7 +69,51 @@ module lcg
 	input  i_rst_n,
 	output [WIDTH-1:0] o_random_out
 );
-initial begin
+parameter S_IDLE = 1'b0;
+parameter S_PROC = 1'b1;
+
+logic [15:0]random_w,random_r
+logic state_r,state_w
+
+// ===== Output Assignments =====
+assign o_random_out = random_r;
+
+always_comb begin
+
+	random_w = random_r;
+	state_w  = state_r;
+
+	initial begin
+		random_w=16'h5CA7
+	end
 	
+	case(state_r)
+	S_IDLE: begin //idle
+		if (i_start) begin
+			state_w  = S_PROC;
+			random_w = 16'h5CA7;
+		end
+	end
+
+	default: begin //running
+		if (i_start) begin
+			random_w 	= {random_r[14:0],random_r[3]^random_r[8]^random_r[11]^random_r[15]};
+		end
+	end
+
+	endcase
+
+end
+
+always_ff @(posedge i_clk or negedge i_rst_n) begin
+	// reset
+	if (!i_rst_n) begin
+		random_r 	<= 16'h5CA7;
+		state_r    	<= S_IDLE;
+	end
+	else begin
+		random_r 	<= random_w;
+		state_r     <= state_w;
+	end
 end
 endmodule
