@@ -82,6 +82,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
 		state_r        	<= state_w;
 		timer_r 		<= timer_w;
 		count_r 		<= count_w;
+		waiter_r 		<= waiter_w;
 	end
 end
 
