@@ -9,12 +9,13 @@ parameter S_IDLE = 1'b0;
 parameter S_PROC = 1'b1;
 
 logic [3:0] o_random_out_r, o_random_out_w;
+logic [3:0] last_random_r, last_random_w;
 logic state_r, state_w;
 logic [19:0] timer_r, timer_w; //create a 50hz clock
 logic [4:0]	count_r, count_w; //count how many times the random number is generated
 logic [10:0] waiter_r, waiter_w; //waiter for the random number to be generated
 logic [15:0] random_number; //random number generated
-
+int count_wait[31] = '{15{7},8,9,10,11,12,13,16,19,22,35, default: 50};
 lfsr lfsr_inst (
 	.i_clk(i_clk),
 	.i_rst_n(i_rst_n),
@@ -45,22 +46,28 @@ always_comb begin
 			state_w = S_PROC;
 			count_w = 5'd1;
 			o_random_out_w = random_number[3:0];
+			last_random_w = o_random_out_r;
 		end
 	end
 
 	S_PROC: begin //running
-		if (count_r == 5'd25) begin
+		if (count_r >= 5'd26) begin
 			state_w = S_IDLE;
 		end
 		else begin
-			if (waiter_r >= count_r) begin
+			if (waiter_r >= count_wait[count_r]) begin
 				o_random_out_w = random_number[3:0];
+				last_random_w = o_random_out_r;
 				waiter_w = 11'd0;
 				count_w = count_r + 1;
 			end
 			else begin
 				if (timer_r == 20'd0) begin
 					waiter_w = waiter_r + 1;
+					if (last_random_r == o_random_out_r) begin
+						o_random_out_w = random_number[3:0];
+						last_random_w = o_random_out_r;
+					end
 				end
 			end
 		end
@@ -75,6 +82,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
 	// reset
 	if (!i_rst_n) begin
 		o_random_out_r 	<= 4'd0;
+		last_random_r 	<= 4'd0;
 		state_r        	<= S_IDLE;
 		timer_r 		<= 20'd0;
 		count_r 		<= 5'd0;
@@ -82,6 +90,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
 	end
 	else begin
 		o_random_out_r 	<= o_random_out_w;
+		last_random_r 	<= last_random_w;
 		state_r        	<= state_w;
 		timer_r 		<= timer_w;
 		count_r 		<= count_w;
