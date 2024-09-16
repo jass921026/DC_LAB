@@ -34,14 +34,13 @@ always_comb begin
 	timer_w 		= timer_r + 1;
 
 	// 50hz clock
-	if (timer_r == 20'd0) begin
-		count_w 	= count_r + 1;
-	end
+	// if (timer_r == 20'd0) begin
+	//		count_w 	= count_r + 1;
+	// end
 
 	// FSM
 	case(state_r)
 	S_IDLE: begin //idle
-		o_random_out_w = 4'd00;
 		if (i_start) begin
 			state_w = S_PROC;
 			count_w = 5'd1;
@@ -54,13 +53,15 @@ always_comb begin
 			state_w = S_IDLE;
 		end
 		else begin
-			if (waiter_r >= count_r**2) begin
+			if (waiter_r >= count_r) begin
 				o_random_out_w = random_number[3:0];
 				waiter_w = 11'd0;
 				count_w = count_r + 1;
 			end
 			else begin
-				waiter_w = waiter_r + 1;
+				if (timer_r == 20'd0) begin
+					waiter_w = waiter_r + 1;
+				end
 			end
 		end
 	end
@@ -90,60 +91,33 @@ end
 
 endmodule
 
-module lfsr
+module lfsr 
 #(
-	parameter WIDTH = 16,
+	parameter WIDTH = 16
 )
 (
 	input  i_clk,
 	input  i_rst_n,
 	output [WIDTH-1:0] o_random_out
 );
-parameter S_IDLE = 1'b0;
-parameter S_PROC = 1'b1;
 
-logic [15:0]random_w,random_r
-logic state_r,state_w
+logic [WIDTH-1:0] random_w,random_r;
 
 // ===== Output Assignments =====
 assign o_random_out = random_r;
 
-always_comb begin
-
-	random_w = random_r;
-	state_w  = state_r;
-
-	initial begin
-		random_w=16'h5CA7
-	end
-	
-	case(state_r)
-	S_IDLE: begin //idle
-		if (i_start) begin
-			state_w  = S_PROC;
-			random_w = 16'h5CA7;
-		end
-	end
-
-	default: begin //running
-		if (i_start) begin
-			random_w 	= {random_r[14:0],random_r[3]^random_r[8]^random_r[11]^random_r[15]};
-		end
-	end
-
-	endcase
-
+always_comb begin	
+	random_w = {random_r[14:0],random_r[3]^random_r[8]^random_r[11]^random_r[15]};
 end
 
 always_ff @(posedge i_clk or negedge i_rst_n) begin
 	// reset
 	if (!i_rst_n) begin
 		random_r 	<= 16'h5CA7;
-		state_r    	<= S_IDLE;
 	end
 	else begin
 		random_r 	<= random_w;
-		state_r     <= state_w;
 	end
 end
+
 endmodule
