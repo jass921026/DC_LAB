@@ -15,7 +15,7 @@ logic [19:0] timer_r, timer_w; //create a 50hz clock
 logic [4:0]	count_r, count_w; //count how many times the random number is generated
 logic [10:0] waiter_r, waiter_w; //waiter for the random number to be generated
 logic [15:0] random_number; //random number generated
-int count_wait[31] = '{15{7},8,9,10,11,12,13,16,19,22,35, default: 50};
+int count_wait[35] = '{7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,9,10,11,12,14,16,18,20,23,26,30,35,40,50,50,50,50,50};
 lfsr lfsr_inst (
 	.i_clk(i_clk),
 	.i_rst_n(i_rst_n),
@@ -29,6 +29,7 @@ always_comb begin
 
 	// Default Values
 	o_random_out_w 	= o_random_out_r;
+	last_random_w = last_random_r;
 	state_w        	= state_r;
 	waiter_w 		= waiter_r;
 	count_w 		= count_r;
@@ -44,14 +45,14 @@ always_comb begin
 	S_IDLE: begin //idle
 		if (i_start) begin
 			state_w = S_PROC;
-			count_w = 5'd1;
+			count_w = 5'd0;
 			o_random_out_w = random_number[3:0];
 			last_random_w = o_random_out_r;
 		end
 	end
 
 	S_PROC: begin //running
-		if (count_r >= 5'd26) begin
+		if (count_r >= 5'd25) begin
 			state_w = S_IDLE;
 		end
 		else begin
