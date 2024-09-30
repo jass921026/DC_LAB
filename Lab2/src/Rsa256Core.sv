@@ -15,14 +15,12 @@ module Rsa256Core
 
 // Define States and Parameters
 
-localparam S_IDLE = 2'd0; // Follow the FSM in PPT
-localparam S_PREP = 2'd1;
-localparam S_MONT = 2'd2;
-localparam S_CALC = 2'd3;
+localparam S_IDLE = 2'd0;
+localparam S_CALC = 2'd1;
 
 // Define Variables
 
-logic [2:0] 					state_w, 	state_r;
+logic [1:0] 					state_w, 	state_r;
 logic [$clog2(bitwidth)-1:0] 	iter_w, 	iter_r;
 logic [bitwidth-1:0] 			t_w, 		t_r;
 logic [bitwidth-1:0] 			m_w, 		m_r;
@@ -52,10 +50,6 @@ always_comb begin
 
 	case (state_r)
 		S_IDLE: begin
-		end
-		S_PREP: begin
-		end
-		S_MONT: begin
 		end
 		S_CALC: begin
 		end

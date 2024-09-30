@@ -1,4 +1,8 @@
-module Rsa256Wrapper (
+module Rsa256Wrapper 
+#(
+    parameter bitwidth = 256
+)
+(
     input         avm_rst,
     input         avm_clk,
     output  [4:0] avm_address,
@@ -15,11 +19,13 @@ localparam STATUS_BASE = 2*4;
 localparam TX_OK_BIT   = 6;
 localparam RX_OK_BIT   = 7;
 
-// Feel free to design your own FSM!
+// Define States and Parameters
 localparam S_GET_KEY = 0;
 localparam S_GET_DATA = 1;
-localparam S_WAIT_CALCULATE = 2;
+localparam S_WAIT_CALC = 2;
 localparam S_SEND_DATA = 3;
+
+// Define Variables
 
 logic [255:0] n_r, n_w, d_r, d_w, enc_r, enc_w, dec_r, dec_w;
 logic [1:0] state_r, state_w;
@@ -36,7 +42,7 @@ assign avm_read = avm_read_r;
 assign avm_write = avm_write_r;
 assign avm_writedata = dec_r[247-:8];
 
-Rsa256Core rsa256_core(
+Rsa256Core #(.bitwidth(256)) rsa256_core(
     .i_clk(avm_clk),
     .i_rst(avm_rst),
     .i_start(rsa_start_r),
