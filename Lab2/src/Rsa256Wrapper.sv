@@ -56,6 +56,7 @@ assign avm_write = avm_write_r;
 assign avm_writedata = dec_r[247-:8];
 
 Rsa256Core #(.bitwidth(256)) rsa256_core(
+Rsa256Core #(.bitwidth(256)) rsa256_core(
     .i_clk(avm_clk),
     .i_rst(avm_rst),
     .i_start(rsa_start_r),
