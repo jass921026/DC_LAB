@@ -45,6 +45,7 @@ logic [$clog2(bitwidth)-3:0] bytes_counter_r, bytes_counter_w; // count current 
 logic [$clog2(bitwidth)-4:0] avm_address_r, avm_address_w; // address for AVM
 logic avm_read_r, avm_read_w; // indicate this model is reading
 logic avm_write_r, avm_write_w; // indicate this model is writing
+logic [7:0] write_buffer_r, write_buffer_w; // buffer for writing
 
 logic rsa_start_r, rsa_start_w;
 logic rsa_finished;
@@ -53,7 +54,7 @@ logic [bitwidth-1:0] rsa_dec;
 assign avm_address = avm_address_r;
 assign avm_read = avm_read_r;
 assign avm_write = avm_write_r;
-assign avm_writedata = dec_r[247-:8];
+assign avm_writedata = write_buffer_r;
 
 Rsa256Core #(.bitwidth(256)) rsa256_core(
     .i_clk(avm_clk),
@@ -123,7 +124,7 @@ task WriteData;
         if (!avm_waitrequest) begin
             if (ios_r == IO_WAIT && avm_readdata[TX_OK_BIT]) begin
                 StartWrite();
-                avm_writedata[7:0] = data[bytes_counter_r*8 +: 8];
+                write_buffer_w[7:0] = data[bytes_counter_r*8 +: 8];
             end
             else if (ios_r == IO_WORK) begin
                 FinishRW();
@@ -192,6 +193,7 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         avm_address_r <= STATUS_BASE;
         avm_read_r <= 1;
         avm_write_r <= 0;
+        write_buffer_r <= 0;
         state_r <= S_GET_KEY_N;
         ios_r <= IO_WAIT;
         bytes_counter_r <= 63;
@@ -204,6 +206,7 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         avm_address_r <= avm_address_w;
         avm_read_r <= avm_read_w;
         avm_write_r <= avm_write_w;
+        write_buffer_r <= write_buffer_w;
         state_r <= state_w;
         ios_r <= ios_w;
         bytes_counter_r <= bytes_counter_w;
