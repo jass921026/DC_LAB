@@ -98,14 +98,17 @@ always_comb begin
 			end
 		end
 		S_MONT1: begin
+			montstart	= 0;
 			if(montfin==1) begin
-				m_w		= mont_result;
-				state_w	= S_MONT2;
-				mont_a	= t_r;
-				mont_b	= t_r;
+				m_w			= mont_result;
+				state_w		= S_MONT2;
+				mont_a		= t_r;
+				mont_b		= t_r;
+				montstart	= 1;
 			end
 		end
 		S_MONT2: begin
+			montstart	= 0;
 			if(montfin==1) begin
 				t_w		= mont_result;
 				state_w	= S_CALC;
