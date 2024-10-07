@@ -48,6 +48,8 @@ montgomery #(.bitwidth(bitwidth)) montgomery_inst (
 
 // Combintional Circuits
 
+assign o_a_pow_d = m_r;
+
 always_comb begin
 
 	// Unconditional Assignments
@@ -80,7 +82,6 @@ always_comb begin
 			if (iter_r	== bitwidth) begin
 				state_w		= S_IDLE;
 				finished_w	= 1;
-				o_a_pow_d	= m_r;
 				iter_w		= 0;
 			end
 			else begin
