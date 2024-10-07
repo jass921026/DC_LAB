@@ -92,9 +92,10 @@ always_comb begin
 					montstart	= 1;
 				end
 				else begin
-					state_w	= S_MONT2;
-					mont_a	= t_r;
-					mont_b	= t_r;					
+					state_w		= S_MONT2;
+					mont_a		= t_r;
+					mont_b		= t_r;
+					montstart	= 1;	
 				end
 			end
 		end
@@ -113,6 +114,7 @@ always_comb begin
 			if(montfin==1) begin
 				t_w		= mont_result;
 				state_w	= S_CALC;
+				iter_w	= iter_r+1;
 			end
 		end
 	endcase
