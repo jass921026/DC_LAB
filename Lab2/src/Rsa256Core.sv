@@ -1,10 +1,10 @@
 module Rsa256Core 
 #(
-	parameter bitwidth = 256;
+	parameter bitwidth = 256
 )
 (
 	input          			i_clk,
-	input         			i_rst,
+	input         				i_rst,
 	input          			i_start,
 	input  [bitwidth-1:0] 	i_a, // cipher text y
 	input  [bitwidth-1:0] 	i_d, // private key
@@ -121,9 +121,9 @@ end
 
 // Sequential Circuits
 
-always_ff @(posedge i_clk or negedge i_rst_n) begin
+always_ff @(posedge i_clk or negedge i_rst) begin
 	// reset
-	if (!i_rst_n) begin
+	if (!i_rst) begin
 		state_r 	<= S_IDLE;
 		iter_r 		<= 0;
 		t_r 		<= 0;
@@ -148,16 +148,16 @@ module montgomery
 
 // This module only perform the montgomery once !!!
 #(
-	parameter bitwidth = 256;
+	parameter bitwidth = 256
 )
 (
 	input          			i_clk,
-	input         			i_rst,
+	input         				i_rst,
 	input          			i_start,
 	input  [bitwidth-1:0] 	i_mdl, 	// modulus
 	input  [bitwidth-1:0] 	i_a, 	// multiplier
 	input  [bitwidth-1:0] 	i_b,	// multiplicand
-	output         			o_finished
+	output         			o_finished,
 	output [bitwidth-1:0] 	o_result
 );
 
@@ -224,9 +224,9 @@ always_comb begin
 end
 
 // Sequential Circuits
-always_ff @(posedge i_clk or negedge i_rst_n) begin
+always_ff @(posedge i_clk or negedge i_rst) begin
 	// reset
-	if (!i_rst_n) begin
+	if (!i_rst) begin
 		iter_r 		<= 0;
 		state_r 	<= S_IDLE;
 		m_r 		<= 0;

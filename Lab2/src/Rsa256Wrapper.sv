@@ -56,7 +56,6 @@ assign avm_write = avm_write_r;
 assign avm_writedata = dec_r[247-:8];
 
 Rsa256Core #(.bitwidth(256)) rsa256_core(
-Rsa256Core #(.bitwidth(256)) rsa256_core(
     .i_clk(avm_clk),
     .i_rst(avm_rst),
     .i_start(rsa_start_r),
@@ -104,7 +103,7 @@ task ReadData;
             end
             else if (ios_r == IO_WORK) begin
                 FinishRW();
-                data[bytes_counter_r*8 +: 8] = avm_readdata[:8];
+                data[bytes_counter_r*8 +: 8] = avm_readdata[0:8];
                 if (bytes_counter_r == bitwidth/8-1) begin
                     // read finished
                     bytes_counter_w = 0;
@@ -124,7 +123,7 @@ task WriteData;
         if (!avm_waitrequest) begin
             if (ios_r == IO_WAIT && avm_readdata[TX_OK_BIT]) begin
                 StartWrite();
-                avm_writedata[:8] = data[bytes_counter_r*8 +: 8];
+                avm_writedata[0:8] = data[bytes_counter_r*8 +: 8];
             end
             else if (ios_r == IO_WORK) begin
                 FinishRW();
