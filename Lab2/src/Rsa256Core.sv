@@ -124,9 +124,9 @@ end
 
 // Sequential Circuits
 
-always_ff @(posedge i_clk or negedge i_rst) begin
+always_ff @(posedge i_clk or posedge i_rst) begin
 	// reset
-	if (!i_rst) begin
+	if (i_rst) begin
 		state_r 	<= S_IDLE;
 		iter_r 		<= 0;
 		t_r 		<= 0;
@@ -227,9 +227,9 @@ always_comb begin
 end
 
 // Sequential Circuits
-always_ff @(posedge i_clk or negedge i_rst) begin
+always_ff @(posedge i_clk or posedge i_rst) begin
 	// reset
-	if (!i_rst) begin
+	if (i_rst) begin
 		iter_r 		<= 0;
 		state_r 	<= S_IDLE;
 		m_r 		<= 0;
