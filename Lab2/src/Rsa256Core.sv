@@ -92,9 +92,10 @@ always_comb begin
 					montstart	= 1;
 				end
 				else begin
-					state_w	= S_MONT2;
-					mont_a	= t_r;
-					mont_b	= t_r;					
+					state_w		= S_MONT2;
+					mont_a		= t_r;
+					mont_b		= t_r;
+					montstart	= 1;	
 				end
 			end
 		end
@@ -113,6 +114,7 @@ always_comb begin
 			if(montfin==1) begin
 				t_w		= mont_result;
 				state_w	= S_CALC;
+				iter_w	= iter_r+1;
 			end
 		end
 	endcase
@@ -122,9 +124,9 @@ end
 
 // Sequential Circuits
 
-always_ff @(posedge i_clk or negedge i_rst) begin
+always_ff @(posedge i_clk or posedge i_rst) begin
 	// reset
-	if (!i_rst) begin
+	if (i_rst) begin
 		state_r 	<= S_IDLE;
 		iter_r 		<= 0;
 		t_r 		<= 0;
@@ -225,9 +227,9 @@ always_comb begin
 end
 
 // Sequential Circuits
-always_ff @(posedge i_clk or negedge i_rst) begin
+always_ff @(posedge i_clk or posedge i_rst) begin
 	// reset
-	if (!i_rst) begin
+	if (i_rst) begin
 		iter_r 		<= 0;
 		state_r 	<= S_IDLE;
 		m_r 		<= 0;
