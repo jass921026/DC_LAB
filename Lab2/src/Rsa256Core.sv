@@ -15,23 +15,23 @@ module Rsa256Core
 
 // Define States and Parameters
 
-localparam S_IDLE 	= 3'd0;
-localparam S_CALC 	= 3'd1;
-localparam S_MONT1	= 3'd2;
-localparam S_LSHIFT	= 3'd3;
-localparam S_MONT2	= 3'd4;
+localparam S_IDLE 	= 2'd0;
+localparam S_CALC 	= 2'd1;
+localparam S_MONT	= 2'd2;
+localparam S_LSHIFT	= 2'd3;
 
 // Define Variables
 
-logic [2:0] 					state_w, 	state_r;
+logic [1:0] 					state_w, 	state_r;
 logic [$clog2(bitwidth):0]	 	iter_w, 	iter_r;
 logic [bitwidth-1:0] 			t_w, 		t_r;
 logic [bitwidth-1:0] 			m_w, 		m_r;
 logic							finished_w,	finished_r;
-logic							montfin;
-logic							montstart;
+logic							montfin,	montfin2;
+logic							montstart,	montstart2;
 logic [bitwidth-1:0]			mont_a,		mont_b;
-logic [bitwidth-1:0]			mont_result;
+logic [bitwidth-1:0]			mont_a2,	mont_b2;
+logic [bitwidth-1:0]			mont_result,mont_result2;
 
 // wiring and instantiation
 
@@ -45,10 +45,21 @@ montgomery #(.bitwidth(bitwidth)) montgomery_inst (
 	.o_finished(montfin),
 	.o_result(mont_result)
 );
+montgomery #(.bitwidth(bitwidth)) montgomery_inst2 (
+	.i_clk(i_clk),
+	.i_rst(i_rst),
+	.i_start(montstart2),
+	.i_mdl(i_n),
+	.i_a(mont_a2),
+	.i_b(mont_b2),
+	.o_finished(montfin2),
+	.o_result(mont_result2)
+);
 
 // Combintional Circuits
 
-assign o_a_pow_d = m_r;
+assign o_a_pow_d 	= 	m_r;
+assign o_finished	=	finished_r;
 
 always_comb begin
 
@@ -61,6 +72,7 @@ always_comb begin
 
 	case (state_r)
 		S_IDLE: begin
+			finished_w	= 0;
 			if (i_start) begin//before enter the lshift state, run the first time
 				state_w = S_LSHIFT;
 				iter_w	= 0;
@@ -86,33 +98,26 @@ always_comb begin
 			end
 			else begin
 				if (i_d[iter_r] == 1) begin
-					state_w		= S_MONT1;
 					mont_a		= m_r;
 					mont_b		= t_r;
 					montstart	= 1;
 				end
-				else begin
-					state_w		= S_MONT2;
-					mont_a		= t_r;
-					mont_b		= t_r;
-					montstart	= 1;	
-				end
+				state_w		= S_MONT;
+				mont_a2		= t_r;
+				mont_b2		= t_r;
+				montstart2	= 1;
 			end
 		end
-		S_MONT1: begin
+		S_MONT: begin
 			montstart	= 0;
-			if(montfin==1) begin
-				m_w			= mont_result;
-				state_w		= S_MONT2;
-				mont_a		= t_r;
-				mont_b		= t_r;
-				montstart	= 1;
+			montstart2	= 0;
+			if(montfin	==1) begin
+				m_w		= mont_result;
 			end
-		end
-		S_MONT2: begin
-			montstart	= 0;
-			if(montfin==1) begin
-				t_w		= mont_result;
+			if(montfin2	==1) begin
+				t_w		= mont_result2;
+			end
+			if(montfin	== 1 and montfin2	== 1) begin				
 				state_w	= S_CALC;
 				iter_w	= iter_r+1;
 			end
