@@ -4,7 +4,7 @@ module Rsa256Core
 )
 (
 	input          			i_clk,
-	input         				i_rst,
+	input         			i_rst,
 	input          			i_start,
 	input  [bitwidth-1:0] 	i_a, // cipher text y
 	input  [bitwidth-1:0] 	i_d, // private key
