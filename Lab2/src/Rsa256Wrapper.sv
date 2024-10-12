@@ -162,13 +162,13 @@ always_comb begin
 
     case (state_r)
         S_GET_KEY_N: begin
-            ReadData(data_r = n_r, data_w = n_w, next_state = S_GET_KEY_D);
+            ReadData(.data_r(n_r), .data_w(n_w), .next_state(S_GET_KEY_D));
         end
         S_GET_KEY_D: begin
-            ReadData(data_r = d_r, data_w = d_w, next_state = S_GET_DATA);
+            ReadData(.data_r(d_r), .data_w(d_w), .next_state(S_GET_DATA));
         end
         S_GET_DATA: begin
-            ReadData(data_r = enc_r, data_w = enc_w, next_state = S_REQ_CALC);
+            ReadData(.data_r(enc_r), .data_w(enc_w), .next_state(S_REQ_CALC));
         end
         S_REQ_CALC: begin
             rsa_start_w = 1;
@@ -181,8 +181,8 @@ always_comb begin
             end
         end
         S_SEND_DATA: begin
-            WriteData(data_r = dec_r, data_w = dec_w, next_state = S_GET_KEY_N);
             //after finish, loop back to get data
+            WriteData(.data_r(dec_r), .data_w(dec_w), .next_state(S_GET_DATA));
         end
     endcase
 end
