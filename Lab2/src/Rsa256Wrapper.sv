@@ -101,6 +101,7 @@ task ReadData;
     output  [bitwidth-1:0] data_w;
     input   [2:0]          next_state;
     begin
+        data_w = data_r;
         if (!avm_waitrequest) begin
             if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
                 StartRead(); 
@@ -148,17 +149,17 @@ endtask
 
 always_comb begin
     // Unconditional Assignments
-        n_w             = n_r;
-        d_w             = d_r;
-        enc_w           = enc_r;
-        dec_w           = dec_r;
-        avm_read_w      = avm_read_r;   
-        avm_write_w     = avm_write_r;
-        byte_cnt_w      = byte_cnt_r;
-        rsa_start_w     = rsa_start_r;
-        avm_address_w   = avm_address_r;
-        state_w         = state_r;
-        ios_w           = ios_r;
+    n_w             = n_r;
+    d_w             = d_r;
+    enc_w           = enc_r;
+    dec_w           = dec_r;
+    avm_read_w      = avm_read_r;   
+    avm_write_w     = avm_write_r;
+    byte_cnt_w      = byte_cnt_r;
+    rsa_start_w     = rsa_start_r;
+    avm_address_w   = avm_address_r;
+    state_w         = state_r;
+    ios_w           = ios_r;
 
     case (state_r)
         S_GET_KEY_N: begin
