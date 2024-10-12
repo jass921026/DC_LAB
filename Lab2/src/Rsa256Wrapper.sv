@@ -111,7 +111,7 @@ task ReadData;
                 data_w[bitwidth-1 : 8] = data_r[bitwidth-9 : 0]; // shift left 8 bits
                 if (byte_cnt_r == bitwidth/8 -1) begin
                     // read finished
-                    byte_cnt_w = 0
+                    byte_cnt_w = 0;
                     state_w = next_state;
                 end
                 else begin
