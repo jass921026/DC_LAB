@@ -101,7 +101,6 @@ task ReadData;
     output  [bitwidth-1:0] data_w;
     input   [2:0]          next_state;
     begin
-        data_w = data_r;
         if (!avm_waitrequest) begin
             if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
                 StartRead(); 
