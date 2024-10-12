@@ -58,7 +58,7 @@ logic [bitwidth-1:0] rsa_dec;
 assign avm_address      = avm_address_r;
 assign avm_read         = avm_read_r;
 assign avm_write        = avm_write_r;
-assign avm_writedata    = dec_r[bitwidth-9 -:8] //the only thing to write is plain text
+assign avm_writedata    = dec_r[bitwidth-9 -:8]; //the only thing to write is plain text
 
 Rsa256Core #(.bitwidth(256)) rsa256_core(
     .i_clk(avm_clk),
@@ -111,7 +111,7 @@ task ReadData;
                 data_w[bitwidth-1 : 8] = data_r[bitwidth-9 : 0]; // shift left 8 bits
                 if (byte_cnt_r == bitwidth/8 -1) begin
                     // read finished
-                    byte_cnt_w = 0
+                    byte_cnt_w = 0;
                     state_w = next_state;
                 end
                 else begin
@@ -148,27 +148,27 @@ endtask
 
 always_comb begin
     // Unconditional Assignments
-        n_w             = n_r;
-        d_w             = d_r;
-        enc_w           = enc_r;
-        dec_w           = dec_r;
-        avm_read_w      = avm_read_r;   
-        avm_write_w     = avm_write_r;
-        byte_cnt_w      = byte_cnt_r;
-        rsa_start_w     = rsa_start_r;
-        avm_address_w   = avm_address_r;
-        state_w         = state_r;
-        ios_w           = ios_r;
+    n_w             = n_r;
+    d_w             = d_r;
+    enc_w           = enc_r;
+    dec_w           = dec_r;
+    avm_read_w      = avm_read_r;   
+    avm_write_w     = avm_write_r;
+    byte_cnt_w      = byte_cnt_r;
+    rsa_start_w     = rsa_start_r;
+    avm_address_w   = avm_address_r;
+    state_w         = state_r;
+    ios_w           = ios_r;
 
     case (state_r)
         S_GET_KEY_N: begin
-            ReadData(data_r = n_r, data_w = n_w, next_state = S_GET_KEY_D);
+            ReadData(.data_r(n_r), .data_w(n_w), .next_state(S_GET_KEY_D));
         end
         S_GET_KEY_D: begin
-            ReadData(data_r = d_r, data_w = d_w, next_state = S_GET_DATA);
+            ReadData(.data_r(d_r), .data_w(d_w), .next_state(S_GET_DATA));
         end
         S_GET_DATA: begin
-            ReadData(data_r = enc_r, data_w = enc_w, next_state = S_REQ_CALC);
+            ReadData(.data_r(enc_r), .data_w(enc_w), .next_state(S_REQ_CALC));
         end
         S_REQ_CALC: begin
             rsa_start_w = 1;
@@ -181,8 +181,8 @@ always_comb begin
             end
         end
         S_SEND_DATA: begin
-            WriteData(data_r = dec_r, data_w = dec_w, next_state = S_GET_KEY_N);
             //after finish, loop back to get data
+            WriteData(.data_r(dec_r), .data_w(dec_w), .next_state(S_GET_DATA));
         end
     endcase
 end
