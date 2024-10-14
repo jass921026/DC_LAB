@@ -169,7 +169,6 @@ always_comb begin
         end
         S_SEND_DATA: begin
             //after finish, loop back to get data
-            Reading();
             if (!avm_waitrequest) begin
                 if (avm_address_r == STATUS_BASE && avm_readdata[TX_OK_BIT]) begin
                     avm_address_w = TX_BASE;
