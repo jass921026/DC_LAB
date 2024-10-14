@@ -176,13 +176,13 @@ always_comb begin
                     Writing();
                 end
                 if (avm_address_r == TX_BASE) begin
+                    avm_address_w = STATUS_BASE;
                     Reading();
                     dec_w[bitwidth-1 : 8] = dec_r[bitwidth-9 : 0]; // shift left 8 bits
                     if (byte_cnt_r == bitwidth/8 -2) begin // only 31 bytes are required
                         // write finished
                         byte_cnt_w = 0;
                         state_w = S_GET_DATA;
-                        avm_address_w = STATUS_BASE;
                     end
                     else begin
                         byte_cnt_w = byte_cnt_r + 1;
