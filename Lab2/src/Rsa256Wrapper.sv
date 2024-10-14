@@ -168,6 +168,7 @@ always_comb begin
                     avm_address_w = RX_BASE;
                 end
                 if (avm_address_r == RX_BASE) begin
+                    avm_address_w = STATUS_BASE;
                     n_w[7:0] = avm_readdata[7:0];
                     n_w[bitwidth-1 : 8] = n_r[bitwidth-9 : 0]; // shift left 8 bits
                     if (byte_cnt_r == bitwidth/8 -1) begin
