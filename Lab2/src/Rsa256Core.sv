@@ -141,6 +141,8 @@ always_ff @(posedge i_clk or posedge i_rst) begin
         t_r 		<= 0;
         m_r 		<= 1; // m = 1, plz check the montgomery algorithm
         finished_r	<= 0;
+		montstart_r	<= 0;
+		montstart2_r<= 0;
     end
     else begin
         state_r 	<= state_w;
@@ -148,6 +150,8 @@ always_ff @(posedge i_clk or posedge i_rst) begin
         t_r 		<= t_w;
         m_r 		<= m_w;
         finished_r	<= finished_w;
+		montstart_r	<= montstart_w;
+		montstart2_r<= montstart2_w;
     end
 end
 
