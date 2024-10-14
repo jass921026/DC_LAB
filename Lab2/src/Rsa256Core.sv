@@ -119,9 +119,7 @@ always_comb begin
                 m_w		= mont_result;
             end
             if(montfin2	==1) begin
-                t_w		= mont_result2;
-            end
-            if(montfin	== 1 && montfin2	== 1) begin				
+                t_w		= mont_result2;			
                 state_w	= S_CALC;
                 iter_w	= iter_r+1;
             end
@@ -201,7 +199,7 @@ always_comb begin
     state_w 	= state_r;
     iter_w 		= iter_r;
     m_w 		= m_r;
-    finished_w	= finished_r;
+    finished_w	= 0;
 	m1			= 0;
 	m2			= 0;
     case (state_r)
