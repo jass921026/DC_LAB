@@ -162,6 +162,7 @@ always_comb begin
             state_w = S_WAIT_CALC;
         end
         S_WAIT_CALC: begin
+            rsa_start_w = 0;
             if (rsa_finished) begin
                 dec_w = rsa_dec;
                 state_w = S_SEND_DATA;
