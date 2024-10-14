@@ -102,9 +102,8 @@ task ReadData;
     input   [2:0]          next_state;
     begin
         if (!avm_waitrequest) begin
-            if (avm_address_r == STATUS_BASE && avm_readdata[RX_OK_BIT]) begin
+            if (avm_address_r == STATUS_BASE) begin //avm_readdata[RX_OK_BIT]
                 avm_address_w = RX_BASE;
-
             end
             if (avm_address_r == RX_BASE) begin
                 FinishRW();
