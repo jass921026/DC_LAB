@@ -198,6 +198,8 @@ always_comb begin
     iter_w 		= iter_r;
     m_w 		= m_r;
     finished_w	= finished_r;
+	m1			= 0;
+	m2			= 0;
     case (state_r)
         S_IDLE: begin
             if (i_start) begin
