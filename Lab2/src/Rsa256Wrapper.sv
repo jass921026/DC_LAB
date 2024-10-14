@@ -181,6 +181,7 @@ always_comb begin
                         // write finished
                         byte_cnt_w = 0;
                         state_w = S_GET_DATA;
+                        avm_address_r = STATUS_BASE;
                     end
                     else begin
                         byte_cnt_w = byte_cnt_r + 1;
