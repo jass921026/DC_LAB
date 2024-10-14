@@ -164,11 +164,10 @@ always_comb begin
         S_GET_KEY_N: begin
             // ReadData(.data_r(n_r), .data_w(n_w), .next_state(S_GET_KEY_D));
             if (!avm_waitrequest) begin
-                if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
-                    
+                if (avm_address_r == STATUS_BASE) begin //avm_readdata[RX_OK_BIT]
+                    avm_address_w = RX_BASE;
                 end
-                if (ios_r == IO_WORK) begin
-                    FinishRW();
+                if (avm_address_r == RX_BASE) begin
                     n_w[7:0] = avm_readdata[7:0];
                     n_w[bitwidth-1 : 8] = n_r[bitwidth-9 : 0]; // shift left 8 bits
                     if (byte_cnt_r == bitwidth/8 -1) begin
