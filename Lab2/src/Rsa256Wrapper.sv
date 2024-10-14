@@ -101,11 +101,11 @@ task ReadData;
     output  [bitwidth-1:0] data_w;
     input   [2:0]          next_state;
     begin
-        if (!avm_waitrequest) begin
-            if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
-                StartRead(); 
-            end
-            if (ios_r == IO_WORK) begin
+        if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
+            StartRead(); 
+        end
+        if (ios_r == IO_WORK) begin
+            if (!avm_waitrequest) begin
                 FinishRW();
                 data_w[7:0] = avm_readdata[7:0];
                 data_w[bitwidth-1 : 8] = data_r[bitwidth-9 : 0]; // shift left 8 bits
@@ -126,11 +126,11 @@ task WriteData;
     output  [bitwidth-1:0] data_w;
     input   [2:0]          next_state;
     begin
-        if (!avm_waitrequest) begin
-            if (ios_r == IO_WAIT && avm_readdata[TX_OK_BIT]) begin
+        if (ios_r == IO_WAIT && avm_readdata[TX_OK_BIT]) begin
                 StartWrite();
-            end
-            if (ios_r == IO_WORK) begin
+        end
+        if (ios_r == IO_WORK) begin
+            if (!avm_waitrequest) begin
                 FinishRW();
                 data_w[bitwidth-1 : 8] = data_r[bitwidth-9 : 0]; // shift left 8 bits
                 if (byte_cnt_r == bitwidth/8 -2) begin // only 31 bytes are required
