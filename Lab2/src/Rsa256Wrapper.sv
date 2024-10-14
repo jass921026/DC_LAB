@@ -102,10 +102,11 @@ task ReadData;
     input   [2:0]          next_state;
     begin
         if (!avm_waitrequest) begin
-            if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
-                StartRead(); 
+            if (avm_address_r == STATUS_BASE && avm_readdata[RX_OK_BIT]) begin
+                avm_address_w = RX_BASE;
+
             end
-            if (ios_r == IO_WORK) begin
+            if (avm_address_r == RX_BASE) begin
                 FinishRW();
                 data_w[7:0] = avm_readdata[7:0];
                 data_w[bitwidth-1 : 8] = data_r[bitwidth-9 : 0]; // shift left 8 bits
@@ -165,7 +166,7 @@ always_comb begin
             // ReadData(.data_r(n_r), .data_w(n_w), .next_state(S_GET_KEY_D));
             if (!avm_waitrequest) begin
                 if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
-                    StartRead(); 
+                    
                 end
                 if (ios_r == IO_WORK) begin
                     FinishRW();
@@ -212,8 +213,8 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         d_r             <= 0;
         enc_r           <= 0;
         dec_r           <= 0;
-        avm_read_r      <= 0;
-        avm_write_r     <= 1;
+        avm_read_r      <= 1;
+        avm_write_r     <= 0;
         byte_cnt_r      <= 0;
         rsa_start_r     <= 0;
         avm_address_r   <= STATUS_BASE;
