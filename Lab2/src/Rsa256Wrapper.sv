@@ -164,7 +164,7 @@ always_comb begin
         S_GET_KEY_N: begin
             // ReadData(.data_r(n_r), .data_w(n_w), .next_state(S_GET_KEY_D));
             if (!avm_waitrequest) begin
-                if (avm_address_r == STATUS_BASE) begin //avm_readdata[RX_OK_BIT]
+                if (avm_address_r == STATUS_BASE && avm_readdata[RX_OK_BIT]) begin
                     avm_address_w = RX_BASE;
                 end
                 if (avm_address_r == RX_BASE) begin
