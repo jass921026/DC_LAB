@@ -24,7 +24,7 @@ localparam S_LSHIFT	= 2'd3;
 
 logic [1:0] 					state_w, 	state_r;
 logic [$clog2(bitwidth):0]	 	iter_w, 	iter_r;
-logic [bitwidth-1:0] 			t_w, 		t_r;
+logic [bitwidth:0] 				t_w, 		t_r;
 logic [bitwidth-1:0] 			m_w, 		m_r;
 logic							finished_w,	finished_r;
 logic							montfin,	montfin2;
@@ -160,7 +160,7 @@ module montgomery
 )
 (
     input          			i_clk,
-    input         				i_rst,
+    input         			i_rst,
     input          			i_start,
     input  [bitwidth-1:0] 	i_mdl, 	// modulus
     input  [bitwidth-1:0] 	i_a, 	// multiplier
