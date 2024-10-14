@@ -212,8 +212,8 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         d_r             <= 0;
         enc_r           <= 0;
         dec_r           <= 0;
-        avm_read_r      <= 1;
-        avm_write_r     <= 0;
+        avm_read_r      <= 0;
+        avm_write_r     <= 1;
         byte_cnt_r      <= 0;
         rsa_start_r     <= 0;
         avm_address_r   <= STATUS_BASE;
