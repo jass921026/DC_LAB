@@ -28,7 +28,8 @@ logic [bitwidth:0] 				t_w, 		t_r;
 logic [bitwidth-1:0] 			m_w, 		m_r;
 logic							finished_w,	finished_r;
 logic							montfin,	montfin2;
-logic							montstart,	montstart2;
+logic							montstart_w, montstart_r;
+logic 							montstart2_w, montstart2_r;
 logic [bitwidth-1:0]			mont_a,		mont_b;
 logic [bitwidth-1:0]			mont_a2,	mont_b2;
 logic [bitwidth-1:0]			mont_result,mont_result2;
@@ -38,7 +39,7 @@ logic [bitwidth-1:0]			mont_result,mont_result2;
 montgomery #(.bitwidth(bitwidth)) montgomery_inst (
     .i_clk(i_clk),
     .i_rst(i_rst),
-    .i_start(montstart),
+    .i_start(montstart_r),
     .i_mdl(i_n),
     .i_a(mont_a),
     .i_b(mont_b),
@@ -48,7 +49,7 @@ montgomery #(.bitwidth(bitwidth)) montgomery_inst (
 montgomery #(.bitwidth(bitwidth)) montgomery_inst2 (
     .i_clk(i_clk),
     .i_rst(i_rst),
-    .i_start(montstart2),
+    .i_start(montstart2_r),
     .i_mdl(i_n),
     .i_a(mont_a2),
     .i_b(mont_b2),
@@ -61,6 +62,11 @@ montgomery #(.bitwidth(bitwidth)) montgomery_inst2 (
 assign o_a_pow_d 	= 	m_r;
 assign o_finished	=	finished_r;
 
+assign mont_a = m_r;
+assign mont_b = t_r;
+assign mont_a2 = t_r;
+assign mont_b2 = t_r;
+
 always_comb begin
 
     // Unconditional Assignments
@@ -69,6 +75,8 @@ always_comb begin
     t_w 	= t_r;
     m_w 	= m_r;
     finished_w = finished_r;
+	montstart_w = montstart_r;
+	montstart2_w = montstart2_r;
 
     case (state_r)
         S_IDLE: begin
@@ -98,19 +106,15 @@ always_comb begin
             end
             else begin
                 if (i_d[iter_r] == 1) begin
-                    mont_a		= m_r;
-                    mont_b		= t_r;
-                    montstart	= 1;
+                    montstart_w	= 1;
                 end
                 state_w		= S_MONT;
-                mont_a2		= t_r;
-                mont_b2		= t_r;
-                montstart2	= 1;
+                montstart2_w	= 1;
             end
         end
         S_MONT: begin
-            montstart	= 0;
-            montstart2	= 0;
+            montstart_w	= 0;
+            montstart2_w	= 0;
             if(montfin	==1) begin
                 m_w		= mont_result;
             end
