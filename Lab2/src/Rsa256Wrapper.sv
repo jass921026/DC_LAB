@@ -127,7 +127,7 @@ task WriteData;
     input   [2:0]          next_state;
     begin
         if (ios_r == IO_WAIT && avm_readdata[TX_OK_BIT]) begin
-                StartWrite();
+            StartWrite();
         end
         if (ios_r == IO_WORK) begin
             if (!avm_waitrequest) begin
@@ -212,7 +212,7 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         d_r             <= 0;
         enc_r           <= 0;
         dec_r           <= 0;
-        avm_read_r      <= 0;
+        avm_read_r      <= 1;
         avm_write_r     <= 0;
         byte_cnt_r      <= 0;
         rsa_start_r     <= 0;
