@@ -174,12 +174,14 @@ always_comb begin
         end
         S_SEND_DATA: begin
             //after finish, loop back to get data
-            Writing();
+            Reading();
             if (!avm_waitrequest) begin
                 if (avm_address_r == STATUS_BASE && avm_readdata[TX_OK_BIT]) begin
                     avm_address_w = TX_BASE;
+                    Writing();
                 end
                 if (ios_r == IO_WORK) begin
+                    Reading();
                     dec_w[bitwidth-1 : 8] = dec_r[bitwidth-9 : 0]; // shift left 8 bits
                     if (byte_cnt_r == bitwidth/8 -2) begin // only 31 bytes are required
                         // write finished
