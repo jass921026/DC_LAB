@@ -28,9 +28,6 @@ localparam S_REQ_CALC  = 3;
 localparam S_WAIT_CALC = 4;
 localparam S_SEND_DATA = 5;
 
-localparam IO_WAIT = 0;
-localparam IO_WORK = 1;
-
 // Define Variables
 
 // datas
@@ -41,7 +38,6 @@ logic [bitwidth-1:0] dec_r, dec_w; // the plain text
 
 // states
 logic [2:0] state_r, state_w; // finite state machine
-logic ios_r, ios_w; // IO state
 logic [$clog2(bitwidth)-4:0] byte_cnt_r, byte_cnt_w; // count current IO byte
 
 // io 
@@ -96,7 +92,6 @@ always_comb begin
     rsa_start_w     = rsa_start_r;
     avm_address_w   = avm_address_r;
     state_w         = state_r;
-    ios_w           = ios_r;
 
     case (state_r)
         S_GET_KEY_N: begin
@@ -180,7 +175,7 @@ always_comb begin
                     avm_address_w = TX_BASE;
                     Writing();
                 end
-                if (ios_r == IO_WORK) begin
+                if (avm_address_r == TX_BASE) begin
                     Reading();
                     dec_w[bitwidth-1 : 8] = dec_r[bitwidth-9 : 0]; // shift left 8 bits
                     if (byte_cnt_r == bitwidth/8 -2) begin // only 31 bytes are required
@@ -210,7 +205,6 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         rsa_start_r     <= 0;
         avm_address_r   <= STATUS_BASE;
         state_r         <= S_GET_KEY_N;
-        ios_r           <= IO_WAIT;
     end 
     else begin
         n_r             <= n_w;
@@ -223,7 +217,6 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         rsa_start_r     <= rsa_start_w;
         avm_address_r   <= avm_address_w;
         state_r         <= state_w;
-        ios_r           <= ios_w;
     end
 end
 endmodule
