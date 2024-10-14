@@ -101,11 +101,11 @@ task ReadData;
     output  [bitwidth-1:0] data_w;
     input   [2:0]          next_state;
     begin
-        if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
-            StartRead(); 
-        end
-        if (ios_r == IO_WORK) begin
-            if (!avm_waitrequest) begin
+        if (!avm_waitrequest) begin
+            if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
+                StartRead(); 
+            end
+            if (ios_r == IO_WORK) begin
                 FinishRW();
                 data_w[7:0] = avm_readdata[7:0];
                 data_w[bitwidth-1 : 8] = data_r[bitwidth-9 : 0]; // shift left 8 bits
@@ -162,7 +162,25 @@ always_comb begin
 
     case (state_r)
         S_GET_KEY_N: begin
-            ReadData(.data_r(n_r), .data_w(n_w), .next_state(S_GET_KEY_D));
+            // ReadData(.data_r(n_r), .data_w(n_w), .next_state(S_GET_KEY_D));
+            if (!avm_waitrequest) begin
+                if (ios_r == IO_WAIT && avm_readdata[RX_OK_BIT]) begin
+                    StartRead(); 
+                end
+                if (ios_r == IO_WORK) begin
+                    FinishRW();
+                    n_w[7:0] = avm_readdata[7:0];
+                    n_w[bitwidth-1 : 8] = n_r[bitwidth-9 : 0]; // shift left 8 bits
+                    if (byte_cnt_r == bitwidth/8 -1) begin
+                        // read finished
+                        byte_cnt_w = 0;
+                        state_w = S_GET_KEY_D;
+                    end
+                    else begin
+                        byte_cnt_w = byte_cnt_r + 1;
+                    end
+                end
+            end
         end
         S_GET_KEY_D: begin
             ReadData(.data_r(d_r), .data_w(d_w), .next_state(S_GET_DATA));
@@ -194,13 +212,13 @@ always_ff @(posedge avm_clk or posedge avm_rst) begin
         d_r             <= 0;
         enc_r           <= 0;
         dec_r           <= 0;
-        avm_read_r      <= 1;
+        avm_read_r      <= 0;
         avm_write_r     <= 0;
         byte_cnt_r      <= 0;
         rsa_start_r     <= 0;
-        avm_address_r   <= RX_BASE;
+        avm_address_r   <= STATUS_BASE;
         state_r         <= S_GET_KEY_N;
-        ios_r           <= IO_WORK;
+        ios_r           <= IO_WAIT;
     end 
     else begin
         n_r             <= n_w;
