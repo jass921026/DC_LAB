@@ -93,10 +93,8 @@ AudDSP dsp0(
 	.i_start(),
 	.i_pause(),
 	.i_stop(),
-	.i_speed(),
-	.i_fast(),
-	.i_slow_0(), // constant interpolation
-	.i_slow_1(), // linear interpolation
+	.i_speed(), // 0 to 2 for slow, 3 is normal, 4 to 6 for fast
+	.i_interpolation_mode(), // 0 for constant, 1 for linear
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_sram_data(data_play),
 	.o_dac_data(dac_data),
