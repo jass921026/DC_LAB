@@ -65,7 +65,7 @@ module tb;
             //     return (a > b) ? a : b;
             // endfunction
 
-            for (int i = 0; i < memsize>>maxab(speed-3,0); i++) begin
+            for (int i = 0; i < memsize>>max(speed-3,0); i++) begin
                 @(posedge daclrck);
                 // collect output data
                 dac_data[i] = dac_block;
@@ -77,7 +77,7 @@ module tb;
             stop = 0;
 
             // compare result
-            for (int i = 0; i < memsize>>maxab(speed-3,0); i++) begin
+            for (int i = 0; i < memsize>>max(speed-3,0); i++) begin
                 if (dac_data != golden[i]) begin
                     $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
                     $finish;
