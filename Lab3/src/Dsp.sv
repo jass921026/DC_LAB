@@ -38,22 +38,22 @@ always_comb begin
     case (state_r)
         S_IDLE: begin
             if (i_start) begin
-                state_r <= S_PLAY;
+                state_w <= S_PLAY;
                 if (i_speed <3) addr_w = 1<<(-i_speed+3);
                 else addr_w = 0;
             end
         end
         S_PAUSE: begin
             if (!i_pause) begin
-                state_r <= S_PLAY;
+                state_w <= S_PLAY;
             end
         end
         S_PLAY: begin
             if (i_pause) begin
-                state_r <= S_PAUSE;
+                state_w <= S_PAUSE;
             end
             if (i_stop) begin
-                state_r <= S_IDLE;
+                state_w <= S_IDLE;
             end
             // work at daclrck change to left (0)
             if (prev_daclrck_r && !i_daclrck) begin
