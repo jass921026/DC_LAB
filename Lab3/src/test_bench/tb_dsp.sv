@@ -1,7 +1,7 @@
 `timescale 1ns/100ps
 
 `define max (a, b) \
-    ((a) > (b) ? (a) : (b));
+    ((a) > (b) ? (a) : (b))
 
 module tb;
     localparam CLK = 10;
