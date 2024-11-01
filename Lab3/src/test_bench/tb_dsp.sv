@@ -19,17 +19,17 @@ module tb;
     
 
     AudDSP dsp(
-        .rst_n(~rst),
-        .clk(clk),
-        .start(start),
-        .pause(pause),
-        .stop(stop),
-        .speed(speed),
-        .interpolation_mode(mode),
-        .daclrck(daclrck),
-        .sram_data(sram_block),
-        .dac_data(dac_block),
-        .sram_addr(sram_addr)
+        .i_rst_n(~rst),
+        .i_clk(clk),
+        .i_start(start),
+        .i_pause(pause),
+        .i_stop(stop),
+        .i_speed(speed),
+        .i_interpolation_mode(mode),
+        .i_daclrck(daclrck),
+        .i_sram_data(sram_block),
+        .o_dac_data(dac_block),
+        .o_sram_addr(sram_addr)
     );
 
     initial begin
