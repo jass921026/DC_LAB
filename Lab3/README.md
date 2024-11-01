@@ -57,3 +57,8 @@ We don't provide a testbench in this lab.
 For the first part, the I2C protocol is quite simple.
 And it's hard to simulate owing to the limitation (you must play audio through SSH).
 
+## How To Use Testbench
+
+```bash
+vcs ./tb_dsp.v ../Dsp.v -full64 -R -debug_access+all -sverilog +access+rw
+```
