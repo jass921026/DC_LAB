@@ -11,6 +11,7 @@ module tb;
     logic [15:0] sram_data[0:memsize-1], dac_data[0:memsize-1], golden[0:memsize-1];
     logic [15:0] sram_block, dac_block;
     logic [19:0] sram_addr;
+    int fd, fg;
     initial clk = 0;
     initial daclrck = 0;
     always #(HCLK) clk = ~clk;
@@ -58,9 +59,9 @@ module tb;
             start = 1;
             #(CLK)
             start = 0;
-            let mmax(a,b) = (a > b) ? a : b;
+            let maxab(a,b) = (a > b) ? a : b;
 
-            for (int i = 0; i < memsize>>mmax(speed-3,0); i++) begin
+            for (int i = 0; i < memsize>>maxab(speed-3,0); i++) begin
                 @(posedge daclrck);
                 // collect output data
                 dac_data[i] = dac_block;
@@ -72,7 +73,7 @@ module tb;
             stop = 0;
 
             // compare result
-            for (int i = 0; i < memsize>>mmax(speed-3,0); i++) begin
+            for (int i = 0; i < memsize>>maxab(speed-3,0); i++) begin
                 if (dac_data != golden[i]) begin
                     $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
                     $finish;
