@@ -59,6 +59,9 @@ module tb;
             start = 1;
             #(CLK)
             start = 0;
+
+            daclrck = 0; //test
+
             function int maxab(int a, int b);
                 return (a > b) ? a : b;
             endfunction
