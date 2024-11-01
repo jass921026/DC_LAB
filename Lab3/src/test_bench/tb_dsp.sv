@@ -49,6 +49,7 @@ module tb;
 
 
 		for (int iter = 0 ; iter < 10; iter++) begin
+			$display("Iteration %d", iter);
 			$fscanf("%d %d" ,speed, mode);
 			// read golden data
 			for (int i = 0; i < memsize; i++) begin
@@ -77,26 +78,9 @@ module tb;
 					$finish;
 				end
 			end
-
 		end
-
-		for (int i = 0; i < 5; i++) begin
-			for (int j = 0; j < 10; j++) begin
-				@(posedge clk);
-			end
-			$fread(encrypted_data, fp_e);
-			$fread(golden, fp_d);
-
-			start_cal <= 1;
-			@(posedge clk)
-			encrypted_data <= 'x;
-			start_cal <= 0;
-			@(posedge fin)
-			$display("=========");
-			$display("dec  %2d = %64x", i, decrypted_data);
-			$display("gold %2d = %64x", i, golden);
-			$display("=========");
-		end
+		// no error
+		$display("Test passed.");
 		$finish;
 	end
 
