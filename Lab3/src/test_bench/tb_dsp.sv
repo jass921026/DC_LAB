@@ -58,8 +58,8 @@ module tb;
 			start = 1;
 			#(CLK)
 			start = 0;
-
 			let mmax(a,b) = (a > b) ? a : b;
+
 			for (int i = 0; i < memsize>>mmax(speed-3,0); i++) begin
 				@(posedge daclrck);
 				// collect output data
