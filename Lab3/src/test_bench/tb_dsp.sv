@@ -13,8 +13,8 @@ module tb;
 	logic [19:0] sram_addr;
 	initial clk = 0;
 	initial daclrck = 0;
-	always #HCLK clk = ~clk;
-	always #4e4*CLK daclrck = ~daclrck;
+	always #(HCLK) clk = ~clk;
+	always #(4e4*CLK) daclrck = ~daclrck;
 	
 
 	AudDSP dsp(

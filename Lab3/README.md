@@ -60,5 +60,5 @@ And it's hard to simulate owing to the limitation (you must play audio through S
 ## How To Use Testbench
 
 ```bash
-vcs ./tb_dsp.v ../Dsp.v -full64 -R -debug_access+all -sverilog +access+rw
+vcs ./tb_dsp.sv ../Dsp.sv -full64 -R -debug_access+all -sverilog +access+rw
 ```
