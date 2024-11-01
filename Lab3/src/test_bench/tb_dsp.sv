@@ -60,11 +60,10 @@ module tb;
             #(CLK)
             start = 0;
 
-            daclrck = 0; //test
 
-            function int maxab(int a, int b);
-                return (a > b) ? a : b;
-            endfunction
+            // function int maxab(int a, int b);
+            //     return (a > b) ? a : b;
+            // endfunction
 
             for (int i = 0; i < memsize>>maxab(speed-3,0); i++) begin
                 @(posedge daclrck);
