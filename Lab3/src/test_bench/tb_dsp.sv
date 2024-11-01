@@ -68,7 +68,7 @@ module tb;
             //     return (a > b) ? a : b;
             // endfunction
 
-            for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0)); i++) begin
+            for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
                 @(posedge daclrck);
                 // collect output data
                 dac_data[i] = dac_block;
