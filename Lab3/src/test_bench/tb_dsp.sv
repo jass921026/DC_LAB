@@ -59,7 +59,9 @@ module tb;
             start = 1;
             #(CLK)
             start = 0;
-            let maxab(a,b) = (a > b) ? a : b;
+            function int maxab(int a, int b);
+                return (a > b) ? a : b;
+            endfunction
 
             for (int i = 0; i < memsize>>maxab(speed-3,0); i++) begin
                 @(posedge daclrck);
