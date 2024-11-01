@@ -81,7 +81,7 @@ module tb;
 
             // compare result
             for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
-                if (dac_data != golden[i]) begin
+                if (dac_data[i] != golden[i]) begin
                     $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
                     $finish;
                 end
