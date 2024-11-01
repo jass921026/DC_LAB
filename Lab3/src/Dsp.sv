@@ -38,14 +38,14 @@ always_comb begin
     case (state_r)
         S_IDLE: begin
             if (i_start) begin
-                state_r <= S_WORK;
+                state_r <= S_PLAY;
                 if (i_speed <3) addr_w = 1<<(-i_speed+3);
                 else addr_w = 0;
             end
         end
         S_PAUSE: begin
             if (!i_pause) begin
-                state_r <= S_WORK;
+                state_r <= S_PLAY;
             end
         end
         S_PLAY: begin
@@ -80,7 +80,7 @@ end
 
 always_ff @(posedge i_clk or negedge i_rst_n) begin
     if (!i_rst_n) begin
-        prev_data_r <= i_dac_data ;
+        prev_data_r <= i_sram_data ;
         prev_daclrck_r <= i_daclrck;
         interpolation_counter_r <= 0;
         state_r <= S_IDLE;
