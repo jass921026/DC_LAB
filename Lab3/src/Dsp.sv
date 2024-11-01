@@ -4,7 +4,7 @@ module AudDSP(
     input       i_start,
     input       i_pause,
     input       i_stop,
-    input [3:0] i_speed, // 0 to 2 for slow, 3 is normal, 4 to 6 for fast
+    input [2:0] i_speed, // 0 to 2 for slow, 3 is normal, 4 to 6 for fast
     input       i_interpolation_mode, // o for constant, 1 for linear
     input       i_daclrck, // 0 for left channel, 1 for right channel, we use 0
     input [15:0] i_sram_data,
