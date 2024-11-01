@@ -54,7 +54,7 @@ module tb;
 
         for (int iter = 0 ; iter < 10; iter++) begin
             $display("Iteration %d", iter);
-            $fscanf("%d%d" ,speed, mode);
+            $fscanf(fd, "%d %d" ,speed, mode);
             // read golden data
             for (int i = 0; i < memsize; i++) begin
                 $fscanf(fg, "%h", golden[i]);
