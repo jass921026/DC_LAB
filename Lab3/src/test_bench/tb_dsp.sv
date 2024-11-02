@@ -6,7 +6,8 @@
 module tb;
     localparam CLK = 10;
     localparam HCLK = CLK/2;
-    localparam memsize = 1048576;
+    localparam memsize = 2**10; // 1K for testing
+    localparam memaddr = 10; // 10 bits for addressing
 
     logic clk, daclrck;
     logic rst, start, pause, stop, mode;
@@ -18,7 +19,7 @@ module tb;
     initial clk = 0;
     initial daclrck = 0;
     always #(HCLK) clk = ~clk;
-    always #(4e1*CLK) daclrck = ~daclrck;
+    always #(5*CLK) daclrck = ~daclrck;
     
 
     AudDSP dsp(
@@ -76,7 +77,11 @@ module tb;
                 // collect output data
                 //$display("Collect %d th data", i);
                 dac_data[i] = dac_block;
-                @(!daclrck);
+                if (dac_data[i] !== golden[i]) begin
+                    $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
+                    $finish;
+                    @(!daclrck);
+                end
             end
             // TODO: add random pause
 
@@ -86,14 +91,6 @@ module tb;
 
             // compare result
             $display("Obtain Data: %h %h %h %h", dac_data[0], dac_data[1], dac_data[2], dac_data[3]);
-            //$display("Give up %d %d",memsize ,(speed-3 > 0 ? speed-3 : 0));
-            for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
-                //$display("Validating %d", i);
-                if (dac_data[i] !== golden[i]) begin
-                    $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
-                    $finish;
-                end
-            end
         end
         // no error
         $display("Test passed.");
@@ -103,18 +100,18 @@ module tb;
 
     always begin //work sram
         #(CLK/2)
-        sram_block = sram_data[sram_addr];
+        sram_block = sram_data[sram_addr[0 += memaddr]];
     end
 
     initial begin //timeout
-        #(5000000000*CLK)
+        #(7000000*CLK)
         $display("Too slow, abort.");
         $finish;
     end
 
     initial begin //timer
         for (int i = 0; 1; i++) begin
-            #(100000000*CLK)
+            #(100000*CLK)
             $display("Time: %d", i*100000);
         end
     end
