@@ -85,7 +85,7 @@ module tb;
                 end
 
                 daclrck = 1;
-                #(5*CLK)
+                #(5*CLK);
             end
             // TODO: add random pause
 
