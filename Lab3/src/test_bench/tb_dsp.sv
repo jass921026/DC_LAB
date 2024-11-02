@@ -72,10 +72,10 @@ module tb;
             // endfunction
 
             for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
-                @(posedge daclrck);
+                @daclrck;
                 // collect output data
                 dac_data[i] = dac_block;
-                @(negedge daclrck);
+                @~daclrck;
             end
             // TODO: add random pause
 
@@ -86,6 +86,7 @@ module tb;
             // compare result
             $display("Obtain Data: %h %h %h %h", dac_data[0], dac_data[1], dac_data[2], dac_data[3]);
             for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
+                $display("Validating %d", i);
                 if (dac_data[i] !== golden[i]) begin
                     $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
                     $finish;
