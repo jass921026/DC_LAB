@@ -18,7 +18,7 @@ module tb;
     initial clk = 0;
     initial daclrck = 0;
     always #(HCLK) clk = ~clk;
-    always #(4e4*CLK) daclrck = ~daclrck;
+    always #(4e1*CLK) daclrck = ~daclrck;
     
 
     AudDSP dsp(
@@ -59,6 +59,7 @@ module tb;
             for (int i = 0; i < memsize; i++) begin
                 $fscanf(fg, "%h", golden[i]);
             end
+            $display("Golden data: %h %h %h %h", golden[0], golden[1], golden[2], golden[3]);
             start = 1;
             #(CLK)
             start = 0;
@@ -69,7 +70,7 @@ module tb;
             // endfunction
 
             for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
-                @(posedge daclrck);
+                @posedge (daclrck);
                 // collect output data
                 dac_data[i] = dac_block;
             end
