@@ -72,6 +72,7 @@ module tb;
             //     return (a > b) ? a : b;
             // endfunction
 
+            @(!daclrck);
             for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
                 @daclrck;
                 // collect output data
