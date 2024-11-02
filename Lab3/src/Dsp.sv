@@ -23,6 +23,9 @@ parameter S_IDLE      = 0;
 parameter S_PAUSE     = 1;
 parameter S_PLAY      = 2;
 
+assign o_sram_addr = addr_r;
+assign o_dac_data = out_data_r;
+
 always_comb begin
     // work at dac clock change
 
