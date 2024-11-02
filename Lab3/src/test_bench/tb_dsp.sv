@@ -74,6 +74,7 @@ module tb;
             for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
                 @daclrck;
                 // collect output data
+                $display("Collect %d th data", i);
                 dac_data[i] = dac_block;
                 @(!daclrck);
             end
