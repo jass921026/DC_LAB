@@ -14,7 +14,7 @@ module AudDSP(
 
 logic [19:0] addr_r, addr_w;
 logic [ 2:0] state_r, state_w;
-logic        prev_daclrck_r, prev_daclrck_w;
+logic        prev_daclrck;
 logic [15:0] out_data_r, out_data_w;
 logic [15:0] prev_data_r, prev_data_w;
 logic [2:0] interpolation_cnt_r, interpolation_cnt_w;
@@ -32,7 +32,7 @@ always_comb begin
     // unconditional assignments
     state_w = state_r;
     addr_w  = addr_r;
-    prev_daclrck_w = prev_daclrck_r;
+    prev_daclrck_w = prev_daclrck;
     prev_data_w = prev_data_r;
     out_data_w = out_data_r;
     interpolation_cnt_w = interpolation_cnt_r;
@@ -61,18 +61,18 @@ always_comb begin
                 addr_w = 0;
             end
             // work at daclrck change to left (0)
-            if (prev_daclrck_r && !i_daclrck) begin
+            if (prev_daclrck && !i_daclrck) begin
                 if (i_speed >= 3) begin //fast forward
                     addr_w = addr_r + 1<<(i_speed-3);
                     out_data_w = prev_data_r;
                     prev_data_w = i_sram_data;
                 end
                 else begin //slow down
-                    if (interpolation_cnt_r == 1<<(-i_speed+3)-1) begin
-                            interpolation_cnt_w = 0;
-                            addr_w = addr_r + 1 ;
-                            prev_data_w = i_sram_data;
-                        end
+                    if (interpolation_cnt_r == (1<<(3-i_speed))-1) begin
+                        interpolation_cnt_w = 0;
+                        addr_w = addr_r + 1 ;
+                        prev_data_w = i_sram_data;
+                    end
                     else begin 
                         interpolation_cnt_w = interpolation_cnt_r + 1;
                     end
@@ -84,7 +84,6 @@ always_comb begin
                     end
                 end
             end
-
         end
     endcase
 end
@@ -92,7 +91,7 @@ end
 always_ff @(posedge i_clk or negedge i_rst_n) begin
     if (!i_rst_n) begin
         prev_data_r <= i_sram_data ;
-        prev_daclrck_r <= i_daclrck;
+        prev_daclrck <= i_daclrck;
         interpolation_cnt_r <= 0;
         state_r <= S_IDLE;
         addr_r <= 0;
@@ -100,7 +99,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
     end
     else begin
         prev_data_r <= prev_data_w;
-        prev_daclrck_r <= prev_daclrck_w;
+        prev_daclrck <= i_daclrck;
         interpolation_cnt_r <= interpolation_cnt_w;
         state_r <= state_w;
         addr_r <= addr_w;
