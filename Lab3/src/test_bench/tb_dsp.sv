@@ -19,7 +19,6 @@ module tb;
     initial clk = 0;
     initial daclrck = 0;
     always #(HCLK) clk = ~clk;
-    always #(5*CLK) daclrck = ~daclrck;
     
 
     AudDSP dsp(
@@ -60,6 +59,7 @@ module tb;
             end
             $display("Golden data: %h %h %h %h", golden[0], golden[1], golden[2], golden[3]);
             
+            daclrck = 1;
             rst = 1;
             #(3*CLK)
             rst = 0;
@@ -72,17 +72,20 @@ module tb;
             //     return (a > b) ? a : b;
             // endfunction
 
-            @(!daclrck);
+            
             for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
-                @daclrck;
+                daclrck = 0;
+                #(5*CLK)
                 // collect output data
                 //$display("Collect %d th data", i);
                 dac_data[i] = dac_block;
                 if (dac_data[i] !== golden[i]) begin
                     $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
                     $finish;
-                    @(!daclrck);
                 end
+
+                daclrck = 1;
+                #(5*CLK)
             end
             // TODO: add random pause
 
