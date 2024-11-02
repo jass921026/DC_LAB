@@ -62,7 +62,7 @@ always_comb begin
             // work at daclrck change to left (0)
             if (prev_daclrck && !i_daclrck) begin
                 if (i_speed >= 3) begin //fast forward
-                    addr_w = addr_r + 1<<(i_speed-3);
+                    addr_w = addr_r + (1<<(i_speed-3));
                     out_data_w = prev_data_r;
                     prev_data_w = i_sram_data;
                 end
