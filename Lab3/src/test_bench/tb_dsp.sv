@@ -74,7 +74,7 @@ module tb;
             for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
                 @daclrck;
                 // collect output data
-                $display("Collect %d th data", i);
+                //$display("Collect %d th data", i);
                 dac_data[i] = dac_block;
                 @(!daclrck);
             end
@@ -107,14 +107,14 @@ module tb;
     end
 
     initial begin //timeout
-        #(5000000*CLK)
+        #(5000000000*CLK)
         $display("Too slow, abort.");
         $finish;
     end
 
     initial begin //timer
         for (int i = 0; 1; i++) begin
-            #(100000*CLK)
+            #(100000000*CLK)
             $display("Time: %d", i*100000);
         end
     end
