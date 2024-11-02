@@ -100,7 +100,7 @@ module tb;
 
     always begin //work sram
         #(CLK/2)
-        sram_block = sram_data[sram_addr[0 += memaddr]];
+        sram_block = sram_data[sram_addr[0 +: memaddr]];
     end
 
     initial begin //timeout
