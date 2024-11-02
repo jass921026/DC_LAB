@@ -40,10 +40,11 @@ always_comb begin
 
     case (state_r)
         S_IDLE: begin
-            if (i_start) begin
+            if (i_start) begin //address must be 0
+                prev_data_w = i_sram_data;
                 state_w <= S_PLAY;
-                if (i_speed <3) addr_w = 1<<(-i_speed+3);
-                else addr_w = 0;
+                if (i_speed >= 3) addr_w = 1<<(i_speed-3);
+                else addr_w = 1;
             end
         end
         S_PAUSE: begin
@@ -57,23 +58,29 @@ always_comb begin
             end
             if (i_stop) begin
                 state_w <= S_IDLE;
+                addr_w = 0;
             end
             // work at daclrck change to left (0)
             if (prev_daclrck_r && !i_daclrck) begin
-                if (i_speed >= 3) begin //no interpolation
+                if (i_speed >= 3) begin //fast forward
                     addr_w = addr_r + 1<<(i_speed-3);
                     out_data_w = prev_data_r;
+                    prev_data_w = i_sram_data;
                 end
                 else begin //slow down
-                    if (interpolation_counter_r == 1<<(-i_speed+3)-1) begin
-                        interpolation_counter_w = 0;
-                        addr_w = addr_r + 1 ;
-                        prev_data_w = i_sram_data;
+                    if (i_interpolation_mode == 0) begin
                     end
-                    else begin
-                        interpolation_counter_w = interpolation_counter_r + 1;
+                    else begin // no interpolation
+                        if (interpolation_counter_r === 1<<(-i_speed+3)-1) begin
+                            interpolation_counter_w = 0;
+                            addr_w = addr_r + 1 ;
+                            prev_data_w = i_sram_data;
+                        end
+                        else begin // linear interpolation
+                            interpolation_counter_w = interpolation_counter_r + 1;
+                        end
+                        out_data_w = prev_data_r + (i_sram_data - prev_data_r) * interpolation_counter_r / (1<<(-i_speed+3));
                     end
-                    out_data_w = prev_data_r + (i_sram_data - prev_data_r) * interpolation_counter_r / (1<<(-i_speed+3));
                 end
             end
 
