@@ -71,7 +71,7 @@ module tb;
             //     return (a > b) ? a : b;
             // endfunction
 
-            for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
+            for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
                 @daclrck;
                 // collect output data
                 dac_data[i] = dac_block;
@@ -85,9 +85,9 @@ module tb;
 
             // compare result
             $display("Obtain Data: %h %h %h %h", dac_data[0], dac_data[1], dac_data[2], dac_data[3]);
-            $display("Give up %d %d",memsize ,memsize>>>(speed-3 > 0 ? speed-3 : 0));
-            for (int i = 0; i < memsize>>>(speed-3 > 0 ? speed-3 : 0); i++) begin
-                $display("Validating %d", i);
+            //$display("Give up %d %d",memsize ,(speed-3 > 0 ? speed-3 : 0));
+            for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
+                //$display("Validating %d", i);
                 if (dac_data[i] !== golden[i]) begin
                     $display("Error at %d: %h != %h", i, dac_data[i], golden[i]);
                     $finish;
