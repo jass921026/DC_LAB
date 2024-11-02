@@ -32,7 +32,6 @@ always_comb begin
     // unconditional assignments
     state_w = state_r;
     addr_w  = addr_r;
-    prev_daclrck_w = prev_daclrck;
     prev_data_w = prev_data_r;
     out_data_w = out_data_r;
     interpolation_cnt_w = interpolation_cnt_r;
