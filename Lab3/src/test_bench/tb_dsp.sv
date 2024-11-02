@@ -72,10 +72,10 @@ module tb;
             // endfunction
 
             for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
-                @(posedge clk);
+                @(posedge daclrck);
                 // collect output data
                 dac_data[i] = dac_block;
-                @negedge daclrck;
+                @(negedge daclrck);
             end
             // TODO: add random pause
 
