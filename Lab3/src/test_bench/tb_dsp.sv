@@ -75,7 +75,7 @@ module tb;
                 @daclrck;
                 // collect output data
                 dac_data[i] = dac_block;
-                @~daclrck;
+                @(~daclrck);
             end
             // TODO: add random pause
 
