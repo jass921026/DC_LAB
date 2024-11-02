@@ -47,12 +47,10 @@ module tb;
         end
             
 
-        rst = 1;
-        #(3*CLK)
-        rst = 0;
 
 
         for (int iter = 0 ; iter < 10; iter++) begin
+            // prepare test data
             $display("Iteration %d", iter);
             $fscanf(fd, "%d %d" ,speed, mode);
             // read golden data
@@ -60,6 +58,10 @@ module tb;
                 $fscanf(fg, "%h", golden[i]);
             end
             $display("Golden data: %h %h %h %h", golden[0], golden[1], golden[2], golden[3]);
+            
+            rst = 1;
+            #(3*CLK)
+            rst = 0;
             start = 1;
             #(CLK)
             start = 0;
@@ -70,7 +72,7 @@ module tb;
             // endfunction
 
             for (int i = 0; i < memsize>>(speed-3 > 0 ? speed-3 : 0); i++) begin
-                @posedge (daclrck);
+                @(posedge daclrck);
                 // collect output data
                 dac_data[i] = dac_block;
             end
@@ -99,10 +101,17 @@ module tb;
         sram_block = sram_data[sram_addr];
     end
 
-    initial begin
+    initial begin //timeout
         #(5000000*CLK)
         $display("Too slow, abort.");
         $finish;
+    end
+
+    initial begin //timer
+        for (int i = 0; 1; i++) begin
+            #(100000*CLK)
+            $display("Time: %d", i*100000);
+        end
     end
 
 endmodule
