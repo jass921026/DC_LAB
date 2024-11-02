@@ -85,7 +85,7 @@ module tb;
 
             // compare result
             $display("Obtain Data: %h %h %h %h", dac_data[0], dac_data[1], dac_data[2], dac_data[3]);
-            $display("Give up %d", memsize>>>(speed-3 > 0 ? speed-3 : 0));
+            $display("Give up %d %d",memsize ,memsize>>>(speed-3 > 0 ? speed-3 : 0));
             for (int i = 0; i < memsize>>>(speed-3 > 0 ? speed-3 : 0); i++) begin
                 $display("Validating %d", i);
                 if (dac_data[i] !== golden[i]) begin
