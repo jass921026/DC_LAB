@@ -62,7 +62,7 @@ always_comb begin
             if (prev_daclrck_r && !i_daclrck) begin
                 if (i_speed >= 3) begin //no interpolation
                     addr_w = addr_r + 1<<(i_speed-3);
-                    out_data_w = i_sram_data;
+                    out_data_w = prev_data_r;
                 end
                 else begin //slow down
                     if (interpolation_counter_r == 1<<(-i_speed+3)-1) begin
