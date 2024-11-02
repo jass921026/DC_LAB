@@ -3,7 +3,7 @@ import binascii
 save_path = "dsp_testdata.txt"
 gold_path = "dsp_golden.txt"
 random.seed(0)
-memsize = 2**20
+memsize = 2**10 #default 2**20, to reduce the time of simulation
 signwidth = 16
 
 def gen_data() -> list[int]:
