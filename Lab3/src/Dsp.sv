@@ -30,7 +30,7 @@ assign o_dac_data = out_data_r;
 function logic [15:0] frac_mul_16;
     input logic [15:0] value;
     input logic [3:0] frac;
-    output frac_mul_16;
+    //output frac_mul_16;
     begin
         case (frac)
             4'b0000: frac_mul_16 = 16'hFFFF;
