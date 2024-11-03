@@ -19,11 +19,11 @@ def dsp(data, mode, speed, interpolation=0) -> list[int]:
     new_data = []
     if mode == 0: # slow playback
         for i in range(len(data)): # max size 2MB
-            order = i % speed
+            order , j = divmod(i, speed)
             if interpolation == 0: # no interpolation
-                new_data.append(data[i])
+                new_data.append(data[j])
             else : # linear interpolation
-                val = frac_mul_16(data[i], speed) * (speed - order) + frac_mul_16(data[i+1], speed) * order
+                val = frac_mul_16(data[j], speed) * (speed - order) + frac_mul_16(data[j+1], speed) * order
                 new_data.append(val)
     else: # fast playback
         for i in range(0,len(data),speed):
@@ -57,6 +57,6 @@ for speed in range(2,9): #slow
     process(data, save_path, gold_path, 0, speed, 0)
     process(data, save_path, gold_path, 0, speed, 1)
 for speed in range(1,9):
-        process(data, save_path, gold_path, 1, speed, 1)
+    process(data, save_path, gold_path, 1, speed, 1)
     
 
