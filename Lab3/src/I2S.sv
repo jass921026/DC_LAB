@@ -101,7 +101,7 @@ logic [19:0]    address_w   , address_r;
 logic [15:0]    data_w      , data_r;
 
 assign o_address    = address_r;
-assign o_data       = data_r
+assign o_data       = data_r;
 
 //combinational circuit
 always_comb begin
