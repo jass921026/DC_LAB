@@ -3,7 +3,7 @@
 module tb;
 	localparam CLK = 10;
 	localparam HCLK = CLK/2;
-	localparam[127:0] tbdata = 128'hf0e1d2c3b4a59687f0e1d2c3b4a59687
+	localparam[127:0] tbdata = 128'hf0e1d2c3b4a59687f0e1d2c3b4a59687;
 
 	logic clk, rst, oen;
 	initial clk = 0;
