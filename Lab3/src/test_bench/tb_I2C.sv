@@ -11,7 +11,7 @@ module tb;
 	logic sdat, sclk, start;
 
 	I2cInitializer init0(
-		.i_rst_n(rst),
+		.i_rst_n(~rst),
 		.i_clk(clk),
 		.i_start(start),
 		.o_finished(finish),

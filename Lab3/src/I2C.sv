@@ -9,8 +9,13 @@ module I2cInitializer(
     input  i_ack
 );
 
+//FSM
+localparam S_IDLE       = 0;
+localparam S_DATA       = 1;
+localparam S_ACK        = 2;
+localparam S_STARTSTOP  = 3;
 
-localparam[24*6-1:0] data = {
+logic [24*7-1:0] data = { //Packed Array
     24'b0011_0100_000_1111_0_0000_0000,
     24'b0011_0100_000_0100_0_0001_0101,
     24'b0011_0100_000_0101_0_0000_0000,
@@ -20,10 +25,6 @@ localparam[24*6-1:0] data = {
     24'b0011_0100_000_1001_0_0000_0001
 } ;
 
-localparam S_IDLE       = 0;
-localparam S_DATA       = 1;
-localparam S_ACK        = 2;
-localparam S_STARTSTOP  = 3;
 
 logic[1:0]  state_w     , state_r;
 logic       sclk_w      , sclk_r;
