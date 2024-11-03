@@ -19,7 +19,7 @@ module tb;
 		.i_start(start),
 		.i_pause(pause),
 		.i_stop(stop),
-		.i_data(data),
+		.i_data(dac_data), // player output is the input of recorder
 		.o_address(o_addr),
 		.o_data(recorder_data)
 	);
