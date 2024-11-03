@@ -9,7 +9,7 @@ module tb;
 	initial clk = 0;
 	initial lrc = 0;
 	always #HCLK clk = ~clk;
-	always #32*CLK lrc = ~lrc;
+	always #(32*CLK) lrc = ~lrc;
 	logic data, o_data, start;
 	logic [19:0] o_addr;
 	logic [15:0] dac_data;
