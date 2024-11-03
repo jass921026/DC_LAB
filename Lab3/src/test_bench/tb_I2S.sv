@@ -36,6 +36,7 @@ module tb;
 
 	initial begin
 		$fsdbDumpfile("I2S.fsdb");
+		$fsdbDumpvars;
 		rst = 0;
 		#(2*CLK)
 		rst = 1;

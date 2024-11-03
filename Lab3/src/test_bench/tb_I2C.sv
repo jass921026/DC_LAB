@@ -24,9 +24,9 @@ module tb;
 	initial begin
 		$fsdbDumpfile("I2C.fsdb");
 		$fsdbDumpvars;
-		rst = 0;
-		#(2*CLK)
 		rst = 1;
+		#(2*CLK)
+		rst = 0;
 		start = 1;
 	end
 

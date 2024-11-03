@@ -1,4 +1,4 @@
-module AudPalyer(
+module AudPlayer(
 	input           i_rst_n,
 	input           i_bclk,
 	input           i_daclrck,
