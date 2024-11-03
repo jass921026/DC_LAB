@@ -72,7 +72,7 @@ module tb;
 			// 	#(2*CLK)
 			// 	start=0;
 			// end
-			#(17*CLK)
+			#(16*CLK)
 			collect_data[127-i*16 -: 16] = recorder_data;
 		end
 		// display the both data
