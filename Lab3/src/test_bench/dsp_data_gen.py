@@ -7,7 +7,9 @@ random.seed(0)
 memsize = 2**10 #default 2**20, to reduce the time of simulation
 signwidth = 16
 
-
+def frac_mul_16(val, frac):
+    magic = int(2**16/frac)
+    return (val * magic) >> 16
 
 def gen_data() -> list[int]:
     data = [random.randint(0, int(2**signwidth-1)) for _ in range(memsize)]
@@ -21,7 +23,8 @@ def dsp(data, mode, speed, interpolation=0) -> list[int]:
                 if interpolation == 0: # no interpolation
                     new_data.append(data[i])
                 else : # linear interpolation
-                    new_data.append(data[i] + floor((data[i+1] - data[i]) * order / speed))
+                    val = frac_mul_16(data[i], speed) * (speed - order) + frac_mul_16(data[i+1], speed) * order
+                    new_data.append(val)
     else: # fast playback
         for i in range(0,len(data),speed):
             new_data.append(data[i])
