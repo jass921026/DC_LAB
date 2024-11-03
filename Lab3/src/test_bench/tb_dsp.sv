@@ -49,10 +49,10 @@ module tb;
 
 
 
-        for (int iter = 0 ; iter < 10; iter++) begin
+        for (int iter = 0 ; iter < 22; iter++) begin
             // prepare test data
             $display("Iteration %d", iter);
-            $fscanf(fd, "%d %d" ,speed, mode);
+            $fscanf(fd, "%d %d %d" ,fast, speed, interpolation);
             // read golden data
             for (int i = 0; i < memsize; i++) begin
                 $fscanf(fg, "%h", golden[i]);
@@ -73,7 +73,7 @@ module tb;
             // endfunction
 
             
-            for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
+            for (int i = 0; i < fast ? memsize/speed :memsize; i++) begin
                 daclrck = 0;
                 #(5*CLK)
                 // collect output data
@@ -115,7 +115,7 @@ module tb;
 
     initial begin //timer
         for (int i = 0; 1; i++) begin
-            #(100000*CLK)
+            #(300000*CLK)
             $display("Time: %d", i*100000);
         end
     end
