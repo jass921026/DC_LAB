@@ -9,7 +9,7 @@ module tb;
 
 	logic clk, rst, pause, stop, lrc;
 	always #HCLK clk = ~clk;
-	always #(32*CLK) lrc = ~lrc;
+	always #(36*CLK) lrc = ~lrc;
 	logic dac_data, start;
 	logic [19:0] o_addr;
 	logic [15:0] play_data,recorder_data;
@@ -56,21 +56,21 @@ module tb;
 		for (int i = 0; i < 8; i++) begin
 			play_data=tbdata[127-i*16 -: 16];
 			@(posedge lrc);
-			if(i==0)begin
-				pause=1;
-				#(2*CLK)
-				pause=0;
-			end
-			if(i==1)begin
-				stop=1;
-				#(2*CLK)
-				stop=0;
-			end
-			if(i==3)begin
-				start=1;
-				#(2*CLK)
-				start=0;
-			end
+			// if(i==1)begin
+			// 	pause=1;
+			// 	#(2*CLK)
+			// 	pause=0;
+			// end
+			// if(i==3)begin
+			// 	stop=1;
+			// 	#(2*CLK)
+			// 	stop=0;
+			// end
+			// if(i==4)begin
+			// 	start=1;
+			// 	#(2*CLK)
+			// 	start=0;
+			// end
 			collect_data[127-i*16 -: 16] = recorder_data;
 		end
 		// display the both data
