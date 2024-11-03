@@ -73,7 +73,7 @@ module tb;
 			// 	start=0;
 			// end
 			@(negedge lrc);
-			#(17*CLK)
+			#(18*CLK)
 			collect_data[127-i*16 -: 16] = recorder_data;
 		end
 		// display the both data
