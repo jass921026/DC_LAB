@@ -49,9 +49,9 @@ module tb;
 		#(2*CLK)
 		rst = 1;
 
-		start=0;
-		#(2*CLK)
 		start=1;
+		#(2*CLK)
+		start=0;
 		
 
 		for (int i = 0; i < 8; i++) begin
