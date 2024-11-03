@@ -1,4 +1,4 @@
-module AudPalyer(
+module AudPlayer(
 	input           i_rst_n,
 	input           i_bclk,
 	input           i_daclrck,
@@ -17,7 +17,7 @@ logic[1:0]  state_w      , state_r;
 logic       aud_dacdat_w , aud_dacdat_r;
 logic[3:0]  counter_w    , counter_r;
 
-assign aud_dacdat = aud_dacdat_r;
+assign o_aud_dacdat = aud_dacdat_r;
 
 //combinational circuit
 always_comb begin
@@ -79,7 +79,7 @@ endmodule
 module AudRecorder(
 	input           i_rst_n, 
 	input           i_clk,
-	input           i_lrc,
+	input           i_daclrck,
 	input           i_start,
 	input           i_pause,
 	input           i_stop,
@@ -96,12 +96,12 @@ localparam S_PAUSE  = 3;
 
 //registers and wires
 logic [1:0]     state_w     , state_r;
-logic [3:0]     counter_w   , counter_r;
+logic [4:0]     counter_w   , counter_r;
 logic [19:0]    address_w   , address_r;
 logic [15:0]    data_w      , data_r;
 
 assign o_address    = address_r;
-assign o_data       = data_r
+assign o_data       = data_r;
 
 //combinational circuit
 always_comb begin
@@ -127,12 +127,12 @@ always_comb begin
             else if(i_pause) begin
                 state_w     = S_PAUSE;
             end
-            else if(!i_lrc) begin//only record left channel
-                if(counter_r != 4'hf) begin
+            else if(!i_daclrck) begin//only record left channel
+                if(counter_r < 5'h11) begin //record 17 bits so that first bit is discarded
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = counter_r+1;
                 end
-                else begin
+                else begin //i2s finish
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = 0;
                     state_w     = S_WAIT;
@@ -147,7 +147,7 @@ always_comb begin
             else if(i_pause) begin
                 state_w     = S_PAUSE;
             end
-            else if(i_lrc) begin//wait for right channel
+            else if(i_daclrck) begin//wait for right channel
                 state_w     = S_REC;
                 data_w      = 0;
                 counter_w   = 0;
@@ -164,10 +164,10 @@ always_comb begin
     endcase
 end
 //sequential circuit
-always_ff@(posedge i_bclk or negedge i_rst_n) begin
+always_ff@(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         state_r         <= S_IDLE;
-        counter_r       <= 4'h0;
+        counter_r       <= 5'h0;
         address_r       <= 20'hfffff;
         data_r          <= 16'h0;
     end
