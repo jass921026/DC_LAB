@@ -7,6 +7,8 @@ random.seed(0)
 memsize = 2**10 #default 2**20, to reduce the time of simulation
 signwidth = 16
 
+
+
 def gen_data() -> list[int]:
     data = [random.randint(0, int(2**signwidth-1)) for _ in range(memsize)]
     return data
