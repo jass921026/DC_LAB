@@ -3,7 +3,9 @@
 module tb;
 	localparam CLK = 10;
 	localparam HCLK = CLK/2;
-	localparam[127:0] tbdata = 128'hf0e1d2c3b4a59687f0e1d2c3b4a59687;
+	logic [127:0] tbdata = 128'hf0e1d2c3b4a59687f0e1d2c3b4a59687;
+	logic [127:0] collect_data;
+
 
 	logic clk, rst, pause, stop, lrc;
 	always #HCLK clk = ~clk;
@@ -69,7 +71,13 @@ module tb;
 				#(2*CLK)
 				start=0;
 			end
+			collect_data[127-i*16 -: 16] = recorder_data;
 		end
+		// display the both data
+		for (int i = 0; i < 2; i++) begin
+			$display("tbdata[%d] = %b\ncollect_data[%d] = %b\n", i, tbdata[127-i*64 -: 64], i, collect_data[127-i*64 -: 64]);
+		end
+
 		$finish;
 	end
 
