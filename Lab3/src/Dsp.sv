@@ -30,25 +30,25 @@ assign o_dac_data = out_data_r;
 function logic [15:0] frac_mul_16;
     input logic [15:0] value;
     input logic [3:0] frac;
-    output result;
+    output frac_mul_16;
     begin
         case (frac)
-            4'b0000: result = 16'hFFFF;
-            4'b0001: result = value;
-            4'b0010: result = value >> 1;
-            4'b0011: result = (value * 16'h5555) >> 16;
-            4'b0100: result = value >> 2;
-            4'b0101: result = (value * 16'h3333) >> 16;
-            4'b0110: result = (value * 16'h2AAA) >> 16;
-            4'b0111: result = (value * 16'h2492) >> 16;
-            4'b1000: result = value >> 3;
-            4'b1001: result = (value * 16'h1C71) >> 16;
-            4'b1010: result = (value * 16'h1999) >> 16;
-            4'b1011: result = (value * 16'h1745) >> 16;
-            4'b1100: result = (value * 16'h1555) >> 16;
-            4'b1101: result = (value * 16'h13B1) >> 16;
-            4'b1110: result = (value * 16'h1249) >> 16;
-            4'b1111: result = (value * 16'h1111) >> 16;
+            4'b0000: frac_mul_16 = 16'hFFFF;
+            4'b0001: frac_mul_16 = value;
+            4'b0010: frac_mul_16 = value >> 1;
+            4'b0011: frac_mul_16 = (value * 16'h5555) >> 16;
+            4'b0100: frac_mul_16 = value >> 2;
+            4'b0101: frac_mul_16 = (value * 16'h3333) >> 16;
+            4'b0110: frac_mul_16 = (value * 16'h2AAA) >> 16;
+            4'b0111: frac_mul_16 = (value * 16'h2492) >> 16;
+            4'b1000: frac_mul_16 = value >> 3;
+            4'b1001: frac_mul_16 = (value * 16'h1C71) >> 16;
+            4'b1010: frac_mul_16 = (value * 16'h1999) >> 16;
+            4'b1011: frac_mul_16 = (value * 16'h1745) >> 16;
+            4'b1100: frac_mul_16 = (value * 16'h1555) >> 16;
+            4'b1101: frac_mul_16 = (value * 16'h13B1) >> 16;
+            4'b1110: frac_mul_16 = (value * 16'h1249) >> 16;
+            4'b1111: frac_mul_16 = (value * 16'h1111) >> 16;
         endcase
     end
 endfunction
