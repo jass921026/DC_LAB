@@ -15,7 +15,7 @@ localparam S_DATAR  = 3;
 //registers and wires
 logic[1:0]  state_w      , state_r;
 logic       aud_dacdat_w , aud_dacdat_r;
-logic[3:0]  counter_w    , counter_r;
+logic[4:0]  counter_w    , counter_r;
 
 assign o_aud_dacdat = aud_dacdat_r;
 
@@ -128,7 +128,7 @@ always_comb begin
                 state_w     = S_PAUSE;
             end
             else if(!i_daclrck) begin//only record left channel
-                if(counter_r != 4'hf) begin
+                if(counter_r != 5'h11) begin //record 17 bits so that first bit is discarded
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = counter_r+1;
                 end
