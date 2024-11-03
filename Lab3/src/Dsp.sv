@@ -80,7 +80,7 @@ always_comb begin
                         out_data_w = prev_data_r;
                     end
                     else begin // linear interpolation
-                        out_data_w = prev_data_r + ($signed(i_sram_data - prev_data_r) * $signed(interpolation_cnt_r) / $signed(i_speed));
+                        out_data_w = (prev_data_r * (i_speed - interpolation_cnt_r) + i_sram_data * interpolation_cnt_r) / i_speed;
                     end
                 end
             end
