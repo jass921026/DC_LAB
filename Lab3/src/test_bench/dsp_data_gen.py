@@ -1,5 +1,6 @@
 import random
 import binascii
+from math import floor
 save_path = "dsp_testdata.txt"
 gold_path = "dsp_golden.txt"
 random.seed(0)
@@ -18,7 +19,7 @@ def dsp(data, mode, speed, interpolation=0) -> list[int]:
                 if interpolation == 0: # no interpolation
                     new_data.append(data[i])
                 else : # linear interpolation
-                    new_data.append(int(data[i] + (data[i+1] - data[i]) * order / speed))
+                    new_data.append(data[i] + floor((data[i+1] - data[i]) * order / speed))
     else: # fast playback
         for i in range(0,len(data),speed):
             new_data.append(data[i])
