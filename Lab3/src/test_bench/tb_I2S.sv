@@ -52,7 +52,7 @@ module tb;
 
 		for (int i = 0; i < 8; i++) begin
 			@(posedge lrc);
-			dac_data=tbdata[127-i*16 -: 16];
+			play_data=tbdata[127-i*16 -: 16];
 			if(i==0)begin
 				pause=1;
 				#(2*CLK)
