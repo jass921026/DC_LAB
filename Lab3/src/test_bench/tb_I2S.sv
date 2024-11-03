@@ -74,8 +74,8 @@ module tb;
 			collect_data[127-i*16 -: 16] = recorder_data;
 		end
 		// display the both data
-		for (logic[1:0] i = 0; i < 2; i++) begin
-			$display("tb_data     [%d] = %b\ncollect_data[%d] = %b\n", i, tbdata[127-i*64 -: 64], i, collect_data[127-i*64 -: 64]);
+		for (logic[3:0] i = 0; i < 8; i++) begin
+			$display("tb_data     [%d] = %b\ncollect_data[%d] = %b\n", i, tbdata[127-i*16 -: 16], i, collect_data[127-i*16 -: 16]);
 		end
 
 		$finish;
