@@ -43,7 +43,7 @@ module tb;
 		start = 0;
 		pause = 0; 
 		stop = 0; 
-		lrc = 0;
+		lrc = 1;
 
 		rst = 0;
 		#(2*CLK)
@@ -53,10 +53,9 @@ module tb;
 		#(2*CLK)
 		start=0;
 		
-
+		lrc = 1;
 		for (int i = 0; i < 8; i++) begin
 			play_data=tbdata[127-i*16 -: 16];
-			@(posedge lrc);
 			// if(i==1)begin
 			// 	pause=1;
 			// 	#(2*CLK)
