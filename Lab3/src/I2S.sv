@@ -167,7 +167,7 @@ end
 always_ff@(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         state_r         <= S_IDLE;
-        counter_r       <= 4'h0;
+        counter_r       <= 5'h0;
         address_r       <= 20'hfffff;
         data_r          <= 16'h0;
     end
