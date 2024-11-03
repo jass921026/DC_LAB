@@ -18,7 +18,7 @@ localparam S_DATA   = 4;
 
 
 
-logic [23:0][6:0] data = { //Packed Array
+logic [23:0] data[0:6] = { //Packed Array
     24'b0011_0100_000_1111_0_0000_0000,
     24'b0011_0100_000_0100_0_0001_0101,
     24'b0011_0100_000_0101_0_0000_0000,
@@ -57,9 +57,9 @@ always_comb begin
         S_IDLE: begin
             finished_w  = 0;
             if(i_start) begin
-                state_w     = S_START;
-                cmdcnt_w    = 'd6; //7 cmds
-                bitcnt_w    = 0;
+                state_w  = S_START;
+                cmdcnt_w = 'd6; //7 cmds
+                bitcnt_w = 0;
             end
         end
         S_DATA : begin
@@ -72,7 +72,7 @@ always_comb begin
                 end
                 else begin
                     sdat_w = data[cmdcnt_r][23-bitcnt_r];
-                    bitcnt_w +=1;
+                    bitcnt_w = bitcnt_r + 1;
                 end
             end
         end
