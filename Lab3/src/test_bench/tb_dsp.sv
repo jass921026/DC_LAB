@@ -29,7 +29,7 @@ module tb;
         .i_stop(stop),
         .i_fast(fast),
         .i_speed(speed),
-        .i_interpolation_mode(mode),
+        .i_interpolation(mode),
         .i_daclrck(daclrck),
         .i_sram_data(sram_block),
         .o_dac_data(dac_block),
