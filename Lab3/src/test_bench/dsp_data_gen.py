@@ -19,7 +19,7 @@ def dsp(data, mode, speed, interpolation=0) -> list[int]:
     new_data = []
     if mode == 0: # slow playback
         for i in range(len(data)): # max size 2MB
-            order , j = divmod(i, speed)
+            j , order = divmod(i, speed)
             if interpolation == 0: # no interpolation
                 new_data.append(data[j])
             else : # linear interpolation
