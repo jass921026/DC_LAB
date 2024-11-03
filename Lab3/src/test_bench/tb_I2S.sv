@@ -37,6 +37,7 @@ module tb;
 		$fsdbDumpvars;
 		clk = 0; 
 		rst = 1; 
+		start = 0;
 		pause = 0; 
 		stop = 0; 
 		lrc = 0;
@@ -51,8 +52,8 @@ module tb;
 		
 
 		for (int i = 0; i < 8; i++) begin
-			@(posedge lrc);
 			play_data=tbdata[127-i*16 -: 16];
+			@(posedge lrc);
 			if(i==0)begin
 				pause=1;
 				#(2*CLK)
