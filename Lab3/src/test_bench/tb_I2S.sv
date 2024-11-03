@@ -4,7 +4,7 @@ module tb;
 	localparam CLK = 10;
 	localparam HCLK = CLK/2;
 	//logic [127:0] tbdata = 128'hf0e1d2c3b4a59687f0e1d2c3b4a59687;
-	logic [127:0] tbdata = 128'h99999999999999999999999999999999; //for test
+	logic [127:0] tbdata = 128'h11111111111111111111111111111111; //for test
 	logic [127:0] collect_data;
 
 
