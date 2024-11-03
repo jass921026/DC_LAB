@@ -29,7 +29,7 @@ module tb;
 		.i_rst_n(rst),
 		.i_bclk(clk),
 		.i_daclrck(lrc),
-		.i_en('b1), // enable AudPlayer only when playing audio, work with AudDSP
+		.i_en(1'b1), // enable AudPlayer only when playing audio, work with AudDSP
 		.i_dac_data(dac_data), //dac_data
 		.o_aud_dacdat(data)
 	);
