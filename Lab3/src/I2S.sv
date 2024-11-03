@@ -51,7 +51,7 @@ always_comb begin
         S_DATAR: begin
             if(counter_r != 0) begin
                 aud_dacdat_w    = i_dac_data[counter_r];
-                counter_w       = counter_r+1;
+                counter_w       = counter_r-1;
             end
             else begin
                 aud_dacdat_w    = i_dac_data[counter_r];
