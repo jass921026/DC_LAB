@@ -10,9 +10,9 @@ module tb;
 	initial lrc = 0;
 	always #HCLK clk = ~clk;
 	always #(32*CLK) lrc = ~lrc;
-	logic data, o_data, start;
+	logic data, start;
 	logic [19:0] o_addr;
-	logic [15:0] dac_data;
+	logic [15:0] dac_data,recorder_data;
 
 	AudRecorder rec0(
 		.i_rst_n(rst), 
@@ -23,13 +23,13 @@ module tb;
 		.i_stop(stop),
 		.i_data(data),
 		.o_address(o_addr),
-		.o_data(o_data)
+		.o_data(recorder_data)
 	);
 	AudPlayer player0(
 		.i_rst_n(rst),
 		.i_bclk(clk),
 		.i_daclrck(lrc),
-		.i_en(1), // enable AudPlayer only when playing audio, work with AudDSP
+		.i_en('b1), // enable AudPlayer only when playing audio, work with AudDSP
 		.i_dac_data(dac_data), //dac_data
 		.o_aud_dacdat(data)
 	);
