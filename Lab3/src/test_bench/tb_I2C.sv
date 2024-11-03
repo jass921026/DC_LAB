@@ -27,7 +27,11 @@ module tb;
 		#(2*CLK)
 		rst = 1;
 		start = 1;
+	end
+
+	initial begin
 		#(500000*CLK)
+		$display("Automatic abort.");
 		$finish;
 	end
 

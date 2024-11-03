@@ -41,7 +41,7 @@ module tb;
 		rst = 1;
 		for (int i = 0; i < 8; i++) begin
 			@(posedge lrc);
-			dac_data=tbdata[127-i*16:112-i*16]
+			dac_data=tbdata[127-i*16 -: 16]
 			if(i==0)begin
 				start=1
 				#(2*CLK)

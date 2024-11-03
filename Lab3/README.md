@@ -59,6 +59,15 @@ And it's hard to simulate owing to the limitation (you must play audio through S
 
 ## How To Use Testbench
 
+### Dsp
+
 ```bash
 vcs ./tb_dsp.sv ../Dsp.sv -full64 -R -debug_access+all -sverilog +access+rw
+```
+
+### I2C & I2S
+
+```bash
+vcs ./tb_I2C.sv ../I2C.sv ../I2S.sv -full64 -R -debug_access+all -sverilog +access+rw
+vcs ./tb_I2S.sv ../I2C.sv ../I2S.sv -full64 -R -debug_access+all -sverilog +access+rw
 ```
