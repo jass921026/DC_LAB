@@ -74,7 +74,7 @@ module tb;
             // endfunction
 
             
-            for (int i = 0; i < fast ? memsize/speed :memsize; i++) begin
+            for (int i = 0; i < (fast ? memsize/speed :memsize); i++) begin
                 daclrck = 0;
                 #(5*CLK)
                 // collect output data
@@ -116,7 +116,7 @@ module tb;
 
     initial begin //timer
         for (int i = 0; 1; i++) begin
-            #(300000*CLK)
+            #(100000*CLK)
             $display("Time: %d", i*100000);
         end
     end

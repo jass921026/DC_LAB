@@ -5,7 +5,7 @@ module AudDSP(
     input       i_pause,
     input       i_stop,
     input       i_fast, // 1 for fast, 0 for slow
-    input [2:0] i_speed, // i for i times fast/slow
+    input [3:0] i_speed, // i for i times fast/slow
     input       i_interpolation, // 0 for constant, 1 for linear
     input       i_daclrck, // 0 for left channel, 1 for right channel, we use 0
     input [15:0] i_sram_data,
@@ -18,7 +18,7 @@ logic [ 2:0] state_r, state_w;
 logic        prev_daclrck;
 logic [15:0] out_data_r, out_data_w;
 logic [15:0] prev_data_r, prev_data_w;
-logic [2:0] interpolation_cnt_r, interpolation_cnt_w;
+logic [3:0] interpolation_cnt_r, interpolation_cnt_w;
 
 parameter S_IDLE      = 0;
 parameter S_PAUSE     = 1;
