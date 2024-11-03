@@ -8,7 +8,7 @@ module tb;
 	logic clk, rst, oen;
 	initial clk = 0;
 	always #HCLK clk = ~clk;
-	logic sdat, sclk, start;
+	logic sdat, sclk, start,finish;
 
 	I2cInitializer init0(
 		.i_rst_n(~rst),
@@ -28,6 +28,9 @@ module tb;
 		#(2*CLK)
 		rst = 0;
 		start = 1;
+		@(posedge finish);
+		$display("Finished.");
+		$finish;
 	end
 
 	initial begin
