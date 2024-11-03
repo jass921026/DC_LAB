@@ -17,7 +17,7 @@ logic[1:0]  state_w      , state_r;
 logic       aud_dacdat_w , aud_dacdat_r;
 logic[3:0]  counter_w    , counter_r;
 
-assign aud_dacdat = aud_dacdat_r;
+assign o_aud_dacdat = aud_dacdat_r;
 
 //combinational circuit
 always_comb begin
