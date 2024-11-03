@@ -79,7 +79,7 @@ endmodule
 module AudRecorder(
 	input           i_rst_n, 
 	input           i_clk,
-	input           i_lrc,
+	input           i_daclrck,
 	input           i_start,
 	input           i_pause,
 	input           i_stop,
@@ -127,7 +127,7 @@ always_comb begin
             else if(i_pause) begin
                 state_w     = S_PAUSE;
             end
-            else if(!i_lrc) begin//only record left channel
+            else if(!i_daclrck) begin//only record left channel
                 if(counter_r != 4'hf) begin
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = counter_r+1;
@@ -147,7 +147,7 @@ always_comb begin
             else if(i_pause) begin
                 state_w     = S_PAUSE;
             end
-            else if(i_lrc) begin//wait for right channel
+            else if(i_daclrck) begin//wait for right channel
                 state_w     = S_REC;
                 data_w      = 0;
                 counter_w   = 0;
