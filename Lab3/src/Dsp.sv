@@ -6,7 +6,7 @@ module AudDSP(
     input       i_stop,
     input       i_fast, // 1 for fast, 0 for slow
     input [2:0] i_speed, // i for i times fast/slow
-    input       i_interpolation_mode, // 0 for constant, 1 for linear
+    input       i_interpolation, // 0 for constant, 1 for linear
     input       i_daclrck, // 0 for left channel, 1 for right channel, we use 0
     input [15:0] i_sram_data,
     output[15:0] o_dac_data,
@@ -43,7 +43,7 @@ always_comb begin
             if (i_start) begin //address must be 0
                 prev_data_w = i_sram_data;
                 state_w <= S_PLAY;
-                if (fast) addr_w = i_speed;
+                if (i_fast) addr_w = i_speed;
                 else addr_w = 1;
             end
         end
@@ -62,7 +62,7 @@ always_comb begin
             end
             // work at daclrck change to left (0)
             if (prev_daclrck && !i_daclrck) begin
-                if (fast) begin //fast forward
+                if (i_fast) begin //fast forward
                     addr_w = addr_r + i_speed;
                     out_data_w = prev_data_r;
                     prev_data_w = i_sram_data;
@@ -76,7 +76,7 @@ always_comb begin
                     else begin 
                         interpolation_cnt_w = interpolation_cnt_r + 1;
                     end
-                    if (i_interpolation_mode == 0) begin // no interpolation
+                    if (i_interpolation == 0) begin // no interpolation
                         out_data_w = prev_data_r;
                     end
                     else begin // linear interpolation

@@ -10,7 +10,7 @@ module tb;
     localparam memaddr = 10; // 10 bits for addressing
 
     logic clk, daclrck;
-    logic rst, start, pause, stop, mode;
+    logic rst, start, pause, stop, mode, fast;
     logic [2:0] speed;
     logic [15:0] sram_data[0:memsize-1], dac_data[0:memsize-1], golden[0:memsize-1];
     logic [15:0] sram_block, dac_block;
