@@ -52,8 +52,8 @@ module tb;
 
         for (int iter = 0 ; iter < 22; iter++) begin
             // prepare test data
-            $display("Iteration %d", iter);
             $fscanf(fd, "%d %d %d" ,fast, speed, interpolation);
+            $display("config %d %d %d", fast, speed, interpolation);
             // read golden data
             for (int i = 0; i < memsize; i++) begin
                 $fscanf(fg, "%h", golden[i]);

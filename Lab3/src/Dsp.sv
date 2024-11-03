@@ -68,7 +68,7 @@ always_comb begin
                     prev_data_w = i_sram_data;
                 end
                 else begin //slow down
-                    if (interpolation_cnt_r == i_speed-1) begin
+                    if (interpolation_cnt_r >= i_speed-1) begin
                         interpolation_cnt_w = 0;
                         addr_w = addr_r + 1 ;
                         prev_data_w = i_sram_data;
