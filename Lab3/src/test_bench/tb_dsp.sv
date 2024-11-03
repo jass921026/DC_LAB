@@ -27,6 +27,7 @@ module tb;
         .i_start(start),
         .i_pause(pause),
         .i_stop(stop),
+        .i_fast(fast),
         .i_speed(speed),
         .i_interpolation_mode(mode),
         .i_daclrck(daclrck),
