@@ -58,21 +58,21 @@ always_comb begin
             finished_w  = 0;
             if(i_start) begin
                 state_w     = S_START;
-                cmdcnt_w    = 6; //7 cmds
+                cmdcnt_w    = 'd6; //7 cmds
                 bitcnt_w    = 0;
             end
         end
         S_DATA : begin
             sclk_w  = ~sclk_r;
             if(sclk_r) begin //this cycle 1, next cycle 0
-                if(bitcnt_r[2:0] == 3'b111) begin //into ack
+                if(bitcnt_r[2:0] == 'b111) begin //into ack
                     state_w = S_ACK;
                     oen_w   = 0;
                     sdat_w  = 0; //actually don't care
                 end
                 else begin
-                    sdat_w      = data[cmdcnt_r][23-bitcnt_r];
-                    bitcnt_w    +=1;
+                    sdat_w = data[cmdcnt_r][23-bitcnt_r];
+                    bitcnt_w +=1;
                 end
             end
         end
@@ -81,7 +81,7 @@ always_comb begin
             if (sclk_r) begin
                 oen_w = 1;
                 if(!i_ack) begin //ack = 0 -> acked
-                    if (bitcnt_r == 5'23) begin //finish this cmd
+                    if (bitcnt_r == 'd23) begin //finish this cmd
                         state_w = S_STOP;
                     end 
                     else begin //next byte
