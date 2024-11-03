@@ -128,11 +128,11 @@ always_comb begin
                 state_w     = S_PAUSE;
             end
             else if(!i_daclrck) begin//only record left channel
-                if(counter_r != 5'h11) begin //record 17 bits so that first bit is discarded
+                if(counter_r < 5'h11) begin //record 17 bits so that first bit is discarded
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = counter_r+1;
                 end
-                else begin
+                else begin //i2s finish
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = 0;
                     state_w     = S_WAIT;
