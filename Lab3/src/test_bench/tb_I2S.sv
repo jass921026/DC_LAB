@@ -6,7 +6,6 @@ module tb;
 	localparam[127:0] tbdata = 128'hf0e1d2c3b4a59687f0e1d2c3b4a59687;
 
 	logic clk, rst, pause, stop, lrc;
-	initial clk = 0, rst = 1, pause = 0, stop = 0, lrc = 0;
 	always #HCLK clk = ~clk;
 	always #(32*CLK) lrc = ~lrc;
 	logic dac_data, start;
@@ -36,6 +35,12 @@ module tb;
 	initial begin
 		$fsdbDumpfile("I2S.fsdb");
 		$fsdbDumpvars;
+		clk = 0; 
+		rst = 1; 
+		pause = 0; 
+		stop = 0; 
+		lrc = 0;
+
 		rst = 0;
 		#(2*CLK)
 		rst = 1;
