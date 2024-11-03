@@ -98,10 +98,10 @@ always_comb begin
         S_START : begin
             if (sdat_r) begin // first cycle
                 sclk_w = 1;
+                sdat_w = 0;
                 oen_w  = 1;
             end
             else begin // second cycle
-                sdat_w = 0;
                 state_w = S_DATA;
                 bitcnt_w = 'd23;
             end
