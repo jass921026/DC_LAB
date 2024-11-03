@@ -18,13 +18,13 @@ def gen_data() -> list[int]:
 def dsp(data, mode, speed, interpolation=0) -> list[int]:
     new_data = []
     if mode == 0: # slow playback
-        for i in range(len(data)//speed): # max size 2MB
-            for order in range(speed):
-                if interpolation == 0: # no interpolation
-                    new_data.append(data[i])
-                else : # linear interpolation
-                    val = frac_mul_16(data[i], speed) * (speed - order) + frac_mul_16(data[i+1], speed) * order
-                    new_data.append(val)
+        for i in range(len(data)): # max size 2MB
+            order = i % speed
+            if interpolation == 0: # no interpolation
+                new_data.append(data[i])
+            else : # linear interpolation
+                val = frac_mul_16(data[i], speed) * (speed - order) + frac_mul_16(data[i+1], speed) * order
+                new_data.append(val)
     else: # fast playback
         for i in range(0,len(data),speed):
             new_data.append(data[i])
