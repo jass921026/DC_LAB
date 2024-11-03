@@ -75,7 +75,7 @@ module tb;
 		end
 		// display the both data
 		for (logic[1:0] i = 0; i < 2; i++) begin
-			$display("tbdata[%d] = %b\ncollect_data[%d] = %b\n", i, tbdata[127-i*64 -: 64], i, collect_data[127-i*64 -: 64]);
+			$display("tb_data     [%d] = %b\ncollect_data[%d] = %b\n", i, tbdata[127-i*64 -: 64], i, collect_data[127-i*64 -: 64]);
 		end
 
 		$finish;
