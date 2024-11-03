@@ -44,29 +44,29 @@ module tb;
 			@(posedge lrc);
 			dac_data=tbdata[127-i*16 -: 16];
 			if(i==0)begin
-				start=1
+				start=1;
 				#(2*CLK)
-				start=0
+				start=0;
 			end
 			if(i==3)begin
-				pause=1
+				pause=1;
 				#(2*CLK)
-				pause=0
+				pause=0;
 			end
 			if(i==4)begin
-				start=1
+				start=1;
 				#(2*CLK)
-				start=0
+				start=0;
 			end
 			if(i==5)begin
-				stop=1
+				stop=1;
 				#(2*CLK)
-				stop=0
+				stop=0;
 			end
 			if(i==6)begin
-				start=1
+				start=1;
 				#(2*CLK)
-				start=0
+				start=0;
 			end
 		end
 		$finish;
