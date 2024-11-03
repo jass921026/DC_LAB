@@ -15,7 +15,7 @@ localparam S_DATAR  = 3;
 //registers and wires
 logic[1:0]  state_w      , state_r;
 logic       aud_dacdat_w , aud_dacdat_r;
-logic[4:0]  counter_w    , counter_r;
+logic[3:0]  counter_w    , counter_r;
 
 assign o_aud_dacdat = aud_dacdat_r;
 
@@ -96,7 +96,7 @@ localparam S_PAUSE  = 3;
 
 //registers and wires
 logic [1:0]     state_w     , state_r;
-logic [3:0]     counter_w   , counter_r;
+logic [4:0]     counter_w   , counter_r;
 logic [19:0]    address_w   , address_r;
 logic [15:0]    data_w      , data_r;
 
