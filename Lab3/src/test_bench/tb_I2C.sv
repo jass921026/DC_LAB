@@ -27,6 +27,8 @@ module tb;
 		#(2*CLK)
 		rst = 0;
 		start = 1;
+		#(2*CLK)
+		start = 0;
 		@(posedge finish);
 		$display("Finished.");
 		$finish;
