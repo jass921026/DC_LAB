@@ -103,7 +103,7 @@ always_comb begin
             end
             else begin // second cycle
                 state_w = S_DATA;
-                bitcnt_w = d'23;
+                bitcnt_w = 'd23;
             end
         end
         S_STOP : begin
