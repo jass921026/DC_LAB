@@ -28,9 +28,9 @@ assign o_sram_addr = addr_r;
 assign o_dac_data = out_data_r;
 
 function logic [15:0] frac_mul_16;
-    input logic [15:0] value
-    input logic [3:0] frac
-    output result
+    input logic [15:0] value;
+    input logic [3:0] frac;
+    output result;
     begin
         case (frac)
             4'b0000: result = 16'hFFFF;
