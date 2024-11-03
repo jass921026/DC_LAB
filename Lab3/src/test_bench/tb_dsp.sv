@@ -10,8 +10,8 @@ module tb;
     localparam memaddr = 10; // 10 bits for addressing
 
     logic clk, daclrck;
-    logic rst, start, pause, stop, mode;
-    logic [2:0] speed;
+    logic rst, start, pause, stop, interpolation, fast;
+    logic [3:0] speed;
     logic [15:0] sram_data[0:memsize-1], dac_data[0:memsize-1], golden[0:memsize-1];
     logic [15:0] sram_block, dac_block;
     logic [19:0] sram_addr;
@@ -27,8 +27,9 @@ module tb;
         .i_start(start),
         .i_pause(pause),
         .i_stop(stop),
+        .i_fast(fast),
         .i_speed(speed),
-        .i_interpolation_mode(mode),
+        .i_interpolation(interpolation),
         .i_daclrck(daclrck),
         .i_sram_data(sram_block),
         .o_dac_data(dac_block),
@@ -49,10 +50,10 @@ module tb;
 
 
 
-        for (int iter = 0 ; iter < 10; iter++) begin
+        for (int iter = 0 ; iter < 22; iter++) begin
             // prepare test data
-            $display("Iteration %d", iter);
-            $fscanf(fd, "%d %d" ,speed, mode);
+            $fscanf(fd, "%d %d %d" ,fast, speed, interpolation);
+            $display("config %d %d %d", fast, speed, interpolation);
             // read golden data
             for (int i = 0; i < memsize; i++) begin
                 $fscanf(fg, "%h", golden[i]);
@@ -73,7 +74,7 @@ module tb;
             // endfunction
 
             
-            for (int i = 0; i < memsize>>(speed > 3 ? speed-3 : 0); i++) begin
+            for (int i = 0; i < (fast ? memsize/speed :memsize); i++) begin
                 daclrck = 0;
                 #(5*CLK)
                 // collect output data
