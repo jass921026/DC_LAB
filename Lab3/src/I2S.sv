@@ -4,7 +4,8 @@ module AudPlayer(
 	input           i_daclrck,
 	input           i_en,
 	input [15:0]    i_dac_data,
-	output          o_aud_dacdat
+	output          o_aud_dacdat,
+	output[3:0]     o_second
 );
 //parameters
 localparam S_IDLE   = 0;
@@ -16,8 +17,11 @@ localparam S_DATAR  = 3;
 logic[1:0]  state_w      , state_r;
 logic       aud_dacdat_w , aud_dacdat_r;
 logic[3:0]  counter_w    , counter_r;
+logic[14:0] seccnt_w , seccnt_r;
+logic[3:0] second_w , second_r;
 
 assign o_aud_dacdat = aud_dacdat_r;
+assign o_second = second_r;
 
 //combinational circuit
 always_comb begin
@@ -25,11 +29,14 @@ always_comb begin
     state_w         = state_r;
     counter_w       = counter_r;
     aud_dacdat_w    = aud_dacdat_r;
+	 second_w        = (seccnt_r==0)?second_r+1:second_r;
+	 seccnt_w        = seccnt_r;
 
     case(state_r)
         S_IDLE: begin
             if(i_en && !i_daclrck) begin//left channel
                 state_w = S_DATAL;
+					 seccnt_w = seccnt_r+1;
             end
         end
         S_DATAL: begin
@@ -67,11 +74,15 @@ always_ff@(posedge i_bclk or negedge i_rst_n) begin
         state_r         <= S_IDLE;
         aud_dacdat_r    <= 1'b0;
         counter_r       <= 4'hf;
+		  seccnt_r  <= 1;
+		  second_r  <= 0;
     end
     else begin
         state_r         <= state_w;
         aud_dacdat_r    <= aud_dacdat_w;
         counter_r       <= counter_w;
+		  seccnt_r  <= seccnt_w;
+		  second_r  <= second_w;
     end
 end
 endmodule
@@ -85,12 +96,13 @@ module AudRecorder(
 	input           i_stop,
 	input           i_data,
 	output [19:0]   o_address,
-	output [15:0]   o_data
+	output [15:0]   o_data,
+	output[3:0]     o_second
 );
 
 //parameters
-localparam S_IDLE   = 0;
-localparam S_REC    = 1;// record left channel 
+localparam S_IDLE   = 1;
+localparam S_REC    = 0;// record left channel 
 localparam S_WAIT   = 2;// wait for the next left channel
 localparam S_PAUSE  = 3;
 
@@ -99,9 +111,12 @@ logic [1:0]     state_w     , state_r;
 logic [4:0]     counter_w   , counter_r;
 logic [19:0]    address_w   , address_r;
 logic [15:0]    data_w      , data_r;
+logic[14:0] seccnt_w , seccnt_r;
+logic[3:0] second_w , second_r;
 
 assign o_address    = address_r;
 assign o_data       = data_r;
+assign o_second = state_r;
 
 //combinational circuit
 always_comb begin
@@ -110,7 +125,8 @@ always_comb begin
     counter_w       = counter_r;
     address_w       = address_r;
     data_w          = data_r;
-
+	 second_w        = (seccnt_r==0)?second_r+1:second_r;
+	 seccnt_w        = seccnt_r;
     case(state_r)
         S_IDLE: begin
             if(i_start) begin
@@ -133,6 +149,7 @@ always_comb begin
                     counter_w   = counter_r+1;
                 end
                 else begin //i2s finish
+					     seccnt_w = seccnt_r+1;
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = 0;
                     state_w     = S_WAIT;
@@ -170,12 +187,16 @@ always_ff@(posedge i_clk or negedge i_rst_n) begin
         counter_r       <= 5'h0;
         address_r       <= 20'hfffff;
         data_r          <= 16'h0;
+		  seccnt_r  <= 1;
+		  second_r  <= 0;
     end
     else begin
         state_r         <= state_w;
         address_r       <= address_w;
         counter_r       <= counter_w;
         data_r          <= data_w;
+		  seccnt_r  <= seccnt_w;
+		  second_r  <= second_w;
     end
 end
 endmodule

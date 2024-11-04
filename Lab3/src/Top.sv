@@ -38,8 +38,8 @@ module Top (
 	output o_AUD_DACDAT,
 
 	// SEVENDECODER (optional display)
-	output [5:0] o_record_time,
-	output [5:0] o_play_time
+	output [3:0] o_record_time,
+	output [3:0] o_play_time
 
 	// LCD (optional display)
 	// input        i_clk_800k,
@@ -74,9 +74,11 @@ logic dsp_start, dsp_pause, dsp_stop;
 logic rec_start, rec_pause, rec_stop;
 logic play_en;
 logic [3:0] acktimes_w,acktimes_r;
+logic [3:0] second_rec,second_play;
+logic [3:0] startcnt_w,startcnt_r;
 
-assign o_play_time = state_r;
-assign o_record_time = acktimes_r;
+assign o_play_time = startcnt_r;
+assign o_record_time = second_rec;
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
 
@@ -97,12 +99,13 @@ assign play_en = (state_r == S_PLAY);
 
 assign dsp_start = (state_r == S_PLAY) && (i_start);
 assign dsp_pause = (state_r == S_PLAY) && (i_pause);
-assign dsp_stop = (state_r == S_PLAY) && (i_stop) || (state_r == S_RECD) ;
+assign dsp_stop = ((state_r == S_PLAY) && i_stop) || (state_r == S_RECD) ;
 
 assign rec_start = (state_r == S_RECD) && (i_start);
 assign rec_pause = (state_r == S_RECD) && (i_pause);
-assign rec_stop = (state_r == S_RECD) && (i_stop) || (state_r == S_PLAY);
+assign rec_stop = ((state_r == S_RECD) && i_stop) || (state_r == S_PLAY);
 assign acktimes_w = (!i2c_ack) ? acktimes_r + 1 : acktimes_r;
+assign startcnt_w = ((state_r == S_RECD) && (i_start))?(startcnt_r+1):startcnt_r;
 
 // below is a simple example for module division
 // you can design these as you like
@@ -146,7 +149,8 @@ AudPlayer player0(
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_en(play_en), // enable AudPlayer only when playing audio, work with AudDSP
 	.i_dac_data(dac_data), //dac_data
-	.o_aud_dacdat(o_AUD_DACDAT)
+	.o_aud_dacdat(o_AUD_DACDAT),
+	.o_second(second_play)
 );
 
 // === AudRecorder ===
@@ -161,6 +165,7 @@ AudRecorder recorder0(
 	.i_data(i_AUD_ADCDAT),
 	.o_address(addr_record),
 	.o_data(data_record),
+	.o_second(second_rec)
 );
 
 always_comb begin
@@ -184,14 +189,16 @@ always_comb begin
 	endcase
 end
 
-always_ff @(posedge i_AUD_BCLK or negedge i_rst_n) begin
+always_ff @(posedge i_clk or negedge i_rst_n) begin
 	if (!i_rst_n) begin
 		state_r <= S_I2C;
 		acktimes_r <= 0;
+		startcnt_r <= 0;
 	end
 	else begin
 		state_r <= state_w;
 		acktimes_r <= acktimes_w;
+		startcnt_r <= startcnt_w;
 	end
 end
 

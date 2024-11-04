@@ -138,6 +138,7 @@ module DE2_115 (
 
 logic key0down, key1down, key2down, key3down;
 logic CLK_12M, CLK_100K, CLK_800K;
+logic [3:0] recd_time,play_time;
 
 assign AUD_XCK = CLK_12M;
 
@@ -205,7 +206,7 @@ Top top0(
 	.o_AUD_DACDAT(AUD_DACDAT),
 
 	// SEVENDECODER (optional display)
-	// .o_record_time(recd_time),
+	.o_record_time(recd_time),
 	.o_play_time(play_time)
 
 	// LCD (optional display)

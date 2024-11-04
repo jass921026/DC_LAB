@@ -80,7 +80,7 @@ always_comb begin
             if (sclk_r) begin
                 oen_w = 1;
                 //if(!i_ack) begin //ack = 0 -> acked
-                if (bitcnt_r == 'd0) begin //finish this cmd
+					 if (bitcnt_r == 'd0) begin //finish this cmd
                     state_w = S_STOP;
                 end 
                 else begin //next byte
