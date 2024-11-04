@@ -84,7 +84,7 @@ always_comb begin
             sclk_w  = ~sclk_r;
             if (sclk_r) begin
                 oen_w = 1;
-//                if(!i_ack) begin //ack = 0 -> acked
+               if(!i_ack) begin //ack = 0 -> acked
 						 if (bitcnt_r == 5'b11111) begin //finish this cmd
 							  state_w = S_STOP;
 						 end 
@@ -93,11 +93,11 @@ always_comb begin
 							  bitcnt_w = bitcnt_r - 1;
                               sdat_w = data[cmdcnt_r][bitcnt_r];
 						 end
-//                end
-//                else begin //ack = 1 -> not acked, resend
-//                    cmdcnt_w    = cmdcnt_r+1;
-//                    state_w     = S_STOP;
-//                end
+               end
+               else begin //ack = 1 -> not acked, resend
+                   cmdcnt_w    = cmdcnt_r+1;
+                   state_w     = S_STOP;
+               end
             end
 
         end
