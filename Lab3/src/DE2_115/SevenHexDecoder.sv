@@ -5,6 +5,15 @@
  *   4  2
  *    33
  */
+
+module seven_hex_16_4 (
+	input [15:0] i_hex,
+	output logic [6:0] o_seven_3,
+	output logic [6:0] o_seven_2,
+	output logic [6:0] o_seven_1,
+	output logic [6:0] o_seven_0
+);
+
 function logic [6:0] seven_hex_16;
 	input logic [3:0] value;
 	begin
@@ -29,13 +38,6 @@ function logic [6:0] seven_hex_16;
 	end
 endfunction
 
-module seven_hex_16_4 (
-	input [15:0] i_hex,
-	output logic [6:0] o_seven_3,
-	output logic [6:0] o_seven_2,
-	output logic [6:0] o_seven_1,
-	output logic [6:0] o_seven_0
-);
 assign o_seven_3 = seven_hex_16(i_hex[15:12]);
 assign o_seven_2 = seven_hex_16(i_hex[11:8]);
 assign o_seven_1 = seven_hex_16(i_hex[7:4]);
