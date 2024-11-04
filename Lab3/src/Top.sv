@@ -40,7 +40,7 @@ module Top (
 	// SEVENDECODER (optional display)
 	output [3:0] o_record_time,
 	output [3:0] o_play_time,
-	output [15:0] o_end_address,
+	output [15:0] o_end_address
 
 	// LCD (optional display)
 	// input        i_clk_800k,
