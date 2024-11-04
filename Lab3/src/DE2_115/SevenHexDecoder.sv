@@ -38,10 +38,12 @@ function logic [6:0] seven_hex_16;
 	end
 endfunction
 
-assign o_seven_3 = seven_hex_16(i_hex[15:12]);
-assign o_seven_2 = seven_hex_16(i_hex[11:8]);
-assign o_seven_1 = seven_hex_16(i_hex[7:4]);
-assign o_seven_0 = seven_hex_16(i_hex[3:0]);
+always_comb begin
+	o_seven_3 = seven_hex_16(i_hex[15:12]);
+	o_seven_2 = seven_hex_16(i_hex[11:8]);
+	o_seven_1 = seven_hex_16(i_hex[7:4]);
+	o_seven_0 = seven_hex_16(i_hex[3:0]);
+end
 endmodule
 
 module SevenHexDecoder (
