@@ -39,7 +39,8 @@ module Top (
 
 	// SEVENDECODER (optional display)
 	output [3:0] o_record_time,
-	output [3:0] o_play_time
+	output [3:0] o_play_time,
+	output [15:0] o_end_address,
 
 	// LCD (optional display)
 	// input        i_clk_800k,
@@ -84,6 +85,7 @@ logic [3:0] startcnt_w,startcnt_r;
 assign o_play_time = second_rec;
 // assign o_play_time = acktimes_r;
 assign o_record_time = state_r;
+assign o_end_address = addr_end_r[19:4]; // 16 bits
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
 
