@@ -192,7 +192,7 @@ always_comb begin
 		S_RECD: begin
 			if 		(i_pause)	state_w = S_RECD_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
-			address_end_w = (address_record + 1) > address_end_r ? (address_record+1) : address_end_r; // max
+			addr_end_w = (addr_record + 1) > addr_end_r ? (addr_record+1) : addr_end_r; // max
 		end
 		S_RECD_PAUSE: begin
 			if 		(i_start)	state_w = S_RECD;
