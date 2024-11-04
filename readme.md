@@ -34,3 +34,5 @@ nWave &
 [MNIST FPGA](https://github.com/junwha/MNIST-FPGA-Accelarator)
 [Transformer on FPGA](https://jeit.ac.cn/cn/article/doi/10.11999/JEIT230713?viewType=HTML)  
 [Transformer on FPGA US](https://wangshusen.github.io/papers/ISQED2021.pdf)  
+
+Bit Coin Mining On DE2-115?
