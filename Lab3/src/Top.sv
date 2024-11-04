@@ -35,11 +35,11 @@ module Top (
 	inout  i_AUD_ADCLRCK,
 	inout  i_AUD_BCLK,
 	inout  i_AUD_DACLRCK,
-	output o_AUD_DACDAT
+	output o_AUD_DACDAT,
 
 	// SEVENDECODER (optional display)
 	// output [5:0] o_record_time,
-	// output [5:0] o_play_time,
+	output [5:0] o_play_time
 
 	// LCD (optional display)
 	// input        i_clk_800k,
@@ -74,6 +74,7 @@ logic dsp_start, dsp_pause, dsp_stop;
 logic rec_start, rec_pause, rec_stop;
 logic play_en;
 
+assign o_play_time = state_r;
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
 
@@ -89,7 +90,7 @@ assign o_SRAM_LB_N = 1'b0;
 assign o_SRAM_UB_N = 1'b0;
 
 assign i2c_start = (state_r == S_I2C);
-assign i2c_ack = i2c_oen ? 0 : io_I2C_SDAT;
+assign i2c_ack = i2c_oen ? 1 : io_I2C_SDAT;
 assign play_en = (state_r == S_PLAY);
 
 assign dsp_start = (state_r == S_PLAY) && (i_start);
@@ -98,7 +99,7 @@ assign dsp_stop = (state_r == S_PLAY) && (i_stop) || (state_r == S_RECD) ;
 
 assign rec_start = (state_r == S_RECD) && (i_start);
 assign rec_pause = (state_r == S_RECD) && (i_pause);
-assign rec_stop = (state_r == S_IDLE) && (i_stop) || (state_r == S_PLAY);
+assign rec_stop = (state_r == S_RECD) && (i_stop) || (state_r == S_PLAY);
 
 // below is a simple example for module division
 // you can design these as you like
@@ -150,7 +151,7 @@ AudPlayer player0(
 AudRecorder recorder0(
 	.i_rst_n(i_rst_n), 
 	.i_clk(i_AUD_BCLK),
-	.i_lrc(i_AUD_ADCLRCK),
+	.i_daclrck(i_AUD_ADCLRCK),
 	.i_start(rec_start),
 	.i_pause(rec_pause),
 	.i_stop(rec_stop),
