@@ -38,8 +38,8 @@ module Top (
 	output o_AUD_DACDAT,
 
 	// SEVENDECODER (optional display)
-	output [3:0] o_record_time,
-	output [3:0] o_play_time,
+	output [3:0] o_curr_state,
+	output [7:0] o_play_time,
 	output [15:0] o_end_address
 
 	// LCD (optional display)
@@ -82,9 +82,8 @@ logic [3:0] acktimes_w,acktimes_r;
 logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
-assign o_play_time = second_rec;
-// assign o_play_time = acktimes_r;
-assign o_record_time = state_r;
+assign o_curr_state = state_r;
+assign o_play_time = (state_r == S_PLAY) ? addr_play[19:12] : 8'd0;
 assign o_end_address = addr_end_r[19:4]; // 16 bits
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
@@ -156,8 +155,7 @@ AudPlayer player0(
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_en(play_en), // enable AudPlayer only when playing audio, work with AudDSP
 	.i_dac_data(dac_data), //dac_data
-	.o_aud_dacdat(o_AUD_DACDAT),
-	.o_second(second_play)
+	.o_aud_dacdat(o_AUD_DACDAT)
 );
 
 // === AudRecorder ===
@@ -171,8 +169,7 @@ AudRecorder recorder0(
 	.i_stop(rec_stop),
 	.i_data(i_AUD_ADCDAT),
 	.o_address(addr_record),
-	.o_data(data_record),
-	.o_second(second_rec)
+	.o_data(data_record)
 );
 
 always_comb begin
