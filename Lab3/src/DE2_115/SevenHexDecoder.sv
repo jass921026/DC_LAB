@@ -6,7 +6,7 @@
  *    33
  */
 function logic [6:0] seven_hex_16;
-	input [3:0] value;
+	input logic [3:0] value;
 	begin
 		case (value)
 			4'h0: seven_hex_16 = 7'b1000000;
