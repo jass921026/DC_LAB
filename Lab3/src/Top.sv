@@ -112,14 +112,14 @@ I2cInitializer init0(
 // in other words, determine which data addr to be fetch for player 
 AudDSP dsp0(
 	.i_rst_n(i_rst_n),
-	.i_clk(i_AUD_BCLK),
-	.i_start(dsp_start),
-	.i_pause(dsp_pause),
-	.i_stop(dsp_stop),
-	.i_speed(dsp_speed),
-	.i_fast(dsp_fast),
-	.i_slow_0(dsp_s0), // constant interpolation
-	.i_slow_1(dsp_s1), // linear interpolation
+	.i_clk(),
+	.i_start(),
+	.i_pause(),
+	.i_stop(),
+	.i_speed(),
+	.i_fast(),
+	.i_slow_0(), // constant interpolation
+	.i_slow_1(), // linear interpolation
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_sram_data(data_play),
 	.o_dac_data(dac_data),
