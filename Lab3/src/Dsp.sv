@@ -67,6 +67,7 @@ always_comb begin
 
     case (state_r)
         S_IDLE: begin
+            out_data_w = 0;
             if (i_start) begin //address must be 0
                 prev_data_w = i_sram_data;
                 state_w <= S_PLAY;
@@ -75,7 +76,12 @@ always_comb begin
             end
         end
         S_PAUSE: begin
-            if (!i_pause) begin
+            out_data_w = 0;
+            if (i_stop) begin
+                state_w <= S_IDLE;
+                addr_w = 0;
+            end
+            else if (!i_pause) begin
                 state_w <= S_PLAY;
             end
         end

@@ -1,12 +1,12 @@
 module I2cInitializer(
     input  i_rst_n,
     input  i_clk,
+    input  i_ack,
     input  i_start,
     output o_finished,
     output o_sclk,    
     output o_sdat,    
-    output o_oen,
-    input  i_ack
+    output o_oen
 );
 
 //FSM
@@ -15,6 +15,7 @@ localparam S_START  = 1;
 localparam S_STOP   = 2;
 localparam S_ACK    = 3;
 localparam S_DATA   = 4;
+localparam S_COOLDOWN = 5;
 
 
 
@@ -55,7 +56,6 @@ always_comb begin
 
     case(state_r)
         S_IDLE: begin
-            finished_w  = 0;
             if(i_start) begin
                 state_w  = S_START;
                 cmdcnt_w = 'd6; //7 cmds
@@ -111,13 +111,23 @@ always_comb begin
             else if (~sdat_r) sdat_w = 1 ;
             else begin
                 if (cmdcnt_r == 0) begin //finish
-                    state_w = S_IDLE;
+                    state_w = S_COOLDOWN;
+                    bitcnt_w = 'd23;
                     finished_w = 1;
                 end
                 else begin
                     state_w = S_START;
                     cmdcnt_w = cmdcnt_r - 1;
                 end
+            end
+        end
+        S_COOLDOWN : begin
+            finished_w = 0;
+            if (bitcnt_r == 'd0) begin
+                state_w = S_IDLE;
+            end
+            else begin
+                bitcnt_w = bitcnt_r - 1;
             end
         end
         default: begin //won't use
