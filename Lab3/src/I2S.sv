@@ -35,6 +35,8 @@ always_comb begin
     case(state_r)
         S_IDLE: begin
             if(i_en && !i_daclrck) begin//left channel
+                aud_dacdat_w    = i_dac_data[counter_r];
+                counter_w       = counter_r-1;
                 state_w = S_DATAL;
 					 seccnt_w = seccnt_r+1;
             end
@@ -69,7 +71,7 @@ always_comb begin
     endcase
 end
 //sequential circuit
-always_ff@(posedge i_bclk or negedge i_rst_n) begin
+always_ff@(negedge i_bclk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         state_r         <= S_IDLE;
         aud_dacdat_r    <= 1'b0;
@@ -181,7 +183,7 @@ always_comb begin
     endcase
 end
 //sequential circuit
-always_ff@(posedge i_clk or negedge i_rst_n) begin
+always_ff@(negedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         state_r         <= S_IDLE;
         counter_r       <= 5'h0;

@@ -70,7 +70,7 @@ agreement for further details.
 		(text "clk" (rect 85 67 188 144)(font "Arial" (color 0 0 0)))
 		(text "reset" (rect 51 83 132 179)(font "Arial" (color 128 0 0)(font_size 9)))
 		(text "reset_n" (rect 85 107 212 224)(font "Arial" (color 0 0 0)))
-		(text " Altpll_qsys " (rect 172 168 422 346)(font "Arial" ))
+		(text " system " (rect 189 168 426 346)(font "Arial" ))
 		(line (pt 80 32)(pt 144 32)(line_width 1))
 		(line (pt 144 32)(pt 144 168)(line_width 1))
 		(line (pt 80 168)(pt 144 168)(line_width 1))

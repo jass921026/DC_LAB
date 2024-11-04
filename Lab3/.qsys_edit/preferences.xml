@@ -7,8 +7,7 @@
    <irq preferredWidth="34" />
   </columns>
  </systemtable>
- <library
-   expandedCategories="Library,Project/Processors and Peripherals/Peripherals,Project,Project/Processors and Peripherals" />
+ <library expandedCategories="Library,Project" />
  <window width="1100" height="800" x="0" y="0" />
  <generation path="C:/Users/user/Desktop/DC_LAB/Lab3/Altpll_qsys" />
 </preferences>

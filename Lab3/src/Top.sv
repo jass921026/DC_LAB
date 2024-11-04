@@ -81,6 +81,7 @@ logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
 assign o_play_time = second_rec;
+// assign o_play_time = acktimes_r;
 assign o_record_time = state_r;
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
