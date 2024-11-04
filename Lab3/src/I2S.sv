@@ -191,16 +191,16 @@ always_ff@(negedge i_clk or negedge i_rst_n) begin
         counter_r       <= 5'h0;
         address_r       <= 20'hfffff;
         data_r          <= 16'h0;
-		  clkcnt_r        <= 0;
-		  second_r        <= 0;
+		clkcnt_r        <= 0;
+		second_r        <= 0;
     end
     else begin
         state_r         <= state_w;
         address_r       <= address_w;
         counter_r       <= counter_w;
         data_r          <= data_w;
-		  clkcnt_r        <= clkcnt_w;
-		  second_r        <= second_w;
+		clkcnt_r        <= clkcnt_w;
+		second_r        <= second_w;
     end
 end
 endmodule

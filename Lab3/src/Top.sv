@@ -68,6 +68,7 @@ logic [2:0] state_r, state_w;
 
 logic [19:0] addr_record, addr_play;
 logic [15:0] data_record, data_play, dac_data;
+logic [19:0] addr_end_r, addr_end_w;
 
 
 logic i2c_start, i2c_finished, i2c_ack,i2c_oen, i2c_sdat;
@@ -175,6 +176,7 @@ AudRecorder recorder0(
 always_comb begin
 	// design your control here
 	state_w = state_r;
+	addr_end_w = addr_end_r;
 	case (state_r)
 		S_IDLE: begin
 			if (i_start) begin
@@ -188,6 +190,7 @@ always_comb begin
 		S_RECD: begin
 			if 		(i_pause)	state_w = S_RECD_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
+			address_end_w = (address_record + 1) > address_end_r ? (address_record+1) : address_end_r; // max
 		end
 		S_RECD_PAUSE: begin
 			if 		(i_start)	state_w = S_RECD;
@@ -196,6 +199,7 @@ always_comb begin
 		S_PLAY: begin
 			if 		(i_pause)	state_w = S_PLAY_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
+			else if (address_play >= address_end_r) state_w = S_IDLE;
 		end
 		S_PLAY_PAUSE: begin
 			if 		(i_start)	state_w = S_PLAY;
@@ -209,11 +213,13 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
 		state_r <= S_I2C;
 		acktimes_r <= 0;
 		startcnt_r <= 0;
+		addr_end_r <= 0;
 	end
 	else begin
 		state_r <= state_w;
 		acktimes_r <= acktimes_w;
 		startcnt_r <= startcnt_w;
+		addr_end_r <= addr_end_w;
 	end
 end
 
