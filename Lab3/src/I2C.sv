@@ -79,19 +79,19 @@ always_comb begin
             sclk_w  = ~sclk_r;
             if (sclk_r) begin
                 oen_w = 1;
-                if(!i_ack) begin //ack = 0 -> acked
-                    if (bitcnt_r == 'd0) begin //finish this cmd
-                        state_w = S_STOP;
-                    end 
-                    else begin //next byte
-                        state_w = S_DATA;
-                        bitcnt_w = bitcnt_r - 1;
-                    end
+                //if(!i_ack) begin //ack = 0 -> acked
+                if (bitcnt_r == 'd0) begin //finish this cmd
+                    state_w = S_STOP;
+                end 
+                else begin //next byte
+                    state_w = S_DATA;
+                    bitcnt_w = bitcnt_r - 1;
+                end/*
                 end
                 else begin //ack = 1 -> not acked, resend
                     cmdcnt_w    = cmdcnt_r+1;
                     state_w     = S_STOP;
-                end
+                end*/
             end
 
         end

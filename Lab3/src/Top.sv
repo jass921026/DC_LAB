@@ -38,7 +38,7 @@ module Top (
 	output o_AUD_DACDAT,
 
 	// SEVENDECODER (optional display)
-	// output [5:0] o_record_time,
+	output [5:0] o_record_time,
 	output [5:0] o_play_time
 
 	// LCD (optional display)
@@ -73,8 +73,10 @@ logic play_mode;
 logic dsp_start, dsp_pause, dsp_stop;
 logic rec_start, rec_pause, rec_stop;
 logic play_en;
+logic [3:0] acktimes_w,acktimes_r;
 
 assign o_play_time = state_r;
+assign o_record_time = acktimes_r;
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
 
@@ -100,6 +102,7 @@ assign dsp_stop = (state_r == S_PLAY) && (i_stop) || (state_r == S_RECD) ;
 assign rec_start = (state_r == S_RECD) && (i_start);
 assign rec_pause = (state_r == S_RECD) && (i_pause);
 assign rec_stop = (state_r == S_RECD) && (i_stop) || (state_r == S_PLAY);
+assign acktimes_w = (!i2c_ack) ? acktimes_r + 1 : acktimes_r;
 
 // below is a simple example for module division
 // you can design these as you like
@@ -184,9 +187,11 @@ end
 always_ff @(posedge i_AUD_BCLK or negedge i_rst_n) begin
 	if (!i_rst_n) begin
 		state_r <= S_I2C;
+		acktimes_r <= 0;
 	end
 	else begin
 		state_r <= state_w;
+		acktimes_r <= acktimes_w;
 	end
 end
 
