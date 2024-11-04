@@ -111,12 +111,13 @@ logic [1:0]     state_w     , state_r;
 logic [4:0]     counter_w   , counter_r;
 logic [19:0]    address_w   , address_r;
 logic [15:0]    data_w      , data_r;
-logic[14:0] seccnt_w , seccnt_r;
-logic[3:0] second_w , second_r;
+logic [21:0]    clkcnt_w    , clkcnt_r;
+logic [3:0]     second_w    , second_r;
 
 assign o_address    = address_r;
 assign o_data       = data_r;
-assign o_second = state_r;
+//assign o_second = address_r[17-:4];
+assign o_second = second_r;
 
 //combinational circuit
 always_comb begin
@@ -125,8 +126,8 @@ always_comb begin
     counter_w       = counter_r;
     address_w       = address_r;
     data_w          = data_r;
-	 second_w        = (seccnt_r==0)?second_r+1:second_r;
-	 seccnt_w        = seccnt_r;
+	 clkcnt_w        = clkcnt_r+1;
+	 second_w        = (clkcnt_r==0)?second_r+1:second_r;
     case(state_r)
         S_IDLE: begin
             if(i_start) begin
@@ -149,7 +150,6 @@ always_comb begin
                     counter_w   = counter_r+1;
                 end
                 else begin //i2s finish
-					     seccnt_w = seccnt_r+1;
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = 0;
                     state_w     = S_WAIT;
@@ -187,16 +187,16 @@ always_ff@(posedge i_clk or negedge i_rst_n) begin
         counter_r       <= 5'h0;
         address_r       <= 20'hfffff;
         data_r          <= 16'h0;
-		  seccnt_r  <= 1;
-		  second_r  <= 0;
+		  clkcnt_r        <= 0;
+		  second_r        <= 0;
     end
     else begin
         state_r         <= state_w;
         address_r       <= address_w;
         counter_r       <= counter_w;
         data_r          <= data_w;
-		  seccnt_r  <= seccnt_w;
-		  second_r  <= second_w;
+		  clkcnt_r        <= clkcnt_w;
+		  second_r        <= second_w;
     end
 end
 endmodule

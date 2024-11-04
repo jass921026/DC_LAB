@@ -64,7 +64,7 @@ always_comb begin
         S_DATA : begin
             sclk_w  = ~sclk_r;
             if(sclk_r) begin //this cycle 1, next cycle 0
-                if(bitcnt_r[2:0] == 'b000) begin //into ack
+                if(bitcnt_r[2:0] == 3'b111 && bitcnt_r[4:3] != 2'b10) begin //into ack
                     state_w = S_ACK;
                     oen_w   = 0;
                     sdat_w  = 0; //actually don't care
@@ -80,7 +80,7 @@ always_comb begin
             if (sclk_r) begin
                 oen_w = 1;
                 //if(!i_ack) begin //ack = 0 -> acked
-					 if (bitcnt_r == 'd0) begin //finish this cmd
+					 if (bitcnt_r == 5'd11111) begin //finish this cmd
                     state_w = S_STOP;
                 end 
                 else begin //next byte

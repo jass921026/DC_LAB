@@ -80,8 +80,8 @@ logic [3:0] acktimes_w,acktimes_r;
 logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
-assign o_play_time = startcnt_r;
-assign o_record_time = second_rec;
+assign o_play_time = second_rec;
+assign o_record_time = state_r;
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
 
@@ -189,7 +189,7 @@ always_comb begin
 			else if (i_stop) 	state_w = S_IDLE;
 		end
 		S_RECD_PAUSE: begin
-			if 		(i_play)	state_w = S_RECD;
+			if 		(i_start)	state_w = S_RECD;
 			else if (i_stop) 	state_w = S_IDLE;
 		end
 		S_PLAY: begin
@@ -197,7 +197,7 @@ always_comb begin
 			else if (i_stop) 	state_w = S_IDLE;
 		end
 		S_PLAY_PAUSE: begin
-			if 		(i_play)	state_w = S_PLAY;
+			if 		(i_start)	state_w = S_PLAY;
 			else if (i_stop) 	state_w = S_IDLE;
 		end
 	endcase
