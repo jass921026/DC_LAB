@@ -91,6 +91,7 @@ always_comb begin
 						 else begin //next byte
 							  state_w = S_DATA;
 							  bitcnt_w = bitcnt_r - 1;
+                              sdat_w = data[cmdcnt_r][bitcnt_r];
 						 end
 //                end
 //                else begin //ack = 1 -> not acked, resend
@@ -105,13 +106,13 @@ always_comb begin
                 sclk_w = 1;
                 sdat_w = 0;
                 oen_w  = 1;
-					 bitcnt_w = 'd23;
+                bitcnt_w = 'd23;
             end
             else begin // second cycle
                 state_w = S_DATA;
-					 sclk_w = 0;
-					 sdat_w = data[cmdcnt_r][bitcnt_r];
-					 bitcnt_w = bitcnt_r - 1;
+                sclk_w = 0;
+                sdat_w = data[cmdcnt_r][bitcnt_r];
+                bitcnt_w = bitcnt_r - 1;
             end
         end
         S_STOP : begin
