@@ -94,7 +94,7 @@ module AudRecorder(
 	input           i_stop,
 	input           i_data,
 	output [19:0]   o_address,
-	output [15:0]   o_data,
+	output [15:0]   o_data
 );
 
 //parameters
