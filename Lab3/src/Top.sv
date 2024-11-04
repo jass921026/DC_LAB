@@ -57,8 +57,11 @@ module Top (
 
 // design the FSM and states as you like
 parameter S_I2C  = 0;
-parameter S_RECD = 1;
-parameter S_PLAY = 2;
+parameter S_IDLE = 1;
+parameter S_RECD = 2;
+parameter S_RECD_PAUSE = 3;
+parameter S_PLAY = 4;
+parameter S_PLAY_PAUSE = 5;
 
 logic [2:0] state_r, state_w;
 
@@ -97,13 +100,13 @@ assign i2c_start = (state_r == S_I2C);
 assign i2c_ack = i2c_oen ? 1 : io_I2C_SDAT;
 assign play_en = (state_r == S_PLAY);
 
-assign dsp_start = (state_r == S_PLAY) && (i_start);
-assign dsp_pause = (state_r == S_PLAY) && (i_pause);
-assign dsp_stop = ((state_r == S_PLAY) && i_stop) || (state_r == S_RECD) ;
+assign dsp_start = (state_r == S_PLAY);
+assign dsp_pause = (state_r == S_PLAY_PAUSE);
+assign dsp_stop = (state_r == S_IDLE);
 
-assign rec_start = (state_r == S_RECD) && (i_start);
-assign rec_pause = (state_r == S_RECD) && (i_pause);
-assign rec_stop = ((state_r == S_RECD) && i_stop) || (state_r == S_PLAY);
+assign rec_start = (state_r == S_RECD);
+assign rec_pause = (state_r == S_RECD_PAUSE);
+assign rec_stop = (state_r == S_IDLE);
 assign acktimes_w = (!i2c_ack) ? acktimes_r + 1 : acktimes_r;
 assign startcnt_w = ((state_r == S_RECD) && (i_start))?(startcnt_r+1):startcnt_r;
 
@@ -172,19 +175,30 @@ always_comb begin
 	// design your control here
 	state_w = state_r;
 	case (state_r)
-		S_I2C: begin
-			if (i2c_finished) begin
+		S_IDLE: begin
+			if (i_start) begin
 				if (i_play_enable) state_w = S_PLAY;
-				else state_w = S_RECD;	
+				else state_w = S_RECD;
 			end
 		end
+		S_I2C: begin
+			if (i2c_finished) 	state_w = S_IDLE;
+		end
 		S_RECD: begin
-			if (i_play_enable) state_w = S_PLAY;
-			else state_w = S_RECD;	
+			if 		(i_pause)	state_w = S_RECD_PAUSE;
+			else if (i_stop) 	state_w = S_IDLE;
+		end
+		S_RECD_PAUSE: begin
+			if 		(i_play)	state_w = S_RECD;
+			else if (i_stop) 	state_w = S_IDLE;
 		end
 		S_PLAY: begin
-			if (i_play_enable) state_w = S_PLAY;
-			else state_w = S_RECD;	
+			if 		(i_pause)	state_w = S_PLAY_PAUSE;
+			else if (i_stop) 	state_w = S_IDLE;
+		end
+		S_PLAY_PAUSE: begin
+			if 		(i_play)	state_w = S_PLAY;
+			else if (i_stop) 	state_w = S_IDLE;
 		end
 	endcase
 end
