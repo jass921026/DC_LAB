@@ -4,7 +4,7 @@ module AudPlayer(
 	input           i_daclrck,
 	input           i_en,
 	input [15:0]    i_dac_data,
-	output          o_aud_dacdat,
+	output          o_aud_dacdat
 );
 //parameters
 localparam S_IDLE   = 0;
