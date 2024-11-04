@@ -139,7 +139,7 @@ module DE2_115 (
 logic key0down, key1down, key2down, key3down;
 logic CLK_12M, CLK_100K, CLK_800K;
 logic [3:0] recd_time,play_time;
-logic [16:0] end_address;
+logic [15:0] end_address;
 
 assign AUD_XCK = CLK_12M;
 
