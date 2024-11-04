@@ -112,8 +112,6 @@ logic [21:0]    clkcnt_w    , clkcnt_r;
 
 assign o_address    = address_r;
 assign o_data       = data_r;
-//assign o_second = address_r[17-:4];
-assign o_second = second_r;
 
 //combinational circuit
 always_comb begin
