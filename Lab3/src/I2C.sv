@@ -21,17 +21,17 @@ localparam S_COOLDOWN = 5;
 
 logic [23:0] data[9:0] = '{ // Unpacked Array
 //    24'b0011_0100_000_1111_0_0000_0000,
-		24'b0011_0100_000_0000_0_1001_0111,
-		24'b0011_0100_000_0001_0_1001_0111,
-		24'b0011_0100_000_0010_0_0111_1001,
-		24'b0011_0100_000_0011_0_0111_1001,
+    24'b0011_0100_000_0000_0_1001_0111,
+    24'b0011_0100_000_0001_0_1001_0111,
+    24'b0011_0100_000_0010_0_0111_1001,
+    24'b0011_0100_000_0011_0_0111_1001,
 		
-      24'b0011_0100_000_0100_0_0001_0101,
-      24'b0011_0100_000_0101_0_0000_0000,
-      24'b0011_0100_000_0110_0_0000_0000,
-      24'b0011_0100_000_0111_0_0100_0010,
-      24'b0011_0100_000_1000_0_0001_1001,
-      24'b0011_0100_000_1001_0_0000_0001
+    24'b0011_0100_000_0100_0_0001_0101,
+    24'b0011_0100_000_0101_0_0000_0000,
+    24'b0011_0100_000_0110_0_0000_0000,
+    24'b0011_0100_000_0111_0_0100_0010,
+    24'b0011_0100_000_1000_0_0001_1001,
+    24'b0011_0100_000_1001_0_0000_0001
 };
 
 
@@ -84,19 +84,20 @@ always_comb begin
             sclk_w  = ~sclk_r;
             if (sclk_r) begin
                 oen_w = 1;
-//                if(!i_ack) begin //ack = 0 -> acked
+               if(!i_ack) begin //ack = 0 -> acked
 						 if (bitcnt_r == 5'b11111) begin //finish this cmd
 							  state_w = S_STOP;
 						 end 
 						 else begin //next byte
 							  state_w = S_DATA;
 							  bitcnt_w = bitcnt_r - 1;
+                              sdat_w = data[cmdcnt_r][bitcnt_r];
 						 end
-//                end
-//                else begin //ack = 1 -> not acked, resend
-//                    cmdcnt_w    = cmdcnt_r+1;
-//                    state_w     = S_STOP;
-//                end
+               end
+               else begin //ack = 1 -> not acked, resend
+                   cmdcnt_w    = cmdcnt_r+1;
+                   state_w     = S_STOP;
+               end
             end
 
         end
@@ -105,13 +106,13 @@ always_comb begin
                 sclk_w = 1;
                 sdat_w = 0;
                 oen_w  = 1;
-					 bitcnt_w = 'd23;
+                bitcnt_w = 'd23;
             end
             else begin // second cycle
                 state_w = S_DATA;
-					 sclk_w = 0;
-					 sdat_w = data[cmdcnt_r][bitcnt_r];
-					 bitcnt_w = bitcnt_r - 1;
+                sclk_w = 0;
+                sdat_w = data[cmdcnt_r][bitcnt_r];
+                bitcnt_w = bitcnt_r - 1;
             end
         end
         S_STOP : begin

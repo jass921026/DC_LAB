@@ -38,8 +38,9 @@ module Top (
 	output o_AUD_DACDAT,
 
 	// SEVENDECODER (optional display)
-	output [3:0] o_record_time,
-	output [3:0] o_play_time
+	output [3:0] o_curr_state,
+	output [7:0] o_play_time,
+	output [15:0] o_end_address
 
 	// LCD (optional display)
 	// input        i_clk_800k,
@@ -68,6 +69,7 @@ logic [2:0] state_r, state_w;
 
 logic [19:0] addr_record, addr_play;
 logic [15:0] data_record, data_play, dac_data;
+logic [19:0] addr_end_r, addr_end_w;
 
 
 logic i2c_start, i2c_finished, i2c_ack,i2c_oen, i2c_sdat;
@@ -80,9 +82,9 @@ logic [3:0] acktimes_w,acktimes_r;
 logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
-assign o_play_time = second_rec;
-// assign o_play_time = acktimes_r;
-assign o_record_time = state_r;
+assign o_curr_state = state_r;
+assign o_play_time = (state_r == S_PLAY) ? addr_play[19:12] : 8'd0;
+assign o_end_address = addr_end_r[19:4]; // 16 bits
 
 assign io_I2C_SDAT = (i2c_oen) ? i2c_sdat : 1'bz;
 
@@ -153,8 +155,7 @@ AudPlayer player0(
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_en(play_en), // enable AudPlayer only when playing audio, work with AudDSP
 	.i_dac_data(dac_data), //dac_data
-	.o_aud_dacdat(o_AUD_DACDAT),
-	.o_second(second_play)
+	.o_aud_dacdat(o_AUD_DACDAT)
 );
 
 // === AudRecorder ===
@@ -168,13 +169,13 @@ AudRecorder recorder0(
 	.i_stop(rec_stop),
 	.i_data(i_AUD_ADCDAT),
 	.o_address(addr_record),
-	.o_data(data_record),
-	.o_second(second_rec)
+	.o_data(data_record)
 );
 
 always_comb begin
 	// design your control here
 	state_w = state_r;
+	addr_end_w = addr_end_r;
 	case (state_r)
 		S_IDLE: begin
 			if (i_start) begin
@@ -188,6 +189,7 @@ always_comb begin
 		S_RECD: begin
 			if 		(i_pause)	state_w = S_RECD_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
+			addr_end_w = (addr_record + 1) > addr_end_r ? (addr_record+1) : addr_end_r; // max
 		end
 		S_RECD_PAUSE: begin
 			if 		(i_start)	state_w = S_RECD;
@@ -196,6 +198,7 @@ always_comb begin
 		S_PLAY: begin
 			if 		(i_pause)	state_w = S_PLAY_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
+			else if (addr_play >= addr_end_r) state_w = S_IDLE;
 		end
 		S_PLAY_PAUSE: begin
 			if 		(i_start)	state_w = S_PLAY;
@@ -209,11 +212,13 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
 		state_r <= S_I2C;
 		acktimes_r <= 0;
 		startcnt_r <= 0;
+		addr_end_r <= 0;
 	end
 	else begin
 		state_r <= state_w;
 		acktimes_r <= acktimes_w;
 		startcnt_r <= startcnt_w;
+		addr_end_r <= addr_end_w;
 	end
 end
 

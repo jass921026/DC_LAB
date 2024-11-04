@@ -138,7 +138,8 @@ module DE2_115 (
 
 logic key0down, key1down, key2down, key3down;
 logic CLK_12M, CLK_100K, CLK_800K;
-logic [3:0] recd_time,play_time;
+logic [3:0] curr_state,play_time;
+logic [15:0] end_address;
 
 assign AUD_XCK = CLK_12M;
 
@@ -206,8 +207,9 @@ Top top0(
 	.o_AUD_DACDAT(AUD_DACDAT),
 
 	// SEVENDECODER (optional display)
-	.o_record_time(recd_time),
-	.o_play_time(play_time)
+	.o_curr_state(curr_state),
+	.o_play_time(play_time),
+	.o_end_address(end_address)
 
 	// LCD (optional display)
 	// .i_clk_800k(CLK_800K),
@@ -224,25 +226,33 @@ Top top0(
 );
 
 SevenHexDecoder seven_dec0(
-	.i_hex(play_time),
-	.o_seven_ten(HEX1),
-	.o_seven_one(HEX0)
+	.i_hex(curr_state),
+	.o_seven_ten(HEX7),
+	.o_seven_one(HEX6)
 );
 
-SevenHexDecoder seven_dec1(
-	.i_hex(recd_time),
-	.o_seven_ten(HEX5),
- 	.o_seven_one(HEX4)
+seven_hex_16_2 seven_dec1(
+	.i_hex(play_time),
+	.o_seven_1(HEX5),
+ 	.o_seven_0(HEX4)
+);
+
+seven_hex_16_4 seven_dec_3(
+	.i_hex(end_address),
+	.o_seven_3(HEX3),
+	.o_seven_2(HEX2),
+	.o_seven_1(HEX1),
+	.o_seven_0(HEX0)
 );
 
 // comment those are use for display
 // assign HEX0 = '1;
 // assign HEX1 = '1;
-assign HEX2 = '1;
-assign HEX3 = '1;
+// assign HEX2 = '1;
+// assign HEX3 = '1;
 // assign HEX4 = '1;
 // assign HEX5 = '1;
-assign HEX6 = '1;
-assign HEX7 = '1;
+// assign HEX6 = '1;
+// assign HEX7 = '1;
 
 endmodule
