@@ -256,13 +256,13 @@ assign LEDG[5] = (curr_state == 'd5) ;
 
 
 // comment those are use for display
-assign HEX0 = '1;
-assign HEX1 = '1;
+// assign HEX0 = '1;
+// assign HEX1 = '1;
 // assign HEX2 = '1;
 // assign HEX3 = '1;
 // assign HEX4 = '1;
 // assign HEX5 = '1;
-// assign HEX6 = '1;
-// assign HEX7 = '1;
+assign HEX6 = '1;
+assign HEX7 = '1;
 
 endmodule
