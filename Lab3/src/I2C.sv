@@ -1,4 +1,4 @@
-module I2cInitializer(
+module I2cInitializer_old(
     input  i_rst_n,
     input  i_clk,
     input  i_ack,
