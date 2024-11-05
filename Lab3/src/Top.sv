@@ -53,7 +53,7 @@ module Top (
 
 	// LED
 	// output  [8:0] o_ledg,
-	// output [17:0] o_ledr
+	//output [17:0] o_ledr
 );
 
 // design the FSM and states as you like
@@ -190,6 +190,7 @@ always_comb begin
 			if 		(i_pause)	state_w = S_RECD_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
 			addr_end_w = (addr_record + 1) > addr_end_r ? (addr_record+1) : addr_end_r; // max
+			if ((addr_record + 1) > 20'ffff0) state_w = S_IDLE ; // add auto stop recoding 
 		end
 		S_RECD_PAUSE: begin
 			if 		(i_start)	state_w = S_RECD;

@@ -143,6 +143,8 @@ logic [15:0] end_address;
 
 assign AUD_XCK = CLK_12M;
 
+assign LEDR = SW ;
+
 Altpll_qsys pll0( // generate with qsys, please follow lab2 tutorials
 	.clk_clk(CLOCK_50),
 	.reset_reset_n(key3down),
@@ -225,11 +227,11 @@ Top top0(
 	// .o_ledr(LEDR) // [17:0]
 );
 
-SevenHexDecoder seven_dec0(
-	.i_hex(curr_state),
-	.o_seven_ten(HEX7),
-	.o_seven_one(HEX6)
-);
+// SevenHexDecoder seven_dec0(
+// 	.i_hex(curr_state),
+// 	.o_seven_ten(HEX7),
+// 	.o_seven_one(HEX6)
+// );
 
 seven_hex_16_2 seven_dec1(
 	.i_hex(play_time),
@@ -245,9 +247,17 @@ seven_hex_16_4 seven_dec_3(
 	.o_seven_0(HEX0)
 );
 
+assign LEDG[0] = (curr_state == 'd0) ;
+assign LEDG[1] = (curr_state == 'd1) ;
+assign LEDG[2] = (curr_state == 'd2) ;
+assign LEDG[3] = (curr_state == 'd3) ;
+assign LEDG[4] = (curr_state == 'd4) ;
+assign LEDG[5] = (curr_state == 'd5) ;
+
+
 // comment those are use for display
-// assign HEX0 = '1;
-// assign HEX1 = '1;
+assign HEX0 = '1;
+assign HEX1 = '1;
 // assign HEX2 = '1;
 // assign HEX3 = '1;
 // assign HEX4 = '1;
