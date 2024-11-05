@@ -240,7 +240,7 @@ Top top0(
 assign HEX7 = fast ? 7'b1111111 : 7'b0111111 ;
 
 seven_hex_16_1 seven_dec0(
-	.i_hex(curr_state),
+	.i_hex(speed),
 	.o_seven(HEX6)
 );
 
