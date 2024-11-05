@@ -208,8 +208,8 @@ always_comb begin
 		S_PLAY: begin
 			if 		(i_pause)	state_w = S_PLAY_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
-			else if (!(i_interpolation && i_fast) && addr_play >= addr_end_r) state_w = S_IDLE;
-			else if (i_interpolation && i_fast && addr_play <= 20'h10) state_w = S_IDLE;
+			else if (!(i_dsp_interpolation && i_dsp_fast) && addr_play >= addr_end_r) state_w = S_IDLE;
+			else if (i_dsp_interpolation && i_dsp_fast && addr_play <= 20'h10) state_w = S_IDLE;
 		end
 		S_PLAY_PAUSE: begin
 			if 		(i_start)	state_w = S_PLAY;
