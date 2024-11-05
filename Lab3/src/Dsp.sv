@@ -163,6 +163,7 @@ end
 always_ff @(posedge i_clk or negedge i_rst_n) begin
     if (!i_rst_n) begin
         prev_data_r <= i_sram_data ;
+        now_data_r <= i_sram_data ;
         prev_daclrck <= i_daclrck;
         interpolation_cnt_r <= 0;
         state_r <= S_IDLE;
@@ -171,6 +172,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
     end
     else begin
         prev_data_r <= prev_data_w;
+        now_data_r <= now_data_w;
         prev_daclrck <= i_daclrck;
         interpolation_cnt_r <= interpolation_cnt_w;
         state_r <= state_w;
