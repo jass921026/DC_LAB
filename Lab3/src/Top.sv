@@ -39,6 +39,7 @@ module Top (
 
 	// SEVENDECODER (optional display)
 	output o_fast,
+	output o_interpolation,
 	output [3:0] o_speed,
 	output [3:0] o_curr_state,
 	output [7:0] o_play_time,
@@ -84,6 +85,7 @@ logic [3:0] acktimes_w,acktimes_r;
 logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
+assign o_interpolation = i_dsp_interpolation;
 assign o_fast = i_dsp_fast;
 assign o_speed = i_dsp_speed;
 assign o_curr_state = state_r;
