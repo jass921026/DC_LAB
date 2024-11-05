@@ -31,8 +31,8 @@ always_comb begin
     case(state_r)
         S_IDLE: begin
             if(i_en && !i_daclrck) begin//left channel
-                // aud_dacdat_w    = i_dac_data[counter_r];
-                // counter_w       = counter_r-1;
+                aud_dacdat_w    = i_dac_data[counter_r];
+                counter_w       = counter_r-1;
                 state_w = S_DATAL;
                 seccnt_w = seccnt_r+1;
             end
@@ -51,8 +51,8 @@ always_comb begin
         S_IDLE2: begin
             if(i_en && i_daclrck) begin//right channel
                 state_w = S_DATAR;
-                // aud_dacdat_w    = i_dac_data[counter_r];
-                // counter_w       = counter_r-1;
+                aud_dacdat_w    = i_dac_data[counter_r];
+                counter_w       = counter_r-1;
             end
         end
         S_DATAR: begin
