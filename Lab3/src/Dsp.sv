@@ -149,6 +149,7 @@ always_comb begin
                 out_data_w = prev_data_r;
                 prev_data_w = i_sram_data;
             end
+        end
     endcase
 end
 
