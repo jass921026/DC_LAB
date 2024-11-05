@@ -117,14 +117,14 @@ always_comb begin
                 else begin //slow down
                     if (interpolation_cnt_r >= i_speed-1) begin
                         interpolation_cnt_w = 0;
-                        addr_w = addr_r + 1 ;
+                        addr_w = addr_r + 1'b1 ;
                         prev_data_w = i_sram_data;
                     end
                     else begin 
-                        interpolation_cnt_w = interpolation_cnt_r + 1;
+                        interpolation_cnt_w = interpolation_cnt_r + 1'b1;
                     end
 
-                    if (i_interpolation == 0) begin // no interpolation
+                    if (!i_interpolation) begin // no interpolation
                         out_data_w = prev_data_r;
                     end
                     else begin // linear interpolation

@@ -32,7 +32,7 @@ always_comb begin
         S_IDLE: begin
             if(i_en && !i_daclrck) begin//left channel
                 aud_dacdat_w    = i_dac_data[counter_r];
-                counter_w       = counter_r-1;
+                counter_w       = counter_r-1'b1;
                 state_w = S_DATAL;
                 seccnt_w = seccnt_r+1;
             end
@@ -40,7 +40,7 @@ always_comb begin
         S_DATAL: begin
             if(counter_r != 0) begin
                 aud_dacdat_w    = i_dac_data[counter_r];
-                counter_w       = counter_r-1;
+                counter_w       = counter_r-1'b1;
             end
             else begin
                 aud_dacdat_w    = i_dac_data[counter_r];
@@ -52,13 +52,13 @@ always_comb begin
             if(i_en && i_daclrck) begin//right channel
                 state_w = S_DATAR;
                 aud_dacdat_w    = i_dac_data[counter_r];
-                counter_w       = counter_r-1;
+                counter_w       = counter_r-1'b1;
             end
         end
         S_DATAR: begin
             if(counter_r != 0) begin
                 aud_dacdat_w    = i_dac_data[counter_r];
-                counter_w       = counter_r-1;
+                counter_w       = counter_r-1'b1;
             end
             else begin
                 aud_dacdat_w    = i_dac_data[counter_r];
@@ -121,7 +121,7 @@ always_comb begin
     counter_w       = counter_r;
     address_w       = address_r;
     data_w          = data_r;
-    clkcnt_w        = clkcnt_r+1;
+    clkcnt_w        = clkcnt_r+1'b1;
     delay_w         = delay_r;
     case(state_r)
         S_IDLE: begin
@@ -142,7 +142,7 @@ always_comb begin
             else if(!i_daclrck) begin//only record left channel
                 if(counter_r < 5'h11) begin //record 17 bits so that first bit is discarded
                     data_w      = {data_r[14:0],i_data};
-                    counter_w   = counter_r+1;
+                    counter_w   = counter_r+1'b1;
                 end
                 else begin //i2s finish
                     data_w      = {data_r[14:0],i_data};
@@ -159,11 +159,11 @@ always_comb begin
                 state_w     = S_PAUSE;
             end 
             else if (!delay_r) begin
-                delay_w     = 1;
-                address_w   = address_r+1;
+                delay_w     = 1'b1;
+                address_w   = address_r+1'b1;
             end
             else if(i_daclrck) begin//wait for right channel
-                delay_w     = 0; 
+                delay_w     = 1'b0; 
                 state_w     = S_REC;
                 data_w      = 0;
                 counter_w   = 0;
