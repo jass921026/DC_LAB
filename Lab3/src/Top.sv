@@ -190,7 +190,7 @@ always_comb begin
 			if 		(i_pause)	state_w = S_RECD_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
 			addr_end_w = (addr_record + 1) > addr_end_r ? (addr_record+1) : addr_end_r; // max
-			if ((addr_record + 1) > 20'hffff0) state_w = S_IDLE ; // add auto stop recoding 
+			if ((addr_record + 1) == 20'hffff0) state_w = S_IDLE ; // add auto stop recoding 
 		end
 		S_RECD_PAUSE: begin
 			if 		(i_start)	state_w = S_RECD;
