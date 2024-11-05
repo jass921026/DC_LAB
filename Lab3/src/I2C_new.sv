@@ -19,20 +19,22 @@ parameter S_STOP	= 5;
 
 
 
-logic [23:0] data[10:0] = '{ // Unpacked Array
-    24'b0011_0100_000_1111_0_0000_0000,
-    24'b0011_0100_000_0000_0_1001_0111,
-    24'b0011_0100_000_0001_0_1001_0111,
-    24'b0011_0100_000_0010_0_0111_1001,
-    24'b0011_0100_000_0011_0_0111_1001,
-		
-    24'b0011_0100_000_0100_0_0001_0101,
-    24'b0011_0100_000_0101_0_0000_0000,
-    24'b0011_0100_000_0110_0_0000_0000,
-    24'b0011_0100_000_0111_0_0100_0010,
-    24'b0011_0100_000_1000_0_0001_1001,
-    24'b0011_0100_000_1001_0_0000_0001
-};
+//logic [23:0] data[10:0] = '{ // Unpacked Array
+//    24'b0011_0100_000_1111_0_0000_0000,
+//    24'b0011_0100_000_0000_0_1001_0111,
+//    24'b0011_0100_000_0001_0_1001_0111,
+//    24'b0011_0100_000_0010_0_0111_1001,
+//    24'b0011_0100_000_0011_0_0111_1001,
+//		
+//    24'b0011_0100_000_0100_0_0001_0101,
+//    24'b0011_0100_000_0101_0_0000_0000,
+//    24'b0011_0100_000_0110_0_0000_0000,
+//    24'b0011_0100_000_0111_0_0100_0010,
+//    24'b0011_0100_000_1000_0_0001_1001,
+//    24'b0011_0100_000_1001_0_0000_0001
+//};
+
+logic [23:0] data[10:0];
 
 
 logic[2:0]  state_w     , state_r;
@@ -43,7 +45,7 @@ logic[3:0]  cmdcnt_w    , cmdcnt_r; // which cmd is sending
 logic[4:0]  bitcnt_w    , bitcnt_r; // which bit in a cmd to send
 
 assign o_finished   = finished_r;
-assign o_oen        = !(state == S_ACK || state == S_IDLE);
+assign o_oen        = !(state_r == S_ACK || state_r == S_IDLE);
 assign o_sclk       = sclk_r;
 assign o_sdat       = sdat_r;
 
@@ -62,7 +64,7 @@ always_comb begin
             if (i_start) begin
                 state_w = S_START;
                 sdat_w = 0;
-                cmdcnt_w = 10;
+                cmdcnt_w = 0;
                 bitcnt_w = 23;
             end
         end
@@ -80,7 +82,7 @@ always_comb begin
             state_w = S_READ;
             sclk_w = 1;
             if (bitcnt_r == 0) begin
-                cmdcnt_w = cmdcnt_r - 1;
+                cmdcnt_w = cmdcnt_r + 1;
                 bitcnt_w = 23;
             end
             else begin
@@ -100,7 +102,7 @@ always_comb begin
         S_ACK: begin
             sclk_w = !sclk_r;
             if (!i_ack && sclk_r) begin
-                if (bitcnt_r = 5'b11111) begin
+                if (bitcnt_r == 23) begin
                     state_w = S_STOP;
                     sdat_w = 0;
                 end
@@ -116,7 +118,7 @@ always_comb begin
             end
             else begin
                 sdat_w = 1;
-                if (cmdcnt_r == 0) begin
+                if (cmdcnt_r == 11) begin
                     state_w = S_IDLE;
                     finished_w = 1;
                 end
@@ -136,7 +138,18 @@ always_ff @ (posedge i_clk or negedge i_rst_n) begin
         sclk_r      <= 1;
         sdat_r      <= 1;
         cmdcnt_r    <= 0;
-        bitcnt_r    <= 0;
+        bitcnt_r    <= 23;
+		  data[0] 	  <= 24'b0011_0100_000_1111_0_0000_0000;
+		  data[1]     <= 24'b0011_0100_000_0000_0_1001_0111;
+        data[2]     <= 24'b0011_0100_000_0001_0_1001_0111;
+        data[3]     <= 24'b0011_0100_000_0010_0_0111_1001;
+        data[4]     <= 24'b0011_0100_000_0011_0_0111_1001;
+        data[5]     <= 24'b0011_0100_000_0100_0_0001_0101;
+        data[6]     <= 24'b0011_0100_000_0101_0_0000_0000;
+        data[7]     <= 24'b0011_0100_000_0110_0_0000_0000;
+        data[8]     <= 24'b0011_0100_000_0111_0_0100_0010;
+        data[9]     <= 24'b0011_0100_000_1000_0_0001_1001;
+        data[10]    <= 24'b0011_0100_000_1001_0_0000_0001;
     end
     else begin
         state_r     <= state_w;
