@@ -36,7 +36,7 @@ function logic [15:0] frac_mul_16;
         case (frac)
             4'b0000: frac_mul_16 = 16'hFFFF;
             4'b0001: frac_mul_16 = value;
-            4'b0010: frac_mul_16 = {0,value[15:1]};
+            4'b0010: frac_mul_16 = {1'b0,value[15:1]};
             4'b0011: frac_mul_16 = (32'(value) * 16'h5555) >> 16;
             4'b0100: frac_mul_16 = value >> 2;
             4'b0101: frac_mul_16 = (32'(value) * 16'h3333) >> 16;
