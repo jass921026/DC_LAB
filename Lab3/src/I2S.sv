@@ -109,6 +109,7 @@ logic [4:0]     counter_w   , counter_r;
 logic [19:0]    address_w   , address_r;
 logic [15:0]    data_w      , data_r;
 logic [21:0]    clkcnt_w    , clkcnt_r;
+logic           delay_w,    , delay_r;
 
 assign o_address    = address_r;
 assign o_data       = data_r;
@@ -121,6 +122,7 @@ always_comb begin
     address_w       = address_r;
     data_w          = data_r;
     clkcnt_w        = clkcnt_r+1;
+    delay_w         = delay_r;
     case(state_r)
         S_IDLE: begin
             if(i_start) begin
@@ -146,7 +148,6 @@ always_comb begin
                     data_w      = {data_r[14:0],i_data};
                     counter_w   = 0;
                     state_w     = S_WAIT;
-                    address_w   = address_r+1;
                 end
             end
         end
@@ -156,8 +157,13 @@ always_comb begin
             end
             else if(i_pause) begin
                 state_w     = S_PAUSE;
+            end 
+            else if (!delay_r) begin
+                delay_w     = 1;
+                address_w   = address_r+1;
             end
             else if(i_daclrck) begin//wait for right channel
+                delay_w     = 0; 
                 state_w     = S_REC;
                 data_w      = 0;
                 counter_w   = 0;
@@ -181,6 +187,7 @@ always_ff@(negedge i_clk or negedge i_rst_n) begin
         address_r       <= 20'hfffff;
         data_r          <= 16'h0;
         clkcnt_r        <= 0;
+        delay_r         <= 0;
 
     end
     else begin
@@ -189,6 +196,7 @@ always_ff@(negedge i_clk or negedge i_rst_n) begin
         counter_r       <= counter_w;
         data_r          <= data_w;
         clkcnt_r        <= clkcnt_w;
+        delay_r         <= delay_w;
     end
 end
 endmodule
