@@ -238,7 +238,7 @@ Top top0(
 // 	.o_seven_one(HEX6)
 // );
 
-assign HEX7 = fast ? (interpolation ? 7'b0110000 : 7'b1111111 ) : 7'b0111111 ;
+assign HEX7 = fast ? (interpolation ? 7'b0101111 : 7'b1111111 ) : 7'b0111111 ;
 
 seven_hex_16_1 seven_dec0(
     .i_hex(speed),

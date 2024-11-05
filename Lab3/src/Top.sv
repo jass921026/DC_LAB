@@ -146,7 +146,7 @@ AudDSP dsp0(
 	.i_stop(dsp_stop),
 	.i_speed(i_dsp_speed),
 	.i_fast(i_dsp_fast),
-	.i_interpolation(dsp_interpolation),
+	.i_interpolation(i_dsp_interpolation),
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_sram_data(data_play),
 	.i_end_addr(addr_end_r),
