@@ -126,7 +126,7 @@ always_comb begin
                         interpolation_cnt_w = interpolation_cnt_r + 1'b1;
                     end
 
-                    if (interpolation_cnt_r == 0) begin
+                    if (interpolation_cnt_r == 4'b0) begin
                         now_data_w = i_sram_data;
                     end
 
