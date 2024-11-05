@@ -82,7 +82,6 @@ logic dsp_start, dsp_pause, dsp_stop;
 logic rec_start, rec_pause, rec_stop;
 logic play_en;
 logic [3:0] acktimes_w,acktimes_r;
-logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
 assign o_interpolation = i_dsp_interpolation;
@@ -209,7 +208,8 @@ always_comb begin
 		S_PLAY: begin
 			if 		(i_pause)	state_w = S_PLAY_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
-			else if (addr_play >= addr_end_r) state_w = S_IDLE;
+			else if (!(i_interpolation && i_fast) && addr_play >= addr_end_r) state_w = S_IDLE;
+			else if (i_interpolation && i_fast && addr_play <= 20'h10) state_w = S_IDLE;
 		end
 		S_PLAY_PAUSE: begin
 			if 		(i_start)	state_w = S_PLAY;

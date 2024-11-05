@@ -138,7 +138,8 @@ module DE2_115 (
 
 logic key0down, key1down, key2down, key3down;
 logic CLK_12M, CLK_100K, CLK_800K;
-logic [3:0] curr_state,play_time;
+logic [3:0] curr_state ;
+logic [7:0] play_time;
 logic [15:0] end_address;
 logic fast, interpolation;
 logic [3:0] speed;
@@ -248,7 +249,7 @@ seven_hex_16_1 seven_dec0(
 seven_hex_16_2 seven_dec1(
     .i_hex(play_time),
     .o_seven_1(HEX5),
-     .o_seven_0(HEX4)
+    .o_seven_0(HEX4)
 );
 
 seven_hex_16_4 seven_dec_3(
