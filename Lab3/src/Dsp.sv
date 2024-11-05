@@ -163,7 +163,7 @@ end
 
 always_ff @(posedge i_clk or negedge i_rst_n) begin
     if (!i_rst_n) begin
-        prev_data_r <= i_sram_data ;
+        prev_data_r <= 0 ;
         pre_pre_data_r <= i_sram_data ;
         prev_daclrck <= i_daclrck;
         interpolation_cnt_r <= 0;
