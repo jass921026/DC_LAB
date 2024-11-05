@@ -109,7 +109,7 @@ logic [4:0]     counter_w   , counter_r;
 logic [19:0]    address_w   , address_r;
 logic [15:0]    data_w      , data_r;
 logic [21:0]    clkcnt_w    , clkcnt_r;
-logic           delay_w,    , delay_r;
+logic           delay_w    , delay_r;
 
 assign o_address    = address_r;
 assign o_data       = data_r;
