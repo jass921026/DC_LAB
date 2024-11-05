@@ -9,6 +9,7 @@ module AudDSP(
     input       i_interpolation, // 0 for constant, 1 for linear
     input       i_daclrck, // 0 for left channel, 1 for right channel, we use 0
     input [15:0] i_sram_data,
+    input [19:0] i_end_addr,
     output[15:0] o_dac_data,
     output[19:0] o_sram_addr //1M bytes * 16 bits
 );
@@ -23,6 +24,7 @@ logic [3:0] interpolation_cnt_r, interpolation_cnt_w;
 parameter S_IDLE      = 0;
 parameter S_PAUSE     = 1;
 parameter S_PLAY      = 2;
+parameter S_BACKTRACK = 3;
 
 assign o_sram_addr = addr_r;
 assign o_dac_data = out_data_r;
@@ -64,15 +66,25 @@ always_comb begin
     out_data_w = out_data_r;
     interpolation_cnt_w = interpolation_cnt_r;
 
-
+    // make backtrack is fast and interpolation
     case (state_r)
         S_IDLE: begin
             out_data_w = 0;
+            if (i_fast && i_interpolation) // backtrack
+                addr_w = i_end_addr;
+            else addr_w = 0;
+
             if (i_start) begin //address must be 0
-                prev_data_w = i_sram_data;
-                state_w <= S_PLAY;
-                if (i_fast) addr_w = i_speed;
-                else addr_w = 1;
+                if (i_fast && i_interpolation) begin // backtrack
+                    addr_w = i_end_addr-i_speed ;
+                    state_w = S_BACKTRACK;
+                end
+                else begin
+                    prev_data_w = i_sram_data;
+                    state_w = S_PLAY;
+                    if (i_fast) addr_w = i_speed;
+                    else addr_w = 1;
+                end
             end
         end
         S_PAUSE: begin
@@ -89,12 +101,15 @@ always_comb begin
             if (i_pause) begin
                 state_w <= S_PAUSE;
             end
-            if (i_stop) begin
+            else if (i_stop) begin
                 state_w <= S_IDLE;
                 addr_w = 0;
             end
+            else if (i_fast && i_interpolation) begin
+                state_w <= S_BACKTRACK;
+            end
             // work at daclrck change to left (0)
-            if (prev_daclrck && !i_daclrck) begin
+            else if (prev_daclrck && !i_daclrck) begin
                 if (i_fast) begin //fast forward
                     addr_w = addr_r + i_speed;
                     out_data_w = prev_data_r;
@@ -118,6 +133,22 @@ always_comb begin
                 end
             end
         end
+        S_BACKTRACK: begin
+            if (i_pause) begin
+                state_w <= S_PAUSE;
+            end
+            else if (i_stop) begin
+                state_w <= S_IDLE;
+                addr_w = 0;
+            end
+            else if (!(i_fast && i_interpolation)) begin
+                state_w <= S_PLAY;
+            end
+            else if (prev_daclrck && !i_daclrck) begin //only fast exist
+                addr_w = addr_r - i_speed;
+                out_data_w = prev_data_r;
+                prev_data_w = i_sram_data;
+            end
     endcase
 end
 

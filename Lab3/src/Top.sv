@@ -147,6 +147,7 @@ AudDSP dsp0(
 	.i_interpolation(dsp_interpolation),
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_sram_data(data_play),
+	.i_end_addr(addr_end_r),
 	.o_dac_data(dac_data),
 	.o_sram_addr(addr_play)
 );
