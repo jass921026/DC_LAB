@@ -128,7 +128,7 @@ always_comb begin
                         out_data_w = prev_data_r;
                     end
                     else begin // linear interpolation
-                        out_data_w = (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (i_speed - interpolation_cnt_r ))  + (frac_mul_16(.value(i_sram_data),.frac(i_speed)) * (interpolation_cnt_r)) ;
+                        out_data_w = (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (i_speed - interpolation_cnt_r ))  + (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (interpolation_cnt_r)) ;
                     end
                 end
             end
