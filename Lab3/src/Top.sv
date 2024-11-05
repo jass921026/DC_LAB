@@ -38,6 +38,9 @@ module Top (
 	output o_AUD_DACDAT,
 
 	// SEVENDECODER (optional display)
+	output o_fast,
+	output o_interpolation,
+	output [3:0] o_speed,
 	output [3:0] o_curr_state,
 	output [7:0] o_play_time,
 	output [15:0] o_end_address
@@ -53,7 +56,7 @@ module Top (
 
 	// LED
 	// output  [8:0] o_ledg,
-	// output [17:0] o_ledr
+	//output [17:0] o_ledr
 );
 
 // design the FSM and states as you like
@@ -79,9 +82,11 @@ logic dsp_start, dsp_pause, dsp_stop;
 logic rec_start, rec_pause, rec_stop;
 logic play_en;
 logic [3:0] acktimes_w,acktimes_r;
-logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
+assign o_interpolation = i_dsp_interpolation;
+assign o_fast = i_dsp_fast;
+assign o_speed = i_dsp_speed;
 assign o_curr_state = state_r;
 assign o_play_time = (state_r == S_PLAY) ? addr_play[19:12] : 8'd0;
 assign o_end_address = addr_end_r[19:4]; // 16 bits
@@ -140,9 +145,10 @@ AudDSP dsp0(
 	.i_stop(dsp_stop),
 	.i_speed(i_dsp_speed),
 	.i_fast(i_dsp_fast),
-	.i_interpolation(dsp_interpolation),
+	.i_interpolation(i_dsp_interpolation),
 	.i_daclrck(i_AUD_DACLRCK),
 	.i_sram_data(data_play),
+	.i_end_addr(addr_end_r),
 	.o_dac_data(dac_data),
 	.o_sram_addr(addr_play)
 );
@@ -180,7 +186,10 @@ always_comb begin
 		S_IDLE: begin
 			if (i_start) begin
 				if (i_play_enable) state_w = S_PLAY;
-				else state_w = S_RECD;
+				else begin
+					state_w = S_RECD ;
+					addr_end_w = 20'h0 ;
+				end
 			end
 		end
 		S_I2C: begin
@@ -190,6 +199,7 @@ always_comb begin
 			if 		(i_pause)	state_w = S_RECD_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
 			addr_end_w = (addr_record + 1) > addr_end_r ? (addr_record+1) : addr_end_r; // max
+			if ((addr_record + 1) == 20'hffff0) state_w = S_IDLE ; // add auto stop recoding 
 		end
 		S_RECD_PAUSE: begin
 			if 		(i_start)	state_w = S_RECD;
@@ -198,7 +208,8 @@ always_comb begin
 		S_PLAY: begin
 			if 		(i_pause)	state_w = S_PLAY_PAUSE;
 			else if (i_stop) 	state_w = S_IDLE;
-			else if (addr_play >= addr_end_r) state_w = S_IDLE;
+			else if (!(i_dsp_interpolation && i_dsp_fast) && addr_play >= addr_end_r) state_w = S_IDLE;
+			else if (i_dsp_interpolation && i_dsp_fast && addr_play <= 20'h10) state_w = S_IDLE;
 		end
 		S_PLAY_PAUSE: begin
 			if 		(i_start)	state_w = S_PLAY;
