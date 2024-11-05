@@ -19,6 +19,7 @@ logic [ 2:0] state_r, state_w;
 logic        prev_daclrck;
 logic [15:0] out_data_r, out_data_w;
 logic [15:0] prev_data_r, prev_data_w;
+logic [15:0] now_data_r, now_data_w;
 logic [3:0] interpolation_cnt_r, interpolation_cnt_w;
 
 parameter S_IDLE      = 0;
@@ -64,6 +65,7 @@ always_comb begin
     prev_data_w = prev_data_r;
     out_data_w = out_data_r;
     interpolation_cnt_w = interpolation_cnt_r;
+    now_data_w = now_data_r;
 
     // make backtrack is fast and interpolation
     case (state_r)
@@ -124,11 +126,16 @@ always_comb begin
                         interpolation_cnt_w = interpolation_cnt_r + 1'b1;
                     end
 
+                    if (interpolation_cnt_r == 0) begin
+                        now_data_w = i_sram_data;
+                    end
+
+
                     if (!i_interpolation) begin // no interpolation
                         out_data_w = prev_data_r;
                     end
                     else begin // linear interpolation
-                        out_data_w = (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (i_speed - interpolation_cnt_r ))  + (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (interpolation_cnt_r)) ;
+                        out_data_w = (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (i_speed - interpolation_cnt_r ))  + (frac_mul_16(.value(now_data_r),.frac(i_speed)) * (interpolation_cnt_r)) ;
                     end
                 end
             end
