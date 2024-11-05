@@ -32,7 +32,6 @@ assign o_dac_data = out_data_r;
 function logic [15:0] frac_mul_16;
     input logic [15:0] value;
     input logic [3:0] frac;
-    //output frac_mul_16;
     begin
         case (frac)
             4'b0000: frac_mul_16 = 16'hFFFF;
@@ -124,11 +123,12 @@ always_comb begin
                     else begin 
                         interpolation_cnt_w = interpolation_cnt_r + 1;
                     end
+
                     if (i_interpolation == 0) begin // no interpolation
                         out_data_w = prev_data_r;
                     end
                     else begin // linear interpolation
-                        out_data_w = frac_mul_16(prev_data_r,i_speed) * (i_speed - interpolation_cnt_r )  + frac_mul_16(i_sram_data,i_speed) * (interpolation_cnt_r) ;
+                        out_data_w = (frac_mul_16(prev_data_r,i_speed) * (i_speed - interpolation_cnt_r ))  + (frac_mul_16(i_sram_data,i_speed) * (interpolation_cnt_r)) ;
                     end
                 end
             end
