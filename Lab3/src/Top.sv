@@ -38,6 +38,8 @@ module Top (
 	output o_AUD_DACDAT,
 
 	// SEVENDECODER (optional display)
+	output o_fast,
+	output [3:0] o_speed,
 	output [3:0] o_curr_state,
 	output [7:0] o_play_time,
 	output [15:0] o_end_address
@@ -82,6 +84,8 @@ logic [3:0] acktimes_w,acktimes_r;
 logic [3:0] second_rec,second_play;
 logic [3:0] startcnt_w,startcnt_r;
 
+assign o_fast = i_dsp_fast;
+assign o_speed = i_dsp_speed;
 assign o_curr_state = state_r;
 assign o_play_time = (state_r == S_PLAY) ? addr_play[19:12] : 8'd0;
 assign o_end_address = addr_end_r[19:4]; // 16 bits
@@ -180,7 +184,10 @@ always_comb begin
 		S_IDLE: begin
 			if (i_start) begin
 				if (i_play_enable) state_w = S_PLAY;
-				else state_w = S_RECD;
+				else begin
+					state_w = S_RECD ;
+					addr_end_w = 20'h0 ;
+				end
 			end
 		end
 		S_I2C: begin

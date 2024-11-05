@@ -140,6 +140,8 @@ logic key0down, key1down, key2down, key3down;
 logic CLK_12M, CLK_100K, CLK_800K;
 logic [3:0] curr_state,play_time;
 logic [15:0] end_address;
+logic fast;
+logic [3:0] speed;
 
 assign AUD_XCK = CLK_12M;
 
@@ -209,6 +211,8 @@ Top top0(
 	.o_AUD_DACDAT(AUD_DACDAT),
 
 	// SEVENDECODER (optional display)
+	.o_fast(fast),
+	.o_speed(speed),
 	.o_curr_state(curr_state),
 	.o_play_time(play_time),
 	.o_end_address(end_address)
@@ -232,6 +236,13 @@ Top top0(
 // 	.o_seven_ten(HEX7),
 // 	.o_seven_one(HEX6)
 // );
+
+assign HEX7 = fast ? 7'b1111111 : 7'b0111111 ;
+
+seven_hex_16_1 seven_dec0(
+	.i_hex(curr_state),
+	.o_seven(HEX6)
+);
 
 seven_hex_16_2 seven_dec1(
 	.i_hex(play_time),
@@ -262,7 +273,7 @@ assign LEDG[5] = (curr_state == 'd5) ;
 // assign HEX3 = '1;
 // assign HEX4 = '1;
 // assign HEX5 = '1;
-assign HEX6 = '1;
-assign HEX7 = '1;
+// assign HEX6 = '1;
+// assign HEX7 = '1;
 
 endmodule
