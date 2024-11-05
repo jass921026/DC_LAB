@@ -127,9 +127,9 @@ always_comb begin
                         interpolation_cnt_w = interpolation_cnt_r + 1'b1;
                     end
 
-                    if (interpolation_cnt_r == 4'b0) begin
+                    // if (interpolation_cnt_r == 4'b0) begin
                         
-                    end
+                    // end
 
 
                     if (!i_interpolation) begin // no interpolation
