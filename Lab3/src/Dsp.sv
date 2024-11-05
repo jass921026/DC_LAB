@@ -19,7 +19,7 @@ logic [ 2:0] state_r, state_w;
 logic        prev_daclrck;
 logic [15:0] out_data_r, out_data_w;
 logic [15:0] prev_data_r, prev_data_w;
-logic [15:0] now_data_r, now_data_w;
+logic [15:0] pre_pre_data_r, pre_pre_data_w;
 logic [3:0] interpolation_cnt_r, interpolation_cnt_w;
 
 parameter S_IDLE      = 0;
@@ -65,7 +65,7 @@ always_comb begin
     prev_data_w = prev_data_r;
     out_data_w = out_data_r;
     interpolation_cnt_w = interpolation_cnt_r;
-    now_data_w = now_data_r;
+    pre_pre_data_w = pre_pre_data_r;
 
     // make backtrack is fast and interpolation
     case (state_r)
@@ -121,13 +121,14 @@ always_comb begin
                         interpolation_cnt_w = 0;
                         addr_w = addr_r + 1'b1 ;
                         prev_data_w = i_sram_data;
+                        pre_pre_data_w = prev_data_r;
                     end
                     else begin 
                         interpolation_cnt_w = interpolation_cnt_r + 1'b1;
                     end
 
                     if (interpolation_cnt_r == 4'b0) begin
-                        now_data_w = i_sram_data;
+                        
                     end
 
 
@@ -135,7 +136,7 @@ always_comb begin
                         out_data_w = prev_data_r;
                     end
                     else begin // linear interpolation
-                        out_data_w = (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (i_speed - interpolation_cnt_r ))  + (frac_mul_16(.value(now_data_r),.frac(i_speed)) * (interpolation_cnt_r)) ;
+                        out_data_w = (frac_mul_16(.value(pre_pre_data_r),.frac(i_speed)) * (i_speed - interpolation_cnt_r ))  + (frac_mul_16(.value(prev_data_r),.frac(i_speed)) * (interpolation_cnt_r)) ;
                     end
                 end
             end
@@ -163,7 +164,7 @@ end
 always_ff @(posedge i_clk or negedge i_rst_n) begin
     if (!i_rst_n) begin
         prev_data_r <= i_sram_data ;
-        now_data_r <= i_sram_data ;
+        pre_pre_data_r <= i_sram_data ;
         prev_daclrck <= i_daclrck;
         interpolation_cnt_r <= 0;
         state_r <= S_IDLE;
@@ -172,7 +173,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
     end
     else begin
         prev_data_r <= prev_data_w;
-        now_data_r <= now_data_w;
+        pre_pre_data_r <= pre_pre_data_w;
         prev_daclrck <= i_daclrck;
         interpolation_cnt_r <= interpolation_cnt_w;
         state_r <= state_w;
