@@ -31,7 +31,10 @@ nWave &
 [NES for DE10](https://github.com/iandailis/NES-FPGA)  
 
 [DE2115 MNIST](https://github.com/grant4001/MNIST_Classification_FPGA)  
+[Another DE2115 MNIST](https://github.com/DouglasYu/ECE385final_digit_recognition)
+[A Similar Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10008429)
 [MNIST FPGA](https://github.com/junwha/MNIST-FPGA-Accelarator)
+[Real Work](https://dl.acm.org/doi/pdf/10.1145/3297858.3304028)
 [Transformer on FPGA](https://jeit.ac.cn/cn/article/doi/10.11999/JEIT230713?viewType=HTML)  
 [Transformer on FPGA US](https://wangshusen.github.io/papers/ISQED2021.pdf)  
 
