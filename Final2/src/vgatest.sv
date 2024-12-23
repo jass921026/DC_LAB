@@ -16,7 +16,7 @@ assign sumi     =   i_x + i_y;
 assign sumcnt   =   xcnt_r + ycnt_r;
 assign o_blue   =   (i_x > xcnt_r && i_x < xcnt_r + 'd200) || (xcnt_r > 'd440 && i_x < xcnt_r - 'd440) ? 'b1111111111 : 'b0000000000;
 assign o_red    =   (i_y > ycnt_r && i_y < ycnt_r + 'd150) || (ycnt_r > 'd330 && i_y < ycnt_r - 'd330) ? 'b1111111111 : 'b0000000000;
-assign o_green  =   (sumi > xcnt_r + ycnt_r && sumi < sumcnt + 'd300) || (sumcnt > 'd820 && sumi < sumcnt - 'd820) ? 'b1111111111 : 'b0000000000;
+assign o_green  =   (sumi > sumcnt && sumi < sumcnt + 'd300) || (sumcnt > 'd820 && sumi < sumcnt - 'd820) ? 'b1111111111 : 'b0000000000;
 
 always_comb begin
     xcnt_w  =   (i_x != 640 || i_y != 480) ? xcnt_r : (xcnt_r >= 'd640 ? 0 : xcnt_r+1);
