@@ -66,3 +66,6 @@ incremental_db/
 db/
 */output_files/
 PLLJ_PLLSPE_INFO.txt
+
+# Ignore dataset
+Final/src/training/data/MNIST/
