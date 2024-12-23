@@ -189,15 +189,30 @@ VGA_Ctrl vgactrl ( // Host Side
     .iRST_N(reset)
 );
 
-Test t1(
-	.i_rst_n(reset),
-	.i_clk(clk25M),
-    .i_x(vgax),
-    .i_y(vgay),
-    .o_blue(blue),
-    .o_red(red),
-    .o_green(green)
+logic [3:0] shownum;
+logic [7:0] numaddr;
+logic [9:0] gray;
+assign shownum = (vgay >= 310 && vgay < 410) ? 4'b0000 + ((vgax >= 6 && vgax < 106) ? 4'b0000 : ((vgax >= 112 && vgax < 212) ? 4'b0001 : ((vgax >= 218 && vgax < 318) ? 4'b0010 : ((vgax >= 324 && vgax < 424) ? 4'b0011 : ((vgax >= 430 && vgax < 530) ? 4'b0100 : ((vgax >= 536 && vgax < 636) ? 4'b0101 : (4'b1111))))))) : ((vgay >= 70 && vgay < 170) ? 4'b1001 + ((vgax >= 6 && vgax < 106) ? 4'b0000 : ((vgax >= 112 && vgax < 212) ? 4'b0001 : ((vgax >= 218 && vgax < 318) ? 4'b0010 : ((vgax >= 324 && vgax < 424) ? 4'b0011 : ((vgax >= 430 && vgax < 530) ? 4'b0100 : ((vgax >= 536 && vgax < 636) ? 4'b0101 : (4'b0110))))))) : 4'b1111);
+assign numaddr = (shownum <= 4'd1000) ? (('d10 * ((vgay - 310)>>4 + (vgay - 310)>>5 + (vgay - 310)>>8 + (vgay - 310)>>9)) + ((vgax - (106 * shownum) - 6)>>4 + (vgax - (106 * shownum) - 6)>>5 + (vgax - (106 * shownum) - 6)>>8 + (vgax - (106 * shownum) - 6)>>9)) : ((shownum < 4'd1111) ? (('d10 * ((vgay - 70)>>4 + (vgay - 70)>>5 + (vgay - 70)>>8 + (vgay - 70)>>9)) + ((vgax - (106 * shownum) - 6)>>4 + (vgax - (106 * shownum) - 6)>>5 + (vgax - (106 * shownum) - 6)>>8 + (vgax - (106 * shownum) - 6)>>9)) : 'b0000);
+
+num2pixel num0 (
+    .num(shownum),
+    .addr(numaddr),
+    .brightness(gray)
 );
+assign red  =   gray;
+assign blue =   gray;
+assign green=   gray;
+
+// Test t0(
+// 	.i_rst_n(reset),
+// 	.i_clk(clk25M),
+//     .i_x(vgax),
+//     .i_y(vgay),
+//     .o_blue(blue),
+//     .o_red(red),
+//     .o_green(green)
+// );
 
 altpll pll0( // generate with qsys, please follow lab2 tutorials
     .clk_clk(CLOCK_50),

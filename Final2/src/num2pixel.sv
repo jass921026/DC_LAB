@@ -1,10 +1,10 @@
 module num2pixel(
     input[3:0] num,//0~9 : 0~9, 10 : =, 11,12,13,14 : +-*/
     input[7:0] addr,//'d0~'d99
-    output[7:0] brightness//'h0~'hff
+    output[9:0] brightness
 );
     logic [7:0] asciipixel;
-    assign brightness   =   asciipixel;
+    assign brightness   =   {asciipixel,2'b00};
 		if (num == 'd0) begin // 0
 			case(addr)
 				8'd00:asciipixel = 8'hff;
