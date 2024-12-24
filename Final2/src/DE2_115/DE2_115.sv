@@ -144,6 +144,28 @@ module DE2_115 (
 // logic fast, interpolation;
 // logic [3:0] speed;
 
+// MARK: MOUSE
+
+logic lmb, rmb;
+logic [8:0] mouse_x, mouse_y;
+logic mouse_valid;
+
+Mouse mouse0(
+    .i_clk(CLOCK_50),
+    .i_rst_n(KEY[3]),
+    .ps2_clk(PS2_CLK),
+    .ps2_data(PS2_DAT),
+    .o_button_left(lmb),
+    .o_button_right(rmb),
+    .o_movement_x(mouse_x),
+    .o_movement_y(mouse_y),
+    .o_valid(mouse_valid)
+);
+
+
+
+// MARK: VGA
+
 logic [9:0] red,blue,green;         //three channel wanna show with vga
 logic [10:0] vgax,vgay;           //position to output
 logic [21:0] addr_screen_img;       //addr of vga requesting (width * y_coord + x_coord)

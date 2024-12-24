@@ -1112,7 +1112,40 @@ set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name VERILOG_FILE synthesis/altpll.v
+set_global_assignment -name SYSTEMVERILOG_FILE src/basic/lfsr.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem7.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem6.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem5.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem4.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem3.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem2.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem1.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem0.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem7.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem6.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem5.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem4.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem3.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem2.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem1.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem0.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/top.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/sram.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/mac_array.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/mac.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/line_buffer_group.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/fmap_III.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/fmap_II.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/fmap_I.sv
+set_global_assignment -name VHDL_FILE src/CNN/fifo.vhd
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/ff_line_buffer_groups.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/cnn_sender.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/cnn_receiver.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/bi_mem0.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/mouse/mouse.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/mouse/ClkDebounce.sv
+set_global_assignment -name VERILOG_FILE synthesis/altpll.v -library altpll
 set_global_assignment -name QIP_FILE synthesis/altpll.qip
 set_global_assignment -name SYSTEMVERILOG_FILE src/display/vgatest.sv
 set_global_assignment -name VERILOG_FILE src/display/VGA_Ctrl.v
@@ -1125,4 +1158,5 @@ set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/Debounce.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/DE2_115.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/vgatest.sv
 set_global_assignment -name VERILOG_FILE src/VGA_Ctrl.v
+set_global_assignment -name SYSTEMVERILOG_FILE src/display/scroll.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

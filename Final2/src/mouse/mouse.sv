@@ -19,15 +19,15 @@ module Mouse
 
 // FSM
 
-localparam S_WRITE_WAIT = 0;
-localparam S_WRITE_LOOP = 1;
-localparam S_READ = 2;
-localparam S_OUTPUT = 3;
+localparam S_WRITE_WAIT = 2'b00;
+localparam S_WRITE_LOOP = 2'b01;
+localparam S_READ       = 2'b10;
+localparam S_OUTPUT     = 2'b11;
 
 localparam WRITE_WAIT_CYCLES = 6000;
 localparam READ_WAIT_CYCLES = 30000;
 
-logic [1:0] state_w, state_r;       // state
+logic [1:0] state_w, state_r;           // state
 logic [20:0] counter_w, counter_r;      // count cycles of main clock
 logic [32:0] shiftreg_w, shiftreg_r;    // shift register for read / write data
 logic [5:0] bitcnt_w, bitcnt_r;         // count bits read / write by mouse
@@ -42,7 +42,7 @@ ClkDebounce deb0 (
     .o_debounced(ps2_clk_deb),
     .o_neg(ps2_clk_neg),
     .o_pos(ps2_clk_pos)
-)
+);
 
 assign ps2_clk = (state_r == S_WRITE_WAIT) ? 1'b0 : 1'bz;
 assign ps2_data = (state_r == S_WRITE_LOOP) ? shiftreg_r[0] : 1'bz;
