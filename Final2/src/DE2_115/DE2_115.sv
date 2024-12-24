@@ -189,105 +189,35 @@ VGA_Ctrl vgactrl ( // Host Side
     .iRST_N(reset)
 );
 
-logic [3:0] shownum;
-logic [7:0] numaddr;
-logic [9:0] gray;
 
-function logic [3:0] coord2numindex;
-    input logic [10:0] x;
-    input logic [10:0] y;
-    begin
-        if (y >= 70 && y < 170) begin
-            if (x >= 6 && x < 106) begin
-                return 4'b0000;
-            end
-            else if (x >= 112 && x < 212) begin
-                return 4'b0001;
-            end
-            else if (x >= 218 && x < 318) begin
-                return 4'b0010;
-            end
-            else if (x >= 324 && x < 424) begin
-                return 4'b0011;
-            end
-            else if (x >= 430 && x < 530) begin
-                return 4'b0100;
-            end
-            else if (x >= 536 && x < 636) begin
-                return 4'b0101;
-            end
-            else begin
-                return 4'b1111;
-            end
-        end
-        else if(y >= 310 && y < 410) begin
-            if (x >= 6 && x < 106) begin
-                return 4'b0110;
-            end
-            else if (x >= 112 && x < 212) begin
-                return 4'b0111;
-            end
-            else if (x >= 218 && x < 318) begin
-                return 4'b1000;
-            end
-            else if (x >= 324 && x < 424) begin
-                return 4'b1001;
-            end
-            else if (x >= 430 && x < 530) begin
-                return 4'b1010;
-            end
-            else if (x >= 536 && x < 636) begin
-                return 4'b1011;
-            end
-            else begin
-                return 4'b1111;
-            end
-        end
-        else begin
-            return 4'b1111;
-        end
-    end
-endfunction
+// always_comb begin
+//     if (coord2numindex(.x(vgax), .y(vgay)) < 'd6) begin
+//         shownum = coord2numindex(.x(vgax), .y(vgay));
+//     end
+//     else if (coord2numindex(.x(vgax), .y(vgay)) < 'hf) begin
+//         shownum = coord2numindex(.x(vgax), .y(vgay)) + 'h3;
+//     end
+//     else begin
+//         shownum = coord2numindex(.x(vgax), .y(vgay));
+//     end
+// end
 
-function logic [7:0] relative_adddress;
-    input logic [10:0] x;
-    input logic [10:0] y;
-    logic [3:0] index = coord2numindex(.x(x),.y(y));
-    begin
-        if (index < 4'b0110) begin
-            relative_adddress = (((32'(y-70) * 16'h1999) >> 16)) + ('d10 * ((32'(x - (106 * index) - 6) * 16'h1999) >> 16));
-        end
-        else if (index < 4'b1111) begin
-            relative_adddress = (((32'(y-310) * 16'h1999) >> 16)) + ('d10 * ((32'(x - (106 * (index - 'd6)) - 6) * 16'h1999) >> 16));
-        end
-        else begin
-            relative_adddress = 'd0;
-        end
-    end
-endfunction
-
-always_comb begin
-    if (coord2numindex(.x(vgax), .y(vgay)) < 'd6) begin
-        shownum = coord2numindex(.x(vgax), .y(vgay));
-    end
-    else if (coord2numindex(.x(vgax), .y(vgay)) < 'hf) begin
-        shownum = coord2numindex(.x(vgax), .y(vgay)) + 'h3;
-    end
-    else begin
-        shownum = coord2numindex(.x(vgax), .y(vgay));
-    end
-end
-
-assign numaddr = relative_adddress(.x(vgax),.y(vgay));
-
-num2pixel num0 (
-    .num(shownum),
-    .addr(numaddr),
-    .brightness(gray)
+scroll scroller(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
+    .i_x(vgax),
+    .i_y(vgay),
+    .o_blue(blue),
+    .o_red(red),
+    .o_green(green),
+    .i_handwrite(900'b0),
+    .i_digit_answered(4'b0),
+    .i_digit_identified(1'b1)
 );
-assign red  =   gray;
-assign blue =   gray;
-assign green=   gray;
+
+// assign red  =   gray;
+// assign blue =   gray;
+// assign green=   gray;
 
 // Test t0(
 // 	.i_rst_n(reset),
