@@ -17,8 +17,8 @@ case(num)
 		8'd05: asciipixel = 8'h00;
 		8'd06: asciipixel = 8'h00;
 		8'd07: asciipixel = 8'h00;
-		8'd08: asciipixel = 8'h00;
-		8'd09: asciipixel = 8'h00;
+		8'd08: asciipixel = 8'hff;
+		8'd09: asciipixel = 8'hff;
 		8'd10: asciipixel = 8'h00;
 		8'd11: asciipixel = 8'h00;
 		8'd12: asciipixel = 8'h00;
@@ -26,40 +26,40 @@ case(num)
 		8'd14: asciipixel = 8'h00;
 		8'd15: asciipixel = 8'h00;
 		8'd16: asciipixel = 8'h00;
-		8'd17: asciipixel = 8'hff;
+		8'd17: asciipixel = 8'h00;
 		8'd18: asciipixel = 8'hff;
-		8'd19: asciipixel = 8'h00;
+		8'd19: asciipixel = 8'hff;
 		8'd20: asciipixel = 8'h00;
-		8'd21: asciipixel = 8'h00;
+		8'd21: asciipixel = 8'hff;
 		8'd22: asciipixel = 8'hff;
-		8'd23: asciipixel = 8'hff;
+		8'd23: asciipixel = 8'h00;
 		8'd24: asciipixel = 8'h00;
 		8'd25: asciipixel = 8'h00;
 		8'd26: asciipixel = 8'h00;
-		8'd27: asciipixel = 8'hff;
+		8'd27: asciipixel = 8'h00;
 		8'd28: asciipixel = 8'hff;
-		8'd29: asciipixel = 8'h00;
+		8'd29: asciipixel = 8'hff;
 		8'd30: asciipixel = 8'h00;
-		8'd31: asciipixel = 8'h00;
+		8'd31: asciipixel = 8'hff;
 		8'd32: asciipixel = 8'hff;
-		8'd33: asciipixel = 8'hff;
+		8'd33: asciipixel = 8'h00;
 		8'd34: asciipixel = 8'h00;
 		8'd35: asciipixel = 8'h00;
 		8'd36: asciipixel = 8'h00;
-		8'd37: asciipixel = 8'hff;
+		8'd37: asciipixel = 8'h00;
 		8'd38: asciipixel = 8'hff;
-		8'd39: asciipixel = 8'h00;
-		8'd40: asciipixel = 8'h00;
+		8'd39: asciipixel = 8'hff;
+		8'd40: asciipixel = 8'hff;
 		8'd41: asciipixel = 8'hff;
 		8'd42: asciipixel = 8'hff;
-		8'd43: asciipixel = 8'hff;
-		8'd44: asciipixel = 8'hff;
-		8'd45: asciipixel = 8'hff;
-		8'd46: asciipixel = 8'hff;
-		8'd47: asciipixel = 8'hff;
+		8'd43: asciipixel = 8'h00;
+		8'd44: asciipixel = 8'h00;
+		8'd45: asciipixel = 8'h00;
+		8'd46: asciipixel = 8'h00;
+		8'd47: asciipixel = 8'h00;
 		8'd48: asciipixel = 8'hff;
-		8'd49: asciipixel = 8'h00;
-		8'd50: asciipixel = 8'h00;
+		8'd49: asciipixel = 8'hff;
+		8'd50: asciipixel = 8'hff;
 		8'd51: asciipixel = 8'hff;
 		8'd52: asciipixel = 8'hff;
 		8'd53: asciipixel = 8'hff;
@@ -68,17 +68,17 @@ case(num)
 		8'd56: asciipixel = 8'hff;
 		8'd57: asciipixel = 8'hff;
 		8'd58: asciipixel = 8'hff;
-		8'd59: asciipixel = 8'h00;
-		8'd60: asciipixel = 8'h00;
-		8'd61: asciipixel = 8'h00;
-		8'd62: asciipixel = 8'h00;
-		8'd63: asciipixel = 8'h00;
-		8'd64: asciipixel = 8'h00;
-		8'd65: asciipixel = 8'h00;
-		8'd66: asciipixel = 8'h00;
+		8'd59: asciipixel = 8'hff;
+		8'd60: asciipixel = 8'hff;
+		8'd61: asciipixel = 8'hff;
+		8'd62: asciipixel = 8'hff;
+		8'd63: asciipixel = 8'hff;
+		8'd64: asciipixel = 8'hff;
+		8'd65: asciipixel = 8'hff;
+		8'd66: asciipixel = 8'hff;
 		8'd67: asciipixel = 8'hff;
 		8'd68: asciipixel = 8'hff;
-		8'd69: asciipixel = 8'h00;
+		8'd69: asciipixel = 8'hff;
 		8'd70: asciipixel = 8'h00;
 		8'd71: asciipixel = 8'h00;
 		8'd72: asciipixel = 8'h00;
@@ -86,9 +86,9 @@ case(num)
 		8'd74: asciipixel = 8'h00;
 		8'd75: asciipixel = 8'h00;
 		8'd76: asciipixel = 8'h00;
-		8'd77: asciipixel = 8'hff;
+		8'd77: asciipixel = 8'h00;
 		8'd78: asciipixel = 8'hff;
-		8'd79: asciipixel = 8'h00;
+		8'd79: asciipixel = 8'hff;
 		8'd80: asciipixel = 8'h00;
 		8'd81: asciipixel = 8'h00;
 		8'd82: asciipixel = 8'h00;
@@ -96,9 +96,9 @@ case(num)
 		8'd84: asciipixel = 8'h00;
 		8'd85: asciipixel = 8'h00;
 		8'd86: asciipixel = 8'h00;
-		8'd87: asciipixel = 8'hff;
+		8'd87: asciipixel = 8'h00;
 		8'd88: asciipixel = 8'hff;
-		8'd89: asciipixel = 8'h00;
+		8'd89: asciipixel = 8'hff;
 		8'd90: asciipixel = 8'h00;
 		8'd91: asciipixel = 8'h00;
 		8'd92: asciipixel = 8'h00;
@@ -107,8 +107,8 @@ case(num)
 		8'd95: asciipixel = 8'h00;
 		8'd96: asciipixel = 8'h00;
 		8'd97: asciipixel = 8'h00;
-		8'd98: asciipixel = 8'h00;
-		8'd99: asciipixel = 8'h00;
+		8'd98: asciipixel = 8'hff;
+		8'd99: asciipixel = 8'hff;
 	default: asciipixel = 8'h0;
 	endcase
 	end
@@ -952,7 +952,7 @@ case(num)
 	default: asciipixel = 8'h0;
 	endcase
 	end
-	4'd09: begin // =
+	4'd09: begin // 0
 	case(addr)
 		8'd00: asciipixel = 8'h00;
 		8'd01: asciipixel = 8'h00;
@@ -1057,7 +1057,7 @@ case(num)
 	default: asciipixel = 8'h0;
 	endcase
 	end
-	4'd10: begin // +
+	4'd10: begin // =
 	case(addr)
 		8'd00: asciipixel = 8'h00;
 		8'd01: asciipixel = 8'h00;
@@ -1162,7 +1162,7 @@ case(num)
 	default: asciipixel = 8'h0;
 	endcase
 	end
-	4'd11: begin // -
+	4'd11: begin // +
 	case(addr)
 		8'd00: asciipixel = 8'h00;
 		8'd01: asciipixel = 8'h00;
@@ -1267,7 +1267,7 @@ case(num)
 	default: asciipixel = 8'h0;
 	endcase
 	end
-	4'd12: begin // *
+	4'd12: begin // -
 	case(addr)
 		8'd00: asciipixel = 8'h00;
 		8'd01: asciipixel = 8'h00;
@@ -1372,7 +1372,7 @@ case(num)
 	default: asciipixel = 8'h0;
 	endcase
 	end
-	4'd13: begin // /
+	4'd13: begin // *
 	case(addr)
 		8'd00: asciipixel = 8'h00;
 		8'd01: asciipixel = 8'h00;
@@ -1450,6 +1450,216 @@ case(num)
 		8'd73: asciipixel = 8'h00;
 		8'd74: asciipixel = 8'hff;
 		8'd75: asciipixel = 8'hff;
+		8'd76: asciipixel = 8'h00;
+		8'd77: asciipixel = 8'h00;
+		8'd78: asciipixel = 8'h00;
+		8'd79: asciipixel = 8'h00;
+		8'd80: asciipixel = 8'h00;
+		8'd81: asciipixel = 8'h00;
+		8'd82: asciipixel = 8'h00;
+		8'd83: asciipixel = 8'h00;
+		8'd84: asciipixel = 8'h00;
+		8'd85: asciipixel = 8'h00;
+		8'd86: asciipixel = 8'h00;
+		8'd87: asciipixel = 8'h00;
+		8'd88: asciipixel = 8'h00;
+		8'd89: asciipixel = 8'h00;
+		8'd90: asciipixel = 8'h00;
+		8'd91: asciipixel = 8'h00;
+		8'd92: asciipixel = 8'h00;
+		8'd93: asciipixel = 8'h00;
+		8'd94: asciipixel = 8'h00;
+		8'd95: asciipixel = 8'h00;
+		8'd96: asciipixel = 8'h00;
+		8'd97: asciipixel = 8'h00;
+		8'd98: asciipixel = 8'h00;
+		8'd99: asciipixel = 8'h00;
+	default: asciipixel = 8'h0;
+	endcase
+	end
+	4'd14: begin // /
+	case(addr)
+		8'd00: asciipixel = 8'h00;
+		8'd01: asciipixel = 8'h00;
+		8'd02: asciipixel = 8'h00;
+		8'd03: asciipixel = 8'h00;
+		8'd04: asciipixel = 8'h00;
+		8'd05: asciipixel = 8'h00;
+		8'd06: asciipixel = 8'h00;
+		8'd07: asciipixel = 8'h00;
+		8'd08: asciipixel = 8'h00;
+		8'd09: asciipixel = 8'h00;
+		8'd10: asciipixel = 8'h00;
+		8'd11: asciipixel = 8'h00;
+		8'd12: asciipixel = 8'h00;
+		8'd13: asciipixel = 8'h00;
+		8'd14: asciipixel = 8'hff;
+		8'd15: asciipixel = 8'hff;
+		8'd16: asciipixel = 8'h00;
+		8'd17: asciipixel = 8'h00;
+		8'd18: asciipixel = 8'h00;
+		8'd19: asciipixel = 8'h00;
+		8'd20: asciipixel = 8'h00;
+		8'd21: asciipixel = 8'h00;
+		8'd22: asciipixel = 8'h00;
+		8'd23: asciipixel = 8'h00;
+		8'd24: asciipixel = 8'hff;
+		8'd25: asciipixel = 8'hff;
+		8'd26: asciipixel = 8'h00;
+		8'd27: asciipixel = 8'h00;
+		8'd28: asciipixel = 8'h00;
+		8'd29: asciipixel = 8'h00;
+		8'd30: asciipixel = 8'h00;
+		8'd31: asciipixel = 8'h00;
+		8'd32: asciipixel = 8'h00;
+		8'd33: asciipixel = 8'h00;
+		8'd34: asciipixel = 8'hff;
+		8'd35: asciipixel = 8'hff;
+		8'd36: asciipixel = 8'h00;
+		8'd37: asciipixel = 8'h00;
+		8'd38: asciipixel = 8'h00;
+		8'd39: asciipixel = 8'h00;
+		8'd40: asciipixel = 8'h00;
+		8'd41: asciipixel = 8'hff;
+		8'd42: asciipixel = 8'hff;
+		8'd43: asciipixel = 8'h00;
+		8'd44: asciipixel = 8'hff;
+		8'd45: asciipixel = 8'hff;
+		8'd46: asciipixel = 8'h00;
+		8'd47: asciipixel = 8'hff;
+		8'd48: asciipixel = 8'hff;
+		8'd49: asciipixel = 8'h00;
+		8'd50: asciipixel = 8'h00;
+		8'd51: asciipixel = 8'hff;
+		8'd52: asciipixel = 8'hff;
+		8'd53: asciipixel = 8'h00;
+		8'd54: asciipixel = 8'hff;
+		8'd55: asciipixel = 8'hff;
+		8'd56: asciipixel = 8'h00;
+		8'd57: asciipixel = 8'hff;
+		8'd58: asciipixel = 8'hff;
+		8'd59: asciipixel = 8'h00;
+		8'd60: asciipixel = 8'h00;
+		8'd61: asciipixel = 8'h00;
+		8'd62: asciipixel = 8'h00;
+		8'd63: asciipixel = 8'h00;
+		8'd64: asciipixel = 8'hff;
+		8'd65: asciipixel = 8'hff;
+		8'd66: asciipixel = 8'h00;
+		8'd67: asciipixel = 8'h00;
+		8'd68: asciipixel = 8'h00;
+		8'd69: asciipixel = 8'h00;
+		8'd70: asciipixel = 8'h00;
+		8'd71: asciipixel = 8'h00;
+		8'd72: asciipixel = 8'h00;
+		8'd73: asciipixel = 8'h00;
+		8'd74: asciipixel = 8'hff;
+		8'd75: asciipixel = 8'hff;
+		8'd76: asciipixel = 8'h00;
+		8'd77: asciipixel = 8'h00;
+		8'd78: asciipixel = 8'h00;
+		8'd79: asciipixel = 8'h00;
+		8'd80: asciipixel = 8'h00;
+		8'd81: asciipixel = 8'h00;
+		8'd82: asciipixel = 8'h00;
+		8'd83: asciipixel = 8'h00;
+		8'd84: asciipixel = 8'hff;
+		8'd85: asciipixel = 8'hff;
+		8'd86: asciipixel = 8'h00;
+		8'd87: asciipixel = 8'h00;
+		8'd88: asciipixel = 8'h00;
+		8'd89: asciipixel = 8'h00;
+		8'd90: asciipixel = 8'h00;
+		8'd91: asciipixel = 8'h00;
+		8'd92: asciipixel = 8'h00;
+		8'd93: asciipixel = 8'h00;
+		8'd94: asciipixel = 8'h00;
+		8'd95: asciipixel = 8'h00;
+		8'd96: asciipixel = 8'h00;
+		8'd97: asciipixel = 8'h00;
+		8'd98: asciipixel = 8'h00;
+		8'd99: asciipixel = 8'h00;
+	default: asciipixel = 8'h0;
+	endcase
+	end
+	4'd15: begin //  
+	case(addr)
+		8'd00: asciipixel = 8'h00;
+		8'd01: asciipixel = 8'h00;
+		8'd02: asciipixel = 8'h00;
+		8'd03: asciipixel = 8'h00;
+		8'd04: asciipixel = 8'h00;
+		8'd05: asciipixel = 8'h00;
+		8'd06: asciipixel = 8'h00;
+		8'd07: asciipixel = 8'h00;
+		8'd08: asciipixel = 8'h00;
+		8'd09: asciipixel = 8'h00;
+		8'd10: asciipixel = 8'h00;
+		8'd11: asciipixel = 8'h00;
+		8'd12: asciipixel = 8'h00;
+		8'd13: asciipixel = 8'h00;
+		8'd14: asciipixel = 8'h00;
+		8'd15: asciipixel = 8'h00;
+		8'd16: asciipixel = 8'h00;
+		8'd17: asciipixel = 8'h00;
+		8'd18: asciipixel = 8'h00;
+		8'd19: asciipixel = 8'h00;
+		8'd20: asciipixel = 8'h00;
+		8'd21: asciipixel = 8'h00;
+		8'd22: asciipixel = 8'h00;
+		8'd23: asciipixel = 8'h00;
+		8'd24: asciipixel = 8'h00;
+		8'd25: asciipixel = 8'h00;
+		8'd26: asciipixel = 8'h00;
+		8'd27: asciipixel = 8'h00;
+		8'd28: asciipixel = 8'h00;
+		8'd29: asciipixel = 8'h00;
+		8'd30: asciipixel = 8'h00;
+		8'd31: asciipixel = 8'h00;
+		8'd32: asciipixel = 8'h00;
+		8'd33: asciipixel = 8'h00;
+		8'd34: asciipixel = 8'h00;
+		8'd35: asciipixel = 8'h00;
+		8'd36: asciipixel = 8'h00;
+		8'd37: asciipixel = 8'h00;
+		8'd38: asciipixel = 8'h00;
+		8'd39: asciipixel = 8'h00;
+		8'd40: asciipixel = 8'h00;
+		8'd41: asciipixel = 8'h00;
+		8'd42: asciipixel = 8'h00;
+		8'd43: asciipixel = 8'h00;
+		8'd44: asciipixel = 8'h00;
+		8'd45: asciipixel = 8'h00;
+		8'd46: asciipixel = 8'h00;
+		8'd47: asciipixel = 8'h00;
+		8'd48: asciipixel = 8'h00;
+		8'd49: asciipixel = 8'h00;
+		8'd50: asciipixel = 8'h00;
+		8'd51: asciipixel = 8'h00;
+		8'd52: asciipixel = 8'h00;
+		8'd53: asciipixel = 8'h00;
+		8'd54: asciipixel = 8'h00;
+		8'd55: asciipixel = 8'h00;
+		8'd56: asciipixel = 8'h00;
+		8'd57: asciipixel = 8'h00;
+		8'd58: asciipixel = 8'h00;
+		8'd59: asciipixel = 8'h00;
+		8'd60: asciipixel = 8'h00;
+		8'd61: asciipixel = 8'h00;
+		8'd62: asciipixel = 8'h00;
+		8'd63: asciipixel = 8'h00;
+		8'd64: asciipixel = 8'h00;
+		8'd65: asciipixel = 8'h00;
+		8'd66: asciipixel = 8'h00;
+		8'd67: asciipixel = 8'h00;
+		8'd68: asciipixel = 8'h00;
+		8'd69: asciipixel = 8'h00;
+		8'd70: asciipixel = 8'h00;
+		8'd71: asciipixel = 8'h00;
+		8'd72: asciipixel = 8'h00;
+		8'd73: asciipixel = 8'h00;
+		8'd74: asciipixel = 8'h00;
+		8'd75: asciipixel = 8'h00;
 		8'd76: asciipixel = 8'h00;
 		8'd77: asciipixel = 8'h00;
 		8'd78: asciipixel = 8'h00;

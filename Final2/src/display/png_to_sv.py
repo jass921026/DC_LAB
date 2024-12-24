@@ -19,7 +19,7 @@ def read_png_to_grayscale(image_path):
 # grayscale_array = read_png_to_grayscale('path_to_image.png')
 # print(grayscale_array)
 
-fnt_map = "123456789=+-*/ "
+fnt_map = "1234567890=+-*/ "
 
 def np_img_2_verilog(image: np.ndarray, i):
     image = image.astype(np.uint8).T
@@ -36,7 +36,7 @@ def np_img_2_verilog(image: np.ndarray, i):
 
 
 if __name__ == "__main__":
-    files = [f"./fonts/pixil-frame-{i}.png" for i in range(14)]
+    files = [f"./fonts/pixil-frame-{i}.png" for i in range(16)]
     text_to_save = ["module num2pixel(", 
                     "input [3:0] num,", 
                     "input [7:0] addr,", 
