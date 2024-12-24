@@ -69,3 +69,6 @@ PLLJ_PLLSPE_INFO.txt
 
 # Ignore dataset
 Final/src/training/data/MNIST/
+
+#Stupid Mac 
+.DS_Store
