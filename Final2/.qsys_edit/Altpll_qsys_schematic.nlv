@@ -1,0 +1,14 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst Altpll_qsys.clk_0 -pg 1 -lvl 1 -y 50
+preplace inst Altpll_qsys -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst Altpll_qsys.altpll_0 -pg 1 -lvl 2 -y 30
+preplace netloc EXPORT<net_container>Altpll_qsys</net_container>(MASTER)Altpll_qsys.altpll_800k,(MASTER)altpll_0.c2) 1 2 1 NJ
+preplace netloc POINT_TO_POINT<net_container>Altpll_qsys</net_container>(SLAVE)altpll_0.inclk_interface_reset,(MASTER)clk_0.clk_reset) 1 1 1 N
+preplace netloc EXPORT<net_container>Altpll_qsys</net_container>(SLAVE)clk_0.clk_in,(SLAVE)Altpll_qsys.clk) 1 0 1 NJ
+preplace netloc EXPORT<net_container>Altpll_qsys</net_container>(SLAVE)Altpll_qsys.reset,(SLAVE)clk_0.clk_in_reset) 1 0 1 NJ
+preplace netloc EXPORT<net_container>Altpll_qsys</net_container>(MASTER)altpll_0.c0,(MASTER)Altpll_qsys.altpll_12m) 1 2 1 NJ
+preplace netloc POINT_TO_POINT<net_container>Altpll_qsys</net_container>(MASTER)clk_0.clk,(SLAVE)altpll_0.inclk_interface) 1 1 1 N
+preplace netloc EXPORT<net_container>Altpll_qsys</net_container>(MASTER)altpll_0.c1,(MASTER)Altpll_qsys.altpll_100k) 1 2 1 NJ
+levelinfo -pg 1 0 50 560
+levelinfo -hier Altpll_qsys 60 90 270 460
