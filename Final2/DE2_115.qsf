@@ -1112,13 +1112,17 @@ set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name VERILOG_FILE synthesis/altpll.v
+set_global_assignment -name QIP_FILE synthesis/altpll.qip
 set_global_assignment -name SYSTEMVERILOG_FILE src/display/vgatest.sv
 set_global_assignment -name VERILOG_FILE src/display/VGA_Ctrl.v
 set_global_assignment -name SYSTEMVERILOG_FILE src/display/num2pixel.sv
-set_global_assignment -name VERILOG_FILE synthesis/altpll.v -library altpll
-set_global_assignment -name QIP_FILE synthesis/altpll.qip
+set_global_assignment -name SYSTEMVERILOG_FILE src/problem_generator.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/display/display_nums.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/num2pixel.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/SevenHexDecoder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/Debounce.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/DE2_115.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/problem_generator.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/vgatest.sv
+set_global_assignment -name VERILOG_FILE src/VGA_Ctrl.v
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
