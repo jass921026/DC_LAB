@@ -5,6 +5,7 @@ module num2pixel(
 );
     logic [7:0] asciipixel;
     assign brightness   =   {asciipixel,2'b00};
+	always_comb begin
 		if (num == 'd0) begin // 0
 			case(addr)
 				8'd00:asciipixel = 8'hff;
@@ -1581,6 +1582,7 @@ module num2pixel(
 			endcase
 		end
         else begin
-            asciipixel = 8'd0;
+            asciipixel = 8'b00000000;
         end
+	end
 endmodule

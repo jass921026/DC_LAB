@@ -192,8 +192,93 @@ VGA_Ctrl vgactrl ( // Host Side
 logic [3:0] shownum;
 logic [7:0] numaddr;
 logic [9:0] gray;
-assign shownum = (vgay >= 310 && vgay < 410) ? 4'b0000 + ((vgax >= 6 && vgax < 106) ? 4'b0000 : ((vgax >= 112 && vgax < 212) ? 4'b0001 : ((vgax >= 218 && vgax < 318) ? 4'b0010 : ((vgax >= 324 && vgax < 424) ? 4'b0011 : ((vgax >= 430 && vgax < 530) ? 4'b0100 : ((vgax >= 536 && vgax < 636) ? 4'b0101 : (4'b1111))))))) : ((vgay >= 70 && vgay < 170) ? 4'b1001 + ((vgax >= 6 && vgax < 106) ? 4'b0000 : ((vgax >= 112 && vgax < 212) ? 4'b0001 : ((vgax >= 218 && vgax < 318) ? 4'b0010 : ((vgax >= 324 && vgax < 424) ? 4'b0011 : ((vgax >= 430 && vgax < 530) ? 4'b0100 : ((vgax >= 536 && vgax < 636) ? 4'b0101 : (4'b0110))))))) : 4'b1111);
-assign numaddr = (shownum <= 4'd1000) ? (('d10 * ((vgay - 310)>>4 + (vgay - 310)>>5 + (vgay - 310)>>8 + (vgay - 310)>>9)) + ((vgax - (106 * shownum) - 6)>>4 + (vgax - (106 * shownum) - 6)>>5 + (vgax - (106 * shownum) - 6)>>8 + (vgax - (106 * shownum) - 6)>>9)) : ((shownum < 4'd1111) ? (('d10 * ((vgay - 70)>>4 + (vgay - 70)>>5 + (vgay - 70)>>8 + (vgay - 70)>>9)) + ((vgax - (106 * shownum) - 6)>>4 + (vgax - (106 * shownum) - 6)>>5 + (vgax - (106 * shownum) - 6)>>8 + (vgax - (106 * shownum) - 6)>>9)) : 'b0000);
+
+function logic [3:0] coord2numindex;
+    input logic [10:0] x;
+    input logic [10:0] y;
+    begin
+        if (y >= 70 && y < 170) begin
+            if (x >= 6 && x < 106) begin
+                return 4'b0000;
+            end
+            else if (x >= 112 && x < 212) begin
+                return 4'b0001;
+            end
+            else if (x >= 218 && x < 318) begin
+                return 4'b0010;
+            end
+            else if (x >= 324 && x < 424) begin
+                return 4'b0011;
+            end
+            else if (x >= 430 && x < 530) begin
+                return 4'b0100;
+            end
+            else if (x >= 536 && x < 636) begin
+                return 4'b0101;
+            end
+            else begin
+                return 4'b1111;
+            end
+        end
+        else if(y >= 310 && y < 410) begin
+            if (x >= 6 && x < 106) begin
+                return 4'b0110;
+            end
+            else if (x >= 112 && x < 212) begin
+                return 4'b0111;
+            end
+            else if (x >= 218 && x < 318) begin
+                return 4'b1000;
+            end
+            else if (x >= 324 && x < 424) begin
+                return 4'b1001;
+            end
+            else if (x >= 430 && x < 530) begin
+                return 4'b1010;
+            end
+            else if (x >= 536 && x < 636) begin
+                return 4'b1011;
+            end
+            else begin
+                return 4'b1111;
+            end
+        end
+        else begin
+            return 4'b1111;
+        end
+    end
+endfunction
+
+function logic [7:0] relative_adddress;
+    input logic [10:0] x;
+    input logic [10:0] y;
+    logic [3:0] index = coord2numindex(.x(x),.y(y));
+    begin
+        if (index < 4'b0110) begin
+            relative_adddress = (((32'(y-70) * 16'h1999) >> 16)) + ('d10 * ((32'(x - (106 * index) - 6) * 16'h1999) >> 16));
+        end
+        else if (index < 4'b1111) begin
+            relative_adddress = (((32'(y-310) * 16'h1999) >> 16)) + ('d10 * ((32'(x - (106 * (index - 'd6)) - 6) * 16'h1999) >> 16));
+        end
+        else begin
+            relative_adddress = 'd0;
+        end
+    end
+endfunction
+
+always_comb begin
+    if (coord2numindex(.x(vgax), .y(vgay)) < 'd6) begin
+        shownum = coord2numindex(.x(vgax), .y(vgay));
+    end
+    else if (coord2numindex(.x(vgax), .y(vgay)) < 'hf) begin
+        shownum = coord2numindex(.x(vgax), .y(vgay)) + 'h3;
+    end
+    else begin
+        shownum = coord2numindex(.x(vgax), .y(vgay));
+    end
+end
+
+assign numaddr = relative_adddress(.x(vgax),.y(vgay));
 
 num2pixel num0 (
     .num(shownum),
@@ -311,7 +396,7 @@ altpll pll0( // generate with qsys, please follow lab2 tutorials
 // );
 
 seven_hex_16_4 seven_dec0(
-    .i_hex(0),
+    .i_hex(shownum),
     .o_seven_3(HEX7),
     .o_seven_2(HEX6),
     .o_seven_1(HEX5),
@@ -319,7 +404,7 @@ seven_hex_16_4 seven_dec0(
 );
 
 seven_hex_16_4 seven_dec1(
-    .i_hex(0),
+    .i_hex(numaddr),
     .o_seven_3(HEX3),
     .o_seven_2(HEX2),
     .o_seven_1(HEX1),
