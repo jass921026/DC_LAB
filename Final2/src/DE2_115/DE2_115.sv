@@ -234,7 +234,7 @@ scroll scroller(
     .o_green(green),
     .i_handwrite(900'b0),
     .i_digit_answered(4'b0),
-    .i_digit_identified(1'b1)
+    .i_digit_identified(key[2])
 );
 
 // assign red  =   gray;
