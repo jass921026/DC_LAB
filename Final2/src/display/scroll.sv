@@ -15,7 +15,7 @@ logic[10:0] scroll_w, scroll_r;
 logic[1:0] correctness_w, correctness_r;
 logic[23:0] problems, problems2;
 logic state_w, state_r;
-logic[8:0] random_index, random_index2;
+logic[7:0] random_index, random_index2;
 logic[95:0] digit_showed_w, digit_showed_r;
 
 LFSR random_gen (
@@ -54,7 +54,6 @@ parameter S_SCROLL    = 1;
 always_comb begin
     scroll_w = scroll_r;
     correctness_w = correctness_r;
-    problems_w = problems_r;
     digit_showed_w = digit_showed_r;
     state_w = state_r;
     case (state_r)
@@ -73,7 +72,7 @@ always_comb begin
         end
         else begin
             scroll_w = 0;
-            correctness_w = {correctness_r[0],1'b0};
+            correctness_w = {1'b0,correctness_r[1]};
             digit_showed_w = {digit_showed_r[71:0], 24'hffffff};
             state_w = S_IDLE;
         end
