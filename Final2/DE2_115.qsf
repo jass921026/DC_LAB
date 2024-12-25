@@ -1112,6 +1112,10 @@ set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name SYSTEMVERILOG_FILE src/basic/SevenHexDecoder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/basic/Debounce.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/CNN_top.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/cnn_test.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/basic/lfsr.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem7.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_mem6.sv
@@ -1129,7 +1133,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem3.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem2.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem1.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/wt_fc1_mem0.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/sram.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/mac_array.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/mac.sv
@@ -1153,10 +1156,9 @@ set_global_assignment -name SYSTEMVERILOG_FILE src/display/num2pixel.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/problem_generator.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/display/display_nums.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/num2pixel.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/SevenHexDecoder.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/Debounce.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/DE2_115/DE2_115.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/vgatest.sv
 set_global_assignment -name VERILOG_FILE src/VGA_Ctrl.v
 set_global_assignment -name SYSTEMVERILOG_FILE src/display/scroll.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/basic/counter.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
