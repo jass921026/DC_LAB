@@ -4,7 +4,6 @@ module display_nums(
     output[9:0] o_blue,
     output[9:0] o_red,
     output[9:0] o_green,
-    input[899:0] i_handwrite,
     input[95:0] i_digit_showed,
     input[1:0] i_correctness,
     input[10:0] i_displacement

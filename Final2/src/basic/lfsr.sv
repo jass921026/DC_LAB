@@ -10,8 +10,8 @@ logic [31:0] random_w,random_r;
 logic [7:0] random_out, random_out2;
 
 // ===== Output Assignments =====
-assign random_out = {random_r[27],random_r[5],random_r[19],random_r[24],random_r[30],random_r[31],random_r[29],random_r[11],random_r[8]};
-assign random_out2 = {random_r[4],random_r[7],random_r[2],random_r[9],random_r[13],random_r[23],random_r[26],random_r[16],random_r[15]};
+assign random_out = {random_r[27],random_r[5],random_r[19],random_r[24],random_r[30],random_r[31],random_r[29],random_r[11]};
+assign random_out2 = {random_r[4],random_r[7],random_r[2],random_r[9],random_r[13],random_r[23],random_r[26],random_r[16]};
 assign o_random_out = (random_out > 8'd228) ? random_out - 8'd28 : random_out;
 assign o_random_out2 = (random_out2 > 8'd228) ? random_out2 - 8'd28 : random_out2;
 
