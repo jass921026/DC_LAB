@@ -13,15 +13,16 @@ module scroll (
 
 logic[10:0] scroll_w, scroll_r;
 logic[1:0] correctness_w, correctness_r;
-logic[23:0] problems_w, problems_r;
+logic[23:0] problems, problems2;
 logic state_w, state_r;
-logic[8:0] random_index;
+logic[8:0] random_index, random_index2;
 logic[95:0] digit_showed_w, digit_showed_r;
 
 LFSR random_gen (
     .i_clk(i_clk),
     .i_rst_n(i_rst_n),
-    .o_random_out(random_index)
+    .o_random_out(random_index),
+    .o_random_out2(random_index2)
 );
 
 display_nums display (
@@ -36,9 +37,15 @@ display_nums display (
     .i_displacement(scroll_r)
 );
 
-generate_problem prob (
+generate_problem prob0 (
     .problem_index(random_index),
-    .problem(problems_w)
+    .problem(problems)
+);
+
+
+generate_problem prob1 (
+    .problem_index(random_index2),
+    .problem(problems2)
 );
 
 parameter S_IDLE      = 0;
@@ -55,7 +62,7 @@ always_comb begin
         if (i_digit_identified) begin
             state_w = S_SCROLL;
             correctness_w = {i_digit_answered == digit_showed_r[51:48], correctness_r[0]};
-            digit_showed_w = {digit_showed_r[95:52], i_digit_answered, digit_showed_r[47:24], problems_r};
+            digit_showed_w = {digit_showed_r[95:52], i_digit_answered, digit_showed_r[47:24], problems};
         end
     end
     S_SCROLL: begin
@@ -79,13 +86,13 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
         scroll_r = 0;
         state_r = S_IDLE;
         correctness_r = 0;
-        problems_r = 0;
+        digit_showed_r = {24'hffffff, problems, problems2, 24'hffffff};
     end
     else begin
         scroll_r = scroll_w;
         state_r = state_w;
         correctness_r = correctness_w;
-        problems_r = problems_w;
+        digit_showed_r = digit_showed_w;
     end
 end
 endmodule
