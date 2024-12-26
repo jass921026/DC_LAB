@@ -55,13 +55,13 @@ always_comb begin
         if (btn_left) begin
             handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4])] = 1;
             handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd30] = 1;
-            if (cursor_x_r[15:4] != 0) begin
+            if (cursor_x_r[15:4] != 29) begin
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd29] = 1;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd1] = 1;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd31] = 1;
             end
             handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd30] = 1;
-            if (cursor_x_r[15:4] != 29) begin
+            if (cursor_x_r[15:4] != 0) begin
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd29] = 1;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd1] = 1;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd31] = 1;
@@ -70,13 +70,13 @@ always_comb begin
         else if (btn_right) begin
             handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4])] = 0;
             handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd30] = 0;
-            if (cursor_x_r[15:4] != 0) begin
+            if (cursor_x_r[15:4] != 29) begin
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd1] = 0;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd31] = 0;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd29] = 0;
             end
             handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd30] = 0;
-            if (cursor_x_r[15:4] != 29) begin
+            if (cursor_x_r[15:4] != 0) begin
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd29] = 0;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd1] = 0;
                 handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd31] = 0;
