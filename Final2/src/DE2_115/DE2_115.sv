@@ -328,7 +328,7 @@ logic digit_valid;
 Magic_model magic_model0(
     .i_clk(clk25M),
     .i_rst_n(reset),
-    .button_pressed(KEY[2]),
+    .i_button_pressed_n(KEY[2]),
     .handwrite(handwrite),
     .digit_o(digit),
     .digit_o_valid(digit_valid)
@@ -337,7 +337,7 @@ Magic_model magic_model0(
 Input_transformer input_transformer0(
     .clk(clk25M),
     .rst(reset),
-    .i_button_pressed_n(key2down),
+    .button_pressed(key2down),
     .handwrite(handwrite),
     .pixel_i(pixel_i),
     .pixel_i_valid(pixel_valid)

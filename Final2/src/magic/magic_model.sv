@@ -43,10 +43,11 @@ always_comb begin
 
     case (state) 
         S_IDLE: begin
-            if (!i_button_pressed_n)
+            if (!i_button_pressed_n) begin
                 state_next = S_INPUT;
                 x_next = 0;
                 y_next = 0;
+            end
         end
 
         S_INPUT: begin
