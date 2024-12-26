@@ -247,11 +247,11 @@ scroll scroller(
     .o_red(red_scroller),
     .o_green(green_scroller),
     .o_displacement(displacement),
-    .i_digit_answered(swans),
-    .i_digit_identified(!KEY[2])
+    .i_digit_answered(digit),
+    .i_digit_identified(digit_valid)
 );
 
-// logic[899:0] handwrite;
+logic[899:0] handwrite;
 
 
 add_hand_write handwrite0(
@@ -309,12 +309,12 @@ logic pixel_valid;
 logic [3:0] digit;
 logic digit_valid;
 
-CNN_test cnn1(
-    .clk(clk25M),
-    .rst(reset),
-    .pixel_i(pixel_i),
-    .pixel_i_valid(pixel_valid)
-);
+// CNN_test cnn1(
+//     .clk(clk25M),
+//     .rst(reset),
+//     .pixel_i(pixel_i),
+//     .pixel_i_valid(pixel_valid)
+// );
 
 CNN_top cnn0 (
     .clk(clk25M),
@@ -323,6 +323,15 @@ CNN_top cnn0 (
     .pixel_i_valid(pixel_valid),
     .digit_o(digit),
     .digit_o_valid(digit_valid)
+);
+
+Input_transformer input_transformer0(
+    .clk(clk25M),
+    .rst(reset),
+    .button_pressed(key2down),
+    .handwrite(handwrite),
+    .pixel_i(pixel_i),
+    .pixel_i_valid(pixel_valid)
 );
 
 // you can decide key down settings on your own, below is just an example
@@ -340,12 +349,14 @@ CNN_top cnn0 (
 //     .o_neg(key1down) 
 // );
 
-// Debounce deb2(
-//     .i_in(KEY[2]), // Stop
-//     .i_rst_n(KEY[3]),
-//     .i_clk(CLK_12M),
-//     .o_neg(key2down) 
-// );
+logic key2down;
+
+Debounce deb2(
+    .i_in(KEY[2]), // Stop
+    .i_rst_n(KEY[3]),
+    .i_clk(clk25M),
+    .o_neg(key2down) 
+);
 
 // Top top0(
 //     .i_rst_n(KEY[3]),
@@ -417,7 +428,9 @@ CNN_top cnn0 (
 
 // MARK: Util
 
-logic [7:0] digit_valid_cnt ;
+logic [7:0] digit_valid_cnt;
+logic [7:0] pixel_valid_cnt;
+
 Counter #(
     .WIDTH(8),
     .MAX_COUNT(255)
@@ -428,17 +441,32 @@ Counter #(
     .count(digit_valid_cnt)
 );
 
+Counter #(
+    .WIDTH(8),
+    .MAX_COUNT(255)
+) counter_pixel (
+    .clk(clk25M),
+    .rst_n(reset),
+    .enable(pixel_valid == 1'b1),
+    .count(pixel_valid_cnt)
+);
+
 
 // MARK: DISPLAY
 
 seven_hex_16_1 seven_dec0(
-    .i_hex(digit),
-    .o_seven(HEX7)
+    .i_hex(KEY[2]),
+    .o_seven(HEX0)
 );
 seven_hex_16_2 seven_dec1(
     .i_hex(digit_valid_cnt),
     .o_seven_1(HEX5),
     .o_seven_0(HEX4)
+);
+seven_hex_16_2 seven_dec2(
+    .i_hex(pixel_valid_cnt),
+    .o_seven_1(HEX7),
+    .o_seven_0(HEX6)
 );
 
 // seven_hex_16_4 seven_dec1(
@@ -448,19 +476,16 @@ seven_hex_16_2 seven_dec1(
 //     .o_seven_1(HEX1),
 //     .o_seven_0(HEX0)
 // );
-seven_hex_16_1 seven_dec2(
-    .i_hex(swans),
-    .o_seven(HEX3)
-);
-seven_hex_16_1 seven_dec2(
-    .i_hex(mouse_display),
-    .o_seven(HEX3)
-);
-seven_hex_16_2 seven_dec3(
-    .i_hex(mouse_y),
-    .o_seven_1(HEX5),
-    .o_seven_0(HEX4)
-);
+
+// seven_hex_16_1 seven_dec2(
+//     .i_hex(mouse_display),
+//     .o_seven(HEX3)
+// );
+// seven_hex_16_2 seven_dec3(
+//     .i_hex(mouse_y),
+//     .o_seven_1(HEX5),
+//     .o_seven_0(HEX4)
+// );
 
 // seven_hex_16_4 seven_dec_3(
 //     .i_hex(end_address),
@@ -479,13 +504,13 @@ seven_hex_16_2 seven_dec3(
 
 
 // comment those are use for display
-assign HEX0 = '1;
+// assign HEX0 = '1;
 assign HEX1 = '1;
 assign HEX2 = '1;
-// assign HEX3 = '1;
+assign HEX3 = '1;
 // assign HEX4 = '1;
 // assign HEX5 = '1;
-assign HEX6 = '1;
+// assign HEX6 = '1;
 // assign HEX7 = '1;
 
 endmodule
