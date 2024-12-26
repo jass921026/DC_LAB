@@ -12,8 +12,13 @@ def read_png_to_grayscale(image_path):
     np.ndarray: 灰階圖像的 NumPy 陣列
     """
     image = Image.open(image_path)
-    alpha_channel = np.array(image)[:, :, 3]
-    return alpha_channel
+    image = image.convert('L')
+    # to numpy array
+    image = np.array(image)
+    #invert
+    image = 255 - image
+    #print(image)
+    return image
 
 # 範例使用
 # grayscale_array = read_png_to_grayscale('path_to_image.png')
@@ -48,6 +53,7 @@ if __name__ == "__main__":
                     "case(num)"]
     for i, file in enumerate(files):
         grayscale_array = read_png_to_grayscale(file)
+        print(f"Processing \n{grayscale_array} \nfrom {file}")
         text_to_save += np_img_2_verilog(grayscale_array, i)
     text_to_save.extend(["\tdefault: asciipixel = 8'h0;", 
                          "endcase", 

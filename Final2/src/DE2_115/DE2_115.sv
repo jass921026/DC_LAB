@@ -175,13 +175,17 @@ Mouse mouse0(
 
 // MARK: VGA
 
-logic [9:0] red,blue,green;         //three channel wanna show with vga
+logic [9:0] red,blue,green,red_scroller,green_scroller,blue_scroller;         //three channel wanna show with vga
 logic [10:0] vgax,vgay;           //position to output
 logic [21:0] addr_screen_img;       //addr of vga requesting (width * y_coord + x_coord)
 logic VGA_Read;                     //vga requesting for input
 
 logic clk25M;
 logic reset;
+logic [10:0] displacement;
+logic [3:0] swans;
+
+assign swans = SW[9] ? 4'd9 : SW[8] ? 4'd8 : SW[7] ? 4'd7 : SW[6] ? 4'd6 : SW[5] ? 4'd5 : SW[4] ? 4'd4 : SW[3] ? 4'd3 : SW[2] ? 4'd2 : SW[1] ? 4'd1 : 4'd0;
 
 assign reset    =   KEY[3];
 
@@ -238,13 +242,30 @@ scroll scroller(
     .i_rst_n(reset),
     .i_x(vgax),
     .i_y(vgay),
+    .o_blue(blue_scroller),
+    .o_red(red_scroller),
+    .o_green(green_scroller),
+    .o_displacement(displacement),
+    .i_digit_answered(swans),
+    .i_digit_identified(!KEY[2])
+);
+
+logic[899:0] handwrite;
+
+add_hand_write handwrite(
+    .i_x(vgax),
+    .i_y(vgay),
+    .i_blue(blue_scroller),
+    .i_red(red_scroller),
+    .i_green(green_scroller),
     .o_blue(blue),
     .o_red(red),
     .o_green(green),
-    .i_handwrite(900'b0),
-    .i_digit_answered(4'b0),
-    .i_digit_identified(1'b1)
+    .i_displacement(displacement),
+    .i_handwrite(handwrite)
 );
+
+
 
 // assign red  =   gray;
 // assign blue =   gray;
@@ -390,6 +411,10 @@ seven_hex_16_1 seven_dec1(
 //     .o_seven_1(HEX1),
 //     .o_seven_0(HEX0)
 // );
+seven_hex_16_1 seven_dec1(
+    .i_hex(swans),
+    .o_seven(HEX0)
+);
 
 // seven_hex_16_4 seven_dec_3(
 //     .i_hex(end_address),
@@ -408,11 +433,11 @@ seven_hex_16_1 seven_dec1(
 
 
 // comment those are use for display
-assign HEX0 = '1;
+// assign HEX0 = '1;
 assign HEX1 = '1;
 assign HEX2 = '1;
 assign HEX3 = '1;
-assign HEX4 = '1;
+// assign HEX4 = '1;
 // assign HEX5 = '1;
 assign HEX6 = '1;
 // assign HEX7 = '1;
