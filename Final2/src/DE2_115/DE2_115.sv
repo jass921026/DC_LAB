@@ -337,7 +337,7 @@ Magic_model magic_model0(
 Input_transformer input_transformer0(
     .clk(clk25M),
     .rst(reset),
-    .button_pressed(key2down),
+    .i_button_pressed_n(key2down),
     .handwrite(handwrite),
     .pixel_i(pixel_i),
     .pixel_i_valid(pixel_valid)

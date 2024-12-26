@@ -2,7 +2,7 @@ module Magic_model
 (
     input i_clk,
     input i_rst_n,
-    input button_pressed,
+    input i_button_pressed_n,
     input [899:0] handwrite,
     output [3:0] digit_o,
     output digit_o_valid
@@ -43,7 +43,7 @@ always_comb begin
 
     case (state) 
         S_IDLE: begin
-            if (button_pressed)
+            if (!i_button_pressed_n)
                 state_next = S_INPUT;
                 x_next = 0;
                 y_next = 0;
