@@ -166,7 +166,7 @@ Mouse mouse0(
 
 // MARK: VGA
 
-logic [9:0] red,blue,green,red_scroller,green_scroller,blue_scroller;         //three channel wanna show with vga
+logic [9:0] red,blue,green,red_scroller,green_scroller,blue_scroller,red_handwrite, green_handwrite, blue_handwrite;         //three channel wanna show with vga
 logic [10:0] vgax,vgay;           //position to output
 logic [21:0] addr_screen_img;       //addr of vga requesting (width * y_coord + x_coord)
 logic VGA_Read;                     //vga requesting for input
@@ -243,20 +243,35 @@ scroll scroller(
 
 logic[899:0] handwrite;
 
-add_hand_write handwrite(
+add_hand_write handwrite0(
     .i_x(vgax),
     .i_y(vgay),
     .i_blue(blue_scroller),
     .i_red(red_scroller),
     .i_green(green_scroller),
-    .o_blue(blue),
-    .o_red(red),
-    .o_green(green),
+    .o_blue(blue_handwrite),
+    .o_red(red_handwrite),
+    .o_green(green_handwrite),
     .i_displacement(displacement),
     .i_handwrite(handwrite)
 );
 
-
+add_cursor cursor(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
+    .ps2_clk(PS2_CLK),
+    .ps2_data(PS2_DAT),
+    .i_x(vgax),
+    .i_y(vgay),
+    .i_blue(blue_handwrite),
+    .i_red(red_handwrite),
+    .i_green(green_handwrite),
+    .o_blue(blue),
+    .o_red(red),
+    .o_green(green),
+    .i_displacement(displacement),
+    .o_handwrite(handwrite)
+);
 
 // assign red  =   gray;
 // assign blue =   gray;
