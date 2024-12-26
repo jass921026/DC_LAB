@@ -47,6 +47,11 @@ always_comb begin
                 state_next = S_INPUT;
                 x_next = 0;
                 y_next = 0;
+                
+                for (int i = 0; i < 10; i = i + 1) begin
+                    sons_next[i] = 0;
+                    moms_next[i] = 0;
+                end
             end
         end
 
