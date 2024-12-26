@@ -13,8 +13,8 @@ module Magic_compare
 
     logic [31:0] prod_a, prod_b;
 
-    assign prod_a = son_a * mom_b;
-    assign prod_b = son_b * mom_a;
+    assign prod_a = 32'(son_a) * mom_b;
+    assign prod_b = 32'(son_b) * mom_a;
 
     assign idx_won = (prod_a >= prod_b) ? idx_a : idx_b;
     assign son_won = (prod_a >= prod_b) ? son_a : son_b;
