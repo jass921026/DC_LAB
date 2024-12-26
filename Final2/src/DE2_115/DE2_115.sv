@@ -250,20 +250,20 @@ scroll scroller(
     .i_digit_identified(!KEY[2])
 );
 
-logic[899:0] handwrite;
+// logic[899:0] handwrite;
 
-add_hand_write handwrite(
-    .i_x(vgax),
-    .i_y(vgay),
-    .i_blue(blue_scroller),
-    .i_red(red_scroller),
-    .i_green(green_scroller),
-    .o_blue(blue),
-    .o_red(red),
-    .o_green(green),
-    .i_displacement(displacement),
-    .i_handwrite(handwrite)
-);
+// add_hand_write handwrite(
+//     .i_x(vgax),
+//     .i_y(vgay),
+//     .i_blue(blue_scroller),
+//     .i_red(red_scroller),
+//     .i_green(green_scroller),
+//     .o_blue(blue),
+//     .o_red(red),
+//     .o_green(green),
+//     .i_displacement(displacement),
+//     .i_handwrite(handwrite)
+// );
 
 
 
@@ -412,7 +412,7 @@ seven_hex_16_1 seven_dec1(
 //     .o_seven_1(HEX1),
 //     .o_seven_0(HEX0)
 // );
-seven_hex_16_1 seven_dec1(
+seven_hex_16_1 seven_dec2(
     .i_hex(swans),
     .o_seven(HEX3)
 );
