@@ -66,7 +66,7 @@ always_comb begin
                         moms_next[i] = moms[i] + 1;
                     end
                 end
-                else begin
+                else begin // handwrite[idx] == 0
                     if (masks[i][y][x]) begin
                         moms_next[i] = moms[i] + 1;
                     end
@@ -99,11 +99,19 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
             state <= S_IDLE;
             x <= 0;
             y <= 0;
+            for (int i = 0; i < 10; i = i + 1) begin
+                sons[i] = 0;
+                moms[i] = 0;
+            end
     end
     else begin
         state <= state_next;
         x <= x_next;
         y <= y_next;
+        for (int i = 0; i < 10; i = i + 1) begin
+            sons[i] = sons_next[i];
+            moms[i] = moms_next[i];
+        end
     end
 end
 
