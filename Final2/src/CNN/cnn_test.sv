@@ -6,8 +6,10 @@ module CNN_test
     output pixel_i_valid
 );
     logic [30:0] count_time;
-   //logic [3:0] digit;
+    logic [3:0] digit_w, digit_r; //state
     logic [4:0] x, y;
+    
+
 
     //counter
     Counter #(
@@ -152,8 +154,36 @@ module CNN_test
             30'b000000000000000000000000000000
     };
 
-    assign pixel_i = digit_2[y][x] ? 8'h00 : 8'hff;
     assign pixel_i_valid = count_time < 30'd901 ? 1 : 0;
+
+    always_comb begin
+        digit_r = digit_w;
+        if (count_time == 30'd1000) begin
+            case (digit_r) 
+                4'd0: digit_w = 4'd1;
+                4'd1: digit_w = 4'd2;
+                4'd2: digit_w = 4'd8;
+                4'd8: digit_w = 4'd1;
+                default: digit_w = 4'd1;
+            endcase
+        end
+        case (digit_r)
+            4'd0: pixel_i = digit_1[y][x] ? 8'hff : 8'h00;
+            4'd1: pixel_i = digit_2[y][x] ? 8'hff : 8'h00;
+            4'd2: pixel_i = digit_8[y][x] ? 8'hff : 8'h00;
+            4'd8: pixel_i = digit_1[y][x] ? 8'hff : 8'h00;
+            default: pixel_i = 8'h00;
+        endcase
+    end
+
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            digit_r <= 0;
+        end
+        else begin
+            digit_r <= digit_w;
+        end
+    end
 
 
 endmodule
