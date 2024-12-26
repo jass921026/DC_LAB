@@ -289,14 +289,14 @@ logic [3:0] digit;
 logic digit_valid;
 
 CNN_test cnn1(
-    .clk(CLOCK_50),
+    .clk(clk25M),
     .rst(reset),
     .pixel_i(pixel_i),
     .pixel_i_valid(pixel_valid)
 );
 
 CNN_top cnn0 (
-    .clk(CLOCK_50),
+    .clk(clk25M),
     .rst(reset),
     .pixel_i(pixel_i),
     .pixel_i_valid(pixel_valid),
