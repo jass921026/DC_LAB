@@ -144,6 +144,15 @@ module DE2_115 (
 // logic fast, interpolation;
 // logic [3:0] speed;
 
+// MARK: SYSTEM  
+
+altpll pll0( // generate with qsys, please follow lab2 tutorials
+    .clk_clk(CLOCK_50),
+    .reset_reset_n(reset),
+    .altpll_25m_clk_clk(clk25M)
+);
+
+
 // MARK: MOUSE
 
 logic lmb, rmb;
@@ -242,7 +251,8 @@ scroll scroller(
     .i_digit_identified(!KEY[2])
 );
 
-logic[899:0] handwrite;
+// logic[899:0] handwrite;
+
 
 add_hand_write handwrite0(
     .i_x(vgax),
@@ -292,10 +302,27 @@ add_cursor cursor(
 //     .o_green(green)
 // );
 
-altpll pll0( // generate with qsys, please follow lab2 tutorials
-    .clk_clk(CLOCK_50),
-    .reset_reset_n(reset),
-    .altpll_25m_clk_clk(clk25M)
+// MARK: CNN
+
+logic [7:0] pixel_i;
+logic pixel_valid;
+logic [3:0] digit;
+logic digit_valid;
+
+CNN_test cnn1(
+    .clk(clk25M),
+    .rst(reset),
+    .pixel_i(pixel_i),
+    .pixel_i_valid(pixel_valid)
+);
+
+CNN_top cnn0 (
+    .clk(clk25M),
+    .rst(reset),
+    .pixel_i(pixel_i),
+    .pixel_i_valid(pixel_valid),
+    .digit_o(digit),
+    .digit_o_valid(digit_valid)
 );
 
 // you can decide key down settings on your own, below is just an example
@@ -388,15 +415,42 @@ altpll pll0( // generate with qsys, please follow lab2 tutorials
 //     .o_seven(HEX6)
 // );
 
-seven_hex_16_2 seven_dec0(
-    .i_hex(mouse_x),
-    .o_seven_1(HEX7),
-    .o_seven_0(HEX6)
+// MARK: Util
+
+logic [7:0] digit_valid_cnt ;
+Counter #(
+    .WIDTH(8),
+    .MAX_COUNT(255)
+) counter_valid (
+    .clk(clk25M),
+    .rst_n(reset),
+    .enable(digit_valid == 1'b1),
+    .count(digit_valid_cnt)
 );
 
-seven_hex_16_1 seven_dec1(
+
+// MARK: DISPLAY
+
+seven_hex_16_1 seven_dec0(
+    .i_hex(digit),
+    .o_seven(HEX7)
+);
+seven_hex_16_2 seven_dec1(
+    .i_hex(digit_valid_cnt),
+    .o_seven_1(HEX5),
+    .o_seven_0(HEX4)
+);
+
+// seven_hex_16_4 seven_dec1(
+//     .i_hex(numaddr),
+//     .o_seven_3(HEX3),
+//     .o_seven_2(HEX2),
+//     .o_seven_1(HEX1),
+//     .o_seven_0(HEX0)
+// );
+seven_hex_16_1 seven_dec2(
     .i_hex(swans),
-    .o_seven(HEX0)
+    .o_seven(HEX3)
 );
 seven_hex_16_1 seven_dec2(
     .i_hex(mouse_display),
@@ -425,13 +479,13 @@ seven_hex_16_2 seven_dec3(
 
 
 // comment those are use for display
-// assign HEX0 = '1;
+assign HEX0 = '1;
 assign HEX1 = '1;
 assign HEX2 = '1;
 // assign HEX3 = '1;
 // assign HEX4 = '1;
 // assign HEX5 = '1;
-// assign HEX6 = '1;
+assign HEX6 = '1;
 // assign HEX7 = '1;
 
 endmodule
