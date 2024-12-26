@@ -1,55 +1,22 @@
-module CNN_test
+`timescale 1ns/100ps
+
+module CNN_testbench
+#(
+    parameter GS_BITS = 8, 
+    parameter BCD_BITS = 4 
+)
 (
-    input clk,
-    input rst,
-    output [7:0] pixel_i,
-    output pixel_i_valid
 );
-    logic [30:0] count_time;
-   //logic [3:0] digit;
-    logic [4:0] x, y;
 
-    //counter
-    Counter #(
-        .WIDTH(30),
-        .MAX_COUNT(50000000)
-    ) counter (
-        .clk(clk),
-        .rst_n(rst),
-        .enable(1'b1),
-        .count(count_time)
-    );
+    localparam CLK = 10;
+	localparam HCLK = CLK/2;
 
-    //digit
-    Counter #(
-        .WIDTH(4),
-        .MAX_COUNT(9)
-    ) digit_counter (
-        .clk(clk),
-        .rst_n(rst),
-        .enable(count_time == 30'd49999999),
-        .count(digit)
-    );
+    logic clk, rst_n;
+    always #HCLK clk = ~clk;
 
-    //xy  
-    Counter #(
-        .WIDTH(5),
-        .MAX_COUNT(29)
-    ) x_counter (
-        .clk(clk),
-        .rst_n(count_time == 30'd49999999),
-        .enable(1'b1),
-        .count(x)
-    );
-    Counter #(
-        .WIDTH(5),
-        .MAX_COUNT(29)
-    ) y_counter (
-        .clk(clk),
-        .rst_n(count_time == 30'd49999999),
-        .enable(x == 29),
-        .count(y)
-    );
+    initial begin
+        clk = 1'b0;
+    end
 
     //pixel
 
@@ -86,6 +53,41 @@ module CNN_test
             30'b000000000000000000000000000000
     };
 
+    logic [29:0][29:0] digit_2 = '{
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000111111111111000000000,
+            30'b000001111000000000000110000000,
+            30'b000110000000000000000110000000,
+            30'b000000000000000000000110000000,
+            30'b000000000000000000001100000000,
+            30'b000000000000000000111000000000,
+            30'b000000000000000011100000000000,
+            30'b000000000000001110000000000000,
+            30'b000000000000011000000000000000,
+            30'b000000000000110000000000000000,
+            30'b000000000001100000000000000000,
+            30'b000000000111000000000000000000,
+            30'b000000001110000000000000000000,
+            30'b000000001100000000000000000000,
+            30'b000000011000000000000000000000,
+            30'b000000110000000000000000000000,
+            30'b000001100000000000000000000000,
+            30'b000001100000000000000000000000,
+            30'b000011111111111111111110000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000,
+            30'b000000000000000000000000000000
+    };
+
+
+
     logic [29:0][29:0] digit_8 = '{
             30'b000000000000000000000000000000,
             30'b000000000000000000000000000000,
@@ -119,8 +121,48 @@ module CNN_test
             30'b000000000000000000000000000000
     };
 
-    assign pixel_i = digit_8[y][x] ? 8'h0 : 8'hff;
-    assign pixel_i_valid = count_time < 30'd901 ? 1 : 0;
+    // CNN
+    logic [7:0] pixel_i;
+    logic pixel_i_valid;
+    logic [3:0] digit_o;
+    logic digit_o_valid;
+    CNN_top cnn0 (
+        .clk(clk),
+        .rst(rst_n),
+        .pixel_i(pixel_i),
+        .pixel_i_valid(pixel_i_valid),
+        .digit_o(digit_o),
+        .digit_o_valid(digit_o_valid)
+    );
 
+    initial begin
+        $fsdbDumpfile("CNN.fsdb");
+        $fsdbDumpvars;
+        rst_n = 0;
+        #(6*CLK)
+        rst_n = 1;
+        #(2*CLK)
+        for (int i = 0; i < 30; i++) begin
+            for (int j = 0; j < 30; j++) begin
+                pixel_i = digit_8[i][j] ? 8'h0 : 8'hff ;
+                pixel_i_valid = 1;
+                #(CLK);
+            end
+        end
+        pixel_i_valid = 1;
+        #(2*CLK)
+        pixel_i_valid = 0;
+
+        @(posedge cnn0.digit_o_valid);
+        $display("Finished.");
+        $finish;
+    end
+
+    //abort 
+    initial begin
+        #(100000*CLK)
+        $display("Automatic abort.");
+        $finish;
+    end
 
 endmodule
