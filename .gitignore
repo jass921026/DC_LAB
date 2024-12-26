@@ -69,6 +69,10 @@ PLLJ_PLLSPE_INFO.txt
 
 # Ignore dataset
 Final/src/training/data/MNIST/
+Final2/src/training/data/MNIST/
+Final2/src/RS232_computer/data/MNIST/
+Final2/src/RS232_computer/test/
+__pycache__/
 
 #Stupid Mac 
 .DS_Store
