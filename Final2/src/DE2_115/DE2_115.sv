@@ -400,7 +400,7 @@ logic [7:0] digit_valid_cnt ;
 Counter #(
     .WIDTH(8),
     .MAX_COUNT(255)
-) counter (
+) counter_valid (
     .clk(clk25M),
     .rst_n(reset),
     .enable(digit_valid == 1'b1),
