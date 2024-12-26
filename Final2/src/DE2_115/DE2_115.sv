@@ -394,15 +394,30 @@ CNN_top cnn0 (
 //     .o_seven(HEX6)
 // );
 
+// MARK: Util
+
+logic [7:0] digit_valid_cnt ;
+Counter #(
+    .WIDTH(8),
+    .MAX_COUNT(255)
+) counter (
+    .clk(clk25M),
+    .rst_n(reset),
+    .enable(digit_valid == 1'b1),
+    .count(digits_valid_cnt)
+);
+
+
 // MARK: DISPLAY
 
 seven_hex_16_1 seven_dec0(
     .i_hex(digit),
     .o_seven(HEX7)
 );
-seven_hex_16_1 seven_dec1(
-    .i_hex({3'b0,digit_valid}),
-    .o_seven(HEX5)
+seven_hex_16_2 seven_dec1(
+    .i_hex(digit_valid_cnt),
+    .o_seven_1(HEX5),
+    .o_seven_0(HEX4)
 );
 
 // seven_hex_16_4 seven_dec1(
@@ -438,7 +453,7 @@ assign HEX0 = '1;
 assign HEX1 = '1;
 assign HEX2 = '1;
 // assign HEX3 = '1;
-assign HEX4 = '1;
+// assign HEX4 = '1;
 // assign HEX5 = '1;
 assign HEX6 = '1;
 // assign HEX7 = '1;
