@@ -157,7 +157,7 @@ altpll pll0( // generate with qsys, please follow lab2 tutorials
 
 logic lmb, rmb;
 logic [8:0] mouse_x, mouse_y;
-logic mouse_valid;
+logic mouse_valid, mouse_display;
 
 Mouse mouse0(
     .i_clk(CLOCK_50),
@@ -168,14 +168,15 @@ Mouse mouse0(
     .o_button_right(rmb),
     .o_movement_x(mouse_x),
     .o_movement_y(mouse_y),
-    .o_valid(mouse_valid)
+    .o_valid(mouse_valid),
+	 .o_display(mouse_display)
 );
 
 
 
 // MARK: VGA
 
-logic [9:0] red,blue,green,red_scroller,green_scroller,blue_scroller;         //three channel wanna show with vga
+logic [9:0] red,blue,green,red_scroller,green_scroller,blue_scroller,red_handwrite, green_handwrite, blue_handwrite;         //three channel wanna show with vga
 logic [10:0] vgax,vgay;           //position to output
 logic [21:0] addr_screen_img;       //addr of vga requesting (width * y_coord + x_coord)
 logic VGA_Read;                     //vga requesting for input
@@ -252,20 +253,40 @@ scroll scroller(
 
 // logic[899:0] handwrite;
 
-// add_hand_write handwrite(
-//     .i_x(vgax),
-//     .i_y(vgay),
-//     .i_blue(blue_scroller),
-//     .i_red(red_scroller),
-//     .i_green(green_scroller),
-//     .o_blue(blue),
-//     .o_red(red),
-//     .o_green(green),
-//     .i_displacement(displacement),
-//     .i_handwrite(handwrite)
-// );
+
+add_hand_write handwrite0(
+    .i_x(vgax),
+    .i_y(vgay),
+    .i_blue(blue_scroller),
+    .i_red(red_scroller),
+    .i_green(green_scroller),
+    .o_blue(blue_handwrite),
+    .o_red(red_handwrite),
+    .o_green(green_handwrite),
+    .i_displacement(displacement),
+    .i_handwrite(handwrite)
+);
 
 
+add_cursor cursor(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
+    .i_x(vgax),
+    .i_y(vgay),
+    .i_blue(blue_handwrite),
+    .i_red(red_handwrite),
+    .i_green(green_handwrite),
+    .o_blue(blue),
+    .o_red(red),
+    .o_green(green),
+    .i_displacement(displacement),
+    .o_handwrite(handwrite),
+    .mouse_valid(mouse_valid),
+    .move_x(mouse_x),
+    .move_y(mouse_y),
+    .btn_left(lmb),
+    .btn_right(rmb)
+);
 
 // assign red  =   gray;
 // assign blue =   gray;
@@ -430,6 +451,15 @@ seven_hex_16_2 seven_dec1(
 seven_hex_16_1 seven_dec2(
     .i_hex(swans),
     .o_seven(HEX3)
+);
+seven_hex_16_1 seven_dec2(
+    .i_hex(mouse_display),
+    .o_seven(HEX3)
+);
+seven_hex_16_2 seven_dec3(
+    .i_hex(mouse_y),
+    .o_seven_1(HEX5),
+    .o_seven_0(HEX4)
 );
 
 // seven_hex_16_4 seven_dec_3(

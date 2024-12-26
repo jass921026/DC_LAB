@@ -17,6 +17,7 @@ logic[23:0] problems, problems2;
 logic state_w, state_r;
 logic[7:0] random_index, random_index2;
 logic[95:0] digit_showed_w, digit_showed_r;
+logic digit_identified_w, digit_identified_r;
 
 assign o_displacement = scroll_r;
 
@@ -57,9 +58,10 @@ always_comb begin
     correctness_w = correctness_r;
     digit_showed_w = digit_showed_r;
     state_w = state_r;
+    digit_identified_w = i_digit_identified;
     case (state_r)
     S_IDLE: begin
-        if (i_digit_identified) begin
+        if (digit_identified_r) begin
             state_w = S_SCROLL;//sometime only change state, don't know why
             correctness_w = {i_digit_answered == digit_showed_r[51:48], correctness_r[0]};
             digit_showed_w = {digit_showed_r[95-:44], i_digit_answered, digit_showed_r[47-:24], problems};
@@ -87,12 +89,14 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
         state_r <= S_IDLE;
         correctness_r <= 0;
         digit_showed_r <= {24'hffffff, problems, problems2, 24'hffffff};
+        digit_identified_r <= 0;
     end
     else begin
         scroll_r <= scroll_w;
         state_r <= state_w;
         correctness_r <= correctness_w;
         digit_showed_r <= digit_showed_w;
+        digit_identified_r <= digit_identified_w;
     end
 end
 endmodule
