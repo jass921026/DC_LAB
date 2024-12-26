@@ -157,7 +157,7 @@ module CNN_test
     assign pixel_i_valid = count_time < 30'd901 ? 1 : 0;
 
     always_comb begin
-        digit_r = digit_w;
+        digit_w = digit_r;
         if (count_time == 30'd1000) begin
             case (digit_r) 
                 4'd0: digit_w = 4'd1;
