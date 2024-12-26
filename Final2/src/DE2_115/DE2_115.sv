@@ -241,6 +241,8 @@ scroll scroller(
     .i_digit_identified(!KEY[2])
 );
 
+logic[899:0] handwrite;
+
 add_hand_write handwrite(
     .i_x(vgax),
     .i_y(vgay),
@@ -251,8 +253,10 @@ add_hand_write handwrite(
     .o_red(red),
     .o_green(green),
     .i_displacement(displacement),
-    .i_handwrite({100'hfffffffffffffffffffffffff,200'b0,100'hfffffffffffffffffffffffff,500'b0})
+    .i_handwrite(handwrite)
 );
+
+
 
 // assign red  =   gray;
 // assign blue =   gray;
