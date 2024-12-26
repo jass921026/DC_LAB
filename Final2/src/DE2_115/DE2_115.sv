@@ -148,7 +148,7 @@ module DE2_115 (
 
 logic lmb, rmb;
 logic [8:0] mouse_x, mouse_y;
-logic mouse_valid;
+logic mouse_valid, mouse_display;
 
 Mouse mouse0(
     .i_clk(CLOCK_50),
@@ -159,7 +159,8 @@ Mouse mouse0(
     .o_button_right(rmb),
     .o_movement_x(mouse_x),
     .o_movement_y(mouse_y),
-    .o_valid(mouse_valid)
+    .o_valid(mouse_valid),
+	 .o_display(mouse_display)
 );
 
 
@@ -256,8 +257,6 @@ add_hand_write handwrite0(
     .i_handwrite(handwrite)
 );
 
-logic mouse_valid;
-logic move_x;
 
 add_cursor cursor(
     .i_clk(clk25M),
@@ -400,8 +399,8 @@ seven_hex_16_1 seven_dec1(
     .o_seven(HEX0)
 );
 seven_hex_16_1 seven_dec2(
-    .i_hex(mouse_valid),
-    .o_seven(HEX4)
+    .i_hex(mouse_display),
+    .o_seven(HEX3)
 );
 seven_hex_16_2 seven_dec3(
     .i_hex(mouse_y),
@@ -429,7 +428,7 @@ seven_hex_16_2 seven_dec3(
 // assign HEX0 = '1;
 assign HEX1 = '1;
 assign HEX2 = '1;
-assign HEX3 = '1;
+// assign HEX3 = '1;
 // assign HEX4 = '1;
 // assign HEX5 = '1;
 // assign HEX6 = '1;

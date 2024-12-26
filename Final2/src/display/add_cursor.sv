@@ -21,12 +21,10 @@ module add_cursor(
 logic[899:0] handwrite_w, handwrite_r;
 logic[15:0] cursor_x_w, cursor_x_r;
 logic[15:0] cursor_y_w, cursor_y_r;
-logic btn_left, btn_right, mouse_valid;
-logic[8:0] move_x, move_y;
 logic[15:0] y_pos;
 
 assign o_handwrite  =   handwrite_r;
-assign y_pos        =   {9'b0,cursor_y_r[15:9]};
+assign y_pos        =   {9'b0,cursor_y_r[15:4]};
 
 always_comb begin
     handwrite_w =   handwrite_r;
@@ -39,35 +37,59 @@ always_comb begin
         if (($signed(cursor_x_r) + $signed(move_x)) < 0) begin
             cursor_x_w = 0;
         end
-        else if (($signed(cursor_x_r) + $signed(move_x)) >= (16'd30<<9)) begin
-            cursor_x_w = (16'd30<<9)-1;
+        else if (($signed(cursor_x_r) + $signed(move_x)) >= (16'd30<<4)) begin
+            cursor_x_w = (16'd30<<4)-1;
         end
         else begin
             cursor_x_w = $signed(cursor_x_r) + $signed(move_x);
         end
-        if (($signed(cursor_y_r) + $signed(move_y)) < 0) begin
+        if (($signed(cursor_y_r) - $signed(move_y)) < 0) begin
             cursor_y_w = 0;
         end
-        else if (($signed(cursor_y_r) + $signed(move_y)) >= (16'd30<<9)) begin
-            cursor_y_w = (16'd30<<9)-1;
+        else if (($signed(cursor_y_r) - $signed(move_y)) >= (16'd30<<4)) begin
+            cursor_y_w = (16'd30<<4)-1;
         end
         else begin
-            cursor_y_w = $signed(cursor_y_r) + $signed(move_y);
+            cursor_y_w = $signed(cursor_y_r) - $signed(move_y);
         end
         if (btn_left) begin
-            handwrite_w[y_pos * 'd30 + cursor_x_r[15:9]] = 1;
+            handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4])] = 1;
+            handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd30] = 1;
+            if (cursor_x_r[15:4] != 0) begin
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd29] = 1;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd1] = 1;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd31] = 1;
+            end
+            handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd30] = 1;
+            if (cursor_x_r[15:4] != 29) begin
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd29] = 1;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd1] = 1;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd31] = 1;
+            end
         end
         else if (btn_right) begin
-            handwrite_w[y_pos * 'd30 + cursor_x_r[15:9]] = 0;
+            handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4])] = 0;
+            handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd30] = 0;
+            if (cursor_x_r[15:4] != 0) begin
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd1] = 0;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd31] = 0;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd29] = 0;
+            end
+            handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd30] = 0;
+            if (cursor_x_r[15:4] != 29) begin
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) - 'd29] = 0;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd1] = 0;
+                handwrite_w['d899-(y_pos * 'd30 + cursor_x_r[15:4]) + 'd31] = 0;
+            end
         end
     end
-    if (i_x == (cursor_x_r[15:9] * 'd3 + 'd537)) begin
-        if (i_displacement == 0 && i_y >= (cursor_y_r[15:9] * 'd3 + 11'd271) && i_y <= (cursor_y_r[15:9] * 'd3 + 11'd281)) begin
+    if (i_x == (cursor_x_r[15:4] * 'd3 + 'd542)) begin
+        if (i_displacement == 0 && i_y >= (cursor_y_r[15:4] * 'd3 + 11'd181) && i_y <= (cursor_y_r[15:4] * 'd3 + 11'd191)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
             o_blue = 10'h0;
         end
-        else if (i_displacement > 0 && i_y >= (cursor_y_r[15:9] * 'd3 - i_displacement + 11'd421) && i_y <= (cursor_y_r[15:9] * 'd3 - i_displacement + 11'd431)) begin
+        else if (i_displacement > 0 && i_y >= (cursor_y_r[15:4] * 'd3 - i_displacement + 11'd331) && i_y <= (cursor_y_r[15:4] * 'd3 - i_displacement + 11'd341)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
             o_blue = 10'h0;
@@ -78,13 +100,13 @@ always_comb begin
             o_green = i_green;
         end
     end
-    else if (i_x >= (cursor_x_r[15:9] * 'd3 + 11'd532) && i_x <= (cursor_x_r[15:9] * 'd3 + 11'd542)) begin
-        if (i_displacement == 0 && i_y == (cursor_y_r[15:9] * 'd3 + 11'd276)) begin
+    else if (i_x >= (cursor_x_r[15:4] * 'd3 + 11'd537) && i_x <= (cursor_x_r[15:4] * 'd3 + 11'd547)) begin
+        if (i_displacement == 0 && i_y == (cursor_y_r[15:4] * 'd3 + 11'd186)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
             o_blue = 10'h0;
         end
-        else if (i_displacement > 0 && (i_y + i_displacement) == (cursor_y_r[15:9] * 'd3 + 11'd436)) begin
+        else if (i_displacement > 0 && (i_y + i_displacement) == (cursor_y_r[15:4] * 'd3 + 11'd336)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
             o_blue = 10'h0;
