@@ -398,6 +398,7 @@ CNN_top cnn0 (
 
 seven_hex_16_1 seven_dec0(
     .i_hex(digit),
+    .o_seven(HEX7)
 );
 seven_hex_16_1 seven_dec1(
     .i_hex({3'b0,digit_valid}),
@@ -413,7 +414,7 @@ seven_hex_16_1 seven_dec1(
 // );
 seven_hex_16_1 seven_dec1(
     .i_hex(swans),
-    .o_seven(HEX0)
+    .o_seven(HEX3)
 );
 
 // seven_hex_16_4 seven_dec_3(
@@ -433,11 +434,11 @@ seven_hex_16_1 seven_dec1(
 
 
 // comment those are use for display
-// assign HEX0 = '1;
+assign HEX0 = '1;
 assign HEX1 = '1;
 assign HEX2 = '1;
-assign HEX3 = '1;
-// assign HEX4 = '1;
+// assign HEX3 = '1;
+assign HEX4 = '1;
 // assign HEX5 = '1;
 assign HEX6 = '1;
 // assign HEX7 = '1;
