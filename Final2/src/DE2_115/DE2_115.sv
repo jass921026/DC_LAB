@@ -404,7 +404,7 @@ Counter #(
     .clk(clk25M),
     .rst_n(reset),
     .enable(digit_valid == 1'b1),
-    .count(digits_valid_cnt)
+    .count(digit_valid_cnt)
 );
 
 
