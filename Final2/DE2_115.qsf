@@ -1187,7 +1187,9 @@ set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=sld_reserved_brain_test_auto_signaltap_0_1_a0cc," -section_id auto_signaltap_0
-set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/weights/bi_mem0.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/magic/magic_model.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/magic/magic_mask.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/magic/magic_compare.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/display/add_cursor.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/input_transformer.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/CNN/CNN_top.sv

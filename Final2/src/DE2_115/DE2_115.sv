@@ -316,11 +316,20 @@ logic digit_valid;
 //     .pixel_i_valid(pixel_valid)
 // );
 
-CNN_top cnn0 (
-    .clk(clk25M),
-    .rst(reset),
-    .pixel_i(pixel_i),
-    .pixel_i_valid(pixel_valid),
+// CNN_top cnn0 (
+//     .clk(clk25M),
+//     .rst(reset),
+//     .pixel_i(pixel_i),
+//     .pixel_i_valid(pixel_valid),
+//     .digit_o(digit),
+//     .digit_o_valid(digit_valid)
+// );
+
+Magic_model magic_model0(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
+    .i_button_pressed_n(KEY[2]),
+    .handwrite(handwrite),
     .digit_o(digit),
     .digit_o_valid(digit_valid)
 );
