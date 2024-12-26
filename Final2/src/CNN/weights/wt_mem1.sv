@@ -1,23 +1,6 @@
-/*
-Copyright 2019, Grant Yu
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 `timescale 1ns/1ns
 
-module wt_mem1 #(parameter ADDR_WIDTH = 7, DATA_WIDTH = 144, DEPTH = 76) (
+module wt_mem1 #(parameter ADDR_WIDTH = 11, DATA_WIDTH = 144, DEPTH = 76) (
 input wire clk,
 input wire [ADDR_WIDTH-1:0] addr_a, 
 input wire [ADDR_WIDTH-1:0] addr_b, 
@@ -28,82 +11,82 @@ output reg [DATA_WIDTH-1:0] q_b
 reg [DATA_WIDTH-1:0] mem [0:DEPTH-1];
 
 initial begin
-mem[0] = 144'h05d80544ed62ebcef524f4d203effdf1038e;
-mem[1] = 144'hf8d6fc18f921f242e9bcec29f160f52cef05;
-mem[2] = 144'h095df703eefcfac5071e02aaf92ff6ebf943;
-mem[3] = 144'h08c7f293f278f73af64afe05efedfe90003e;
-mem[4] = 144'h005bec7bebdbfafbff11f941fa07eaeeedae;
-mem[5] = 144'h0021e9d3e150f952f0aaf02ff0a1f06be819;
-mem[6] = 144'hf13af5ceea0effb401f8fcca05c900e0f78f;
-mem[7] = 144'h00f6ef98ea7ffba1ee6ff8b909f2edd7f974;
-mem[8] = 144'hf8940560ee330351f6faf0070756fed9f141;
-mem[9] = 144'hf9adede10689fc90fbccf3adfa1506a2f17c;
-mem[10] = 144'hfa3c0353f0b007e00230ffbeed75fc1cf51f;
-mem[11] = 144'hec3febb1fbbbffcefc45fd54ecffefd1f275;
-mem[12] = 144'h0180ef6aefde01a0fedcef45fc06f032f169;
-mem[13] = 144'hfb050534ff89f0c4efdd07adec7def3cfaa2;
-mem[14] = 144'h0b57f4520196f492f927f27a0901ef7fed0c;
-mem[15] = 144'h0b72f645f987f76b095ff3870b74fbeeef2c;
-mem[16] = 144'hf2e7f8d1f323fd50f59d026c074afb13f572;
-mem[17] = 144'hf07bf7b2e86bfab2f7edeca9fbc9fb93e2fd;
-mem[18] = 144'h03bc0b65fad1f9c10976f7700a15f90b060a;
-mem[19] = 144'h0150069bf29704f2f8a4f452f8cef708f51e;
-mem[20] = 144'hf04b06340827ea00fe69ee62f7f9fb85086a;
-mem[21] = 144'hed5d05bdf1affaa6eeccf42403fef618e8a2;
-mem[22] = 144'h01cff8ebf3e2edd6edf1ffe0f7d5ebfdf4b0;
-mem[23] = 144'h06dc01c5044e0679f016eee9fd86f7c609c7;
-mem[24] = 144'hf7e3023d0379f52a0afbf291f4a2f1d30cba;
-mem[25] = 144'h0482057b0460fcd1036e0799f4b9f7adf86b;
-mem[26] = 144'hf948f77209b109b2f47cf05affbffc1bfc03;
-mem[27] = 144'h04f700d2f7f8fd0bf305fd71f4bffae60b74;
-mem[28] = 144'h0c96081006ddee87f5da085f01100b2d0038;
-mem[29] = 144'h08c70d80058cfb320061fdf1028b0bfd0247;
-mem[30] = 144'hf962f787009f09c7f4b8f835075aef9af169;
-mem[31] = 144'hfb07fd4fe93503b7ee16e8a203e9fc04ea8d;
-mem[32] = 144'hf108f6e4fb77f96102d8f52e0226fe7304e6;
-mem[33] = 144'hfa87ffd4f3c10a8af8b50581fa48ec5cf639;
-mem[34] = 144'hf3cbf9c8fec5f9b3f37dfa4b019a0763f21f;
-mem[35] = 144'hfcc4f58befcbf7b40346f2a7f0bbe62df253;
-mem[36] = 144'hfc3c048e040f0a06feeeee05f5c00563f51a;
-mem[37] = 144'hf421f371f2a4f26fe9bf0a5aee1df746fb2b;
-mem[38] = 144'hf77bf5b30870074effe709b8f8bbf9fd0368;
-mem[39] = 144'hf2cef5b3ec18ea9400b40425022aee550366;
-mem[40] = 144'hed000185f467f84ff8f5ffeb087500110c0e;
-mem[41] = 144'hf3d5fb41f3a50856ef1cfd52055bfe0bf7e8;
-mem[42] = 144'h0673fbbffa09fcabedc2fd76f22a081cfe04;
-mem[43] = 144'h0467f130eaf1f614e837f335efa9f809ef19;
-mem[44] = 144'h0694ea05f90df72b04cc05fdf559fb330259;
-mem[45] = 144'hf575de01e313f0dce934f952f15debf2f0cb;
-mem[46] = 144'h0a30fdc90ba0f754fc10efb7072e07070356;
-mem[47] = 144'h046207d502070881f09e0173f1800558ef95;
-mem[48] = 144'h073d0b46fbfc00aaeba3fe0101a4fa43eeed;
-mem[49] = 144'h0a2effb60748f97403e5085afc73f5b20269;
-mem[50] = 144'hf535f5b607fcfe2d01eff35bf5120974fa17;
-mem[51] = 144'hf45e05dd0093f6d000f8f33403fff93a00a7;
-mem[52] = 144'heed4034fec84f5b8f1b0fa890ce00d33f93a;
-mem[53] = 144'hf45f008df99ff642f308fd11ee49faa000f2;
-mem[54] = 144'h0b57092403b0f60b09aa0b02fe56f3d50c69;
-mem[55] = 144'h03a5ee99ec99fa3205a0fde6ee0900a002d4;
-mem[56] = 144'h08a1040a0ca0f257ee8ef129058efdb305f9;
-mem[57] = 144'h010df3240aebeef3f44e073df9acee2af852;
-mem[58] = 144'h031f0221fa42fdc70240feecefaf03b4057a;
-mem[59] = 144'hef4cff7eef32f437fb56090a0010f8e40374;
-mem[60] = 144'hefc209ca0570fc2a01e206b2edb30474ff11;
-mem[61] = 144'hfd78f11501a4ebc6ea4ff260f84602e0eac5;
-mem[62] = 144'hef09f1680887f5deeb6ef2180563fa4afcfb;
-mem[63] = 144'h006eed5c06060663f58af4e4fa93feb3faa6;
-mem[64] = 144'h0553f74e0456f08d01b0fbc80340e9d0075a;
-mem[65] = 144'hf029ee29f77bfb15f46fe9680343faecff86;
-mem[66] = 144'hf68df0b8fcbcf383f3cbeeadfbb20121ff32;
-mem[67] = 144'hf4090838032f0d9af2e5eeb00be0ef14f27d;
-mem[68] = 144'h05d1f9bcfe21f148f997fab0f4f9fcbf0f1f;
-mem[69] = 144'h04a2062301370892e4bdf5780c3af611fc2a;
-mem[70] = 144'hf878072ffd1eedb0f8a91776fc4bf317f8b5;
-mem[71] = 144'h05dff44ff34900a3ec60f49e046f0678075e;
-mem[72] = 144'hf0ef061cf501fe5bf72bee8c09c8ff7a0c8e;
-mem[73] = 144'hfc37fbc30470f2432bb9e890f43806c0f972;
-mem[74] = 144'hf778f10e087afa5ef3a9eca0f35202e60a5c;
-mem[75] = 144'hfa9bf31b00b704a306601d59fbb2fd6a0ded;
+mem[0] = 144'hfbad005b1176ebad01041380f8cb136c1fd3;
+mem[1] = 144'h167e00220f3210011cb7f50a14581dd01959;
+mem[2] = 144'h02da04affb46007bfff8f8c400510143f7c8;
+mem[3] = 144'h07f006b500b304a60a8c009dfee2ff4a07bf;
+mem[4] = 144'h05cb03c6019a0bdb095af8b1ff9bfc9cf65b;
+mem[5] = 144'hfe6608b0077f0655052903b4fe79034700b8;
+mem[6] = 144'h09e8fd5df30a05edfe00f01dff02f098f653;
+mem[7] = 144'h024706b1032a07c7022c0911006c02be0315;
+mem[8] = 144'hf3c6ff500c3302da05a209a904fe0285fe4a;
+mem[9] = 144'hfb99f64d035701cb0798ffce09e403bc03d1;
+mem[10] = 144'hf2940b0a0f6bfe6f0e5a0ea70f620eaa0b7a;
+mem[11] = 144'hf2a3f97503f7f5b0fd3e096cfee2069f0b52;
+mem[12] = 144'hefb6fa3f0218fef109be0370099f0a2e0aae;
+mem[13] = 144'hf779f47bf5a5fa53ff29fe6c06ea01e2056f;
+mem[14] = 144'h03d00644047d00f2fb89f7fff65aeb0bf275;
+mem[15] = 144'hfcfdffa9062a043407a0030904bdffca007c;
+mem[16] = 144'hff1210c419e808970e0f0b2d0d79078a0190;
+mem[17] = 144'hf29106620d0ef903fc0006b1fcdafd8f01c6;
+mem[18] = 144'h04b00abf01040b890241f0390555f280e8d6;
+mem[19] = 144'hff25057cfd2c000f07cb0781fde8060f051d;
+mem[20] = 144'h02b4f5cbf37403ecf885f3ddf384f0a2efc4;
+mem[21] = 144'h096503f0f88106e80a49020202ad016500f9;
+mem[22] = 144'h0f4af28ff0420f9ee67cfa9d1255efbe0507;
+mem[23] = 144'h0bd9ff57f48b0b55ff15f31c0c28058df42d;
+mem[24] = 144'h0332fd24fbd60133fbe1fbe90415fce7ffe6;
+mem[25] = 144'hf8f0017cfdbbf9b5017efbba00f8fca9f987;
+mem[26] = 144'hee32fa770594fa14031901bffcfd0795fe38;
+mem[27] = 144'hfc75f957f63102c40710056d0267037409df;
+mem[28] = 144'h067e0c9e0c7508eb0481fb2c05eeffd9f3bb;
+mem[29] = 144'hfce2028603cffbf200cf0590077f06e9ff13;
+mem[30] = 144'hede2f7c104d1fb940693105d02ea0e8b0d4c;
+mem[31] = 144'hf958f55dfb4efbea007e044c08bd07b209b6;
+mem[32] = 144'h0959fcf8fa1b0bc6f6c5f6af00d6f5bbf243;
+mem[33] = 144'hff67075b0181fed1022102f5ff62ff4bf5d2;
+mem[34] = 144'h05cc0421f8690842ffeaf7a70075fa4dea7a;
+mem[35] = 144'h06180160069906a90775092affb000b204a4;
+mem[36] = 144'hf9a604ef02c307a6061e00ec034a09ffffbe;
+mem[37] = 144'hfca7fa10f7c101b404db004bfe83048f0905;
+mem[38] = 144'h03caf931f5270288fda8f1c0fb97f4d9efad;
+mem[39] = 144'h069d077dfb76fef20bc002e3fd15017b02b5;
+mem[40] = 144'h03a4073e00ea0db8061af5bd0a17faf0f363;
+mem[41] = 144'h0161ffd7004609a600bd00aa0918095004a9;
+mem[42] = 144'h04ae01f6fb0e0391fdf9f17401f9efcdef63;
+mem[43] = 144'hfbf704b6fe5e07ed099c05060657053600bf;
+mem[44] = 144'h09c9ee08f506ff40ed8001bdff33f906fe0c;
+mem[45] = 144'h077a000ff6e2ff68f8acf63c02e3fc2cfad6;
+mem[46] = 144'hf1530c6815d6fc9b0da9196509d914c70f4f;
+mem[47] = 144'hf76df6430cb0f2b6f8720b34fb5afd1608e5;
+mem[48] = 144'h1222f0d3f31c10c6eef2f5a510aafaf3f6e0;
+mem[49] = 144'h0b750109f60d0a3f05e3f3770229fdbcf617;
+mem[50] = 144'hfdee0481fae4ff83fd99038efe55fefbfdd9;
+mem[51] = 144'hfc96fdcd020e00e40424fa850108fc3bfdfd;
+mem[52] = 144'hec6e043a1266f30209f211abff0b15c80d6b;
+mem[53] = 144'hfd6cfed30385f6c2fd6c0632f983ff670595;
+mem[54] = 144'hfd86ff19fae1fc14016cfede01f5fe71fd49;
+mem[55] = 144'hfb4d03d5fc060018fd140031fd7ffacb0083;
+mem[56] = 144'h078e02cc000deb1fee0df06ee2c4ee4df517;
+mem[57] = 144'h0a45099a0c92fd5e002efd41edecf0a4f50d;
+mem[58] = 144'h1106fe8bfa8b0328f2f5f3afe540ebfaf652;
+mem[59] = 144'h069007a80ad0056804ee02a1f948f39bfdd6;
+mem[60] = 144'h04c0054b099204690d00ff890273002ff7ac;
+mem[61] = 144'hf4bf02dbfc16fc5403620659087808be0205;
+mem[62] = 144'h01530417f64301e2fea2f65effbbf65bf23e;
+mem[63] = 144'h0361037605d0053a05b2fe4c01cb06f00681;
+mem[64] = 144'h0a3906ea03480c4f0443f812fa71f2eff116;
+mem[65] = 144'hfdfe02ca00760758053802c0035a08780471;
+mem[66] = 144'h099f01fe04f1f924f436094b06f2fb3106c1;
+mem[67] = 144'hfd6df48dfe1bfa4b0766f4e9ff6bfbb4f7cd;
+mem[68] = 144'h050d018afda60097fa7409a0f7c5fb360310;
+mem[69] = 144'h0b0ffb4e0369fdc8ff6b067efbc9089ffae8;
+mem[70] = 144'hf94d064406c7086a089df2ee017bfa74faa3;
+mem[71] = 144'h047907090354f81efb4705d502aa081406c0;
+mem[72] = 144'hf1990235f98e026cf833f5f203e3088c0929;
+mem[73] = 144'h08e2042e012bff4d076f06b1f91ff553f81f;
+mem[74] = 144'h00a9fa2bfd7705d7f91706fbfcf80514ff38;
+mem[75] = 144'h02890750ff49f921072f0832fdfdf872fe56;
 end
 
 always @ (posedge clk) begin
