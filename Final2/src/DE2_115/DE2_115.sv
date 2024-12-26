@@ -256,11 +256,12 @@ add_hand_write handwrite0(
     .i_handwrite(handwrite)
 );
 
+logic mouse_valid;
+logic move_x;
+
 add_cursor cursor(
     .i_clk(clk25M),
     .i_rst_n(reset),
-    .ps2_clk(PS2_CLK),
-    .ps2_data(PS2_DAT),
     .i_x(vgax),
     .i_y(vgay),
     .i_blue(blue_handwrite),
@@ -270,7 +271,12 @@ add_cursor cursor(
     .o_red(red),
     .o_green(green),
     .i_displacement(displacement),
-    .o_handwrite(handwrite)
+    .o_handwrite(handwrite),
+    .mouse_valid(mouse_valid),
+    .move_x(mouse_x),
+    .move_y(mouse_y),
+    .btn_left(lmb),
+    .btn_right(rmb)
 );
 
 // assign red  =   gray;
@@ -383,17 +389,24 @@ altpll pll0( // generate with qsys, please follow lab2 tutorials
 //     .o_seven(HEX6)
 // );
 
-seven_hex_16_4 seven_dec0(
-    .i_hex(shownum),
-    .o_seven_3(HEX7),
-    .o_seven_2(HEX6),
-    .o_seven_1(HEX5),
-    .o_seven_0(HEX4)
+seven_hex_16_2 seven_dec0(
+    .i_hex(mouse_x),
+    .o_seven_1(HEX7),
+    .o_seven_0(HEX6)
 );
 
 seven_hex_16_1 seven_dec1(
     .i_hex(swans),
     .o_seven(HEX0)
+);
+seven_hex_16_1 seven_dec2(
+    .i_hex(mouse_valid),
+    .o_seven(HEX4)
+);
+seven_hex_16_2 seven_dec3(
+    .i_hex(mouse_y),
+    .o_seven_1(HEX5),
+    .o_seven_0(HEX4)
 );
 
 // seven_hex_16_4 seven_dec_3(

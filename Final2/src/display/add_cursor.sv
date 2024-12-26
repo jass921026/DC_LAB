@@ -1,8 +1,6 @@
 module add_cursor(
     input i_clk,  // system clock
     input i_rst_n,  // system reset
-    inout ps2_clk,  // mouse clock
-    inout ps2_data, // mouse data
     input[9:0] i_red,
     input[9:0] i_green,
     input[9:0] i_blue,
@@ -12,7 +10,12 @@ module add_cursor(
     output[9:0] o_blue,
     output[9:0] o_red,
     output[9:0] o_green,
-    output[899:0] o_handwrite
+    output[899:0] o_handwrite,
+    input[8:0] move_x,
+    input[8:0] move_y,
+    input btn_left,
+    input btn_right,
+    input mouse_valid
 );
 
 logic[899:0] handwrite_w, handwrite_r;
@@ -21,18 +24,6 @@ logic[15:0] cursor_y_w, cursor_y_r;
 logic btn_left, btn_right, mouse_valid;
 logic[8:0] move_x, move_y;
 logic[15:0] y_pos;
-
-Mouse mouse(
-    .i_clk(i_clk),
-    .i_rst_n(i_rst_n),
-    .ps2_clk(ps2_clk),
-    .ps2_data(ps2_data),
-    .o_button_left(btn_left),
-    .o_button_right(btn_right),
-    .o_movement_x(move_x), // signed
-    .o_movement_y(move_y),
-    .o_valid(mouse_valid)
-);
 
 assign o_handwrite  =   handwrite_r;
 assign y_pos        =   {9'b0,cursor_y_r[15:9]};
@@ -74,12 +65,12 @@ always_comb begin
         if (i_displacement == 0 && i_y >= (cursor_y_r[15:9] * 'd3 + 11'd271) && i_y <= (cursor_y_r[15:9] * 'd3 + 11'd281)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
-            o_blue = 10'h3ff;
+            o_blue = 10'h0;
         end
         else if (i_displacement > 0 && i_y >= (cursor_y_r[15:9] * 'd3 - i_displacement + 11'd421) && i_y <= (cursor_y_r[15:9] * 'd3 - i_displacement + 11'd431)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
-            o_blue = 10'h3ff;
+            o_blue = 10'h0;
         end
         else begin
             o_red = i_red;
@@ -87,16 +78,16 @@ always_comb begin
             o_green = i_green;
         end
     end
-    else if (i_x >= (cursor_x_r[15:9] * 'd3 + 11'd532) && i_x >= (cursor_x_r[15:9] * 'd3 + 11'd542)) begin
+    else if (i_x >= (cursor_x_r[15:9] * 'd3 + 11'd532) && i_x <= (cursor_x_r[15:9] * 'd3 + 11'd542)) begin
         if (i_displacement == 0 && i_y == (cursor_y_r[15:9] * 'd3 + 11'd276)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
-            o_blue = 10'h3ff;
+            o_blue = 10'h0;
         end
         else if (i_displacement > 0 && (i_y + i_displacement) == (cursor_y_r[15:9] * 'd3 + 11'd436)) begin
             o_red = 10'h3ff;
             o_green = 10'h3ff;
-            o_blue = 10'h3ff;
+            o_blue = 10'h0;
         end
         else begin
             o_red = i_red;
