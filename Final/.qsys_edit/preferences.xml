@@ -8,7 +8,7 @@
   </columns>
  </systemtable>
  <library
-   expandedCategories="Library/Basic Functions/Clocks; PLLs and Resets,Library/Interface Protocols/PCI Express/Example Design Components,Library,Library/Basic Functions,Library/Interface Protocols,Library/Basic Functions/Clocks; PLLs and Resets/PLL,Project,Library/Interface Protocols/PCI Express" />
- <window width="1100" height="800" x="399" y="232" />
- <generation path="altpll" />
+   expandedCategories="Library/Basic Functions/Clocks; PLLs and Resets,Library,Project,Library/Basic Functions,Library/Basic Functions/Clocks; PLLs and Resets/PLL" />
+ <window width="876" height="800" x="507" y="156" />
+ <generation path="C:/Users/user/Desktop/DC_LAB/Final2" />
 </preferences>

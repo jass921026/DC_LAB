@@ -144,13 +144,49 @@ module DE2_115 (
 // logic fast, interpolation;
 // logic [3:0] speed;
 
-logic [9:0] red,blue,green;         //three channel wanna show with vga
+// MARK: SYSTEM  
+
+altpll pll0( // generate with qsys, please follow lab2 tutorials
+    .clk_clk(CLOCK_50),
+    .reset_reset_n(reset),
+    .altpll_25m_clk_clk(clk25M)
+);
+
+
+// MARK: MOUSE
+
+logic lmb, rmb;
+logic [8:0] mouse_x, mouse_y;
+logic mouse_valid, mouse_display;
+
+Mouse mouse0(
+    .i_clk(CLOCK_50),
+    .i_rst_n(KEY[3]),
+    .ps2_clk(PS2_CLK),
+    .ps2_data(PS2_DAT),
+    .o_button_left(lmb),
+    .o_button_right(rmb),
+    .o_movement_x(mouse_x),
+    .o_movement_y(mouse_y),
+    .o_valid(mouse_valid),
+	 .o_display(mouse_display)
+);
+
+
+
+// MARK: VGA
+
+logic [9:0] red,blue,green,red_scroller,green_scroller,blue_scroller,red_handwrite, green_handwrite, blue_handwrite;         //three channel wanna show with vga
 logic [10:0] vgax,vgay;           //position to output
 logic [21:0] addr_screen_img;       //addr of vga requesting (width * y_coord + x_coord)
 logic VGA_Read;                     //vga requesting for input
 
 logic clk25M;
 logic reset;
+logic [10:0] displacement;
+logic [3:0] swans;
+
+assign swans = SW[9] ? 4'd9 : SW[8] ? 4'd8 : SW[7] ? 4'd7 : SW[6] ? 4'd6 : SW[5] ? 4'd5 : SW[4] ? 4'd4 : SW[3] ? 4'd3 : SW[2] ? 4'd2 : SW[1] ? 4'd1 : 4'd0;
 
 assign reset    =   KEY[3];
 
@@ -189,20 +225,124 @@ VGA_Ctrl vgactrl ( // Host Side
     .iRST_N(reset)
 );
 
-Test t1(
-	.i_rst_n(reset),
-	.i_clk(clk25M),
+
+// always_comb begin
+//     if (coord2numindex(.x(vgax), .y(vgay)) < 'd6) begin
+//         shownum = coord2numindex(.x(vgax), .y(vgay));
+//     end
+//     else if (coord2numindex(.x(vgax), .y(vgay)) < 'hf) begin
+//         shownum = coord2numindex(.x(vgax), .y(vgay)) + 'h3;
+//     end
+//     else begin
+//         shownum = coord2numindex(.x(vgax), .y(vgay));
+//     end
+// end
+
+scroll scroller(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
     .i_x(vgax),
     .i_y(vgay),
-    .o_blue(blue),
-    .o_red(red),
-    .o_green(green)
+    .o_blue(blue_scroller),
+    .o_red(red_scroller),
+    .o_green(green_scroller),
+    .o_displacement(displacement),
+    .i_digit_answered(digit),
+    .i_digit_identified(digit_valid)
 );
 
-altpll pll0( // generate with qsys, please follow lab2 tutorials
-    .clk_clk(CLOCK_50),
-    .reset_reset_n(reset),
-    .altpll_25m_clk_clk(clk25M)
+logic[899:0] handwrite;
+
+
+add_hand_write handwrite0(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
+    .i_x(vgax),
+    .i_y(vgay),
+    .i_blue(blue_scroller),
+    .i_red(red_scroller),
+    .i_green(green_scroller),
+    .o_blue(blue_handwrite),
+    .o_red(red_handwrite),
+    .o_green(green_handwrite),
+    .i_displacement(displacement),
+    .i_handwrite(handwrite)
+);
+
+
+add_cursor cursor(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
+    .i_x(vgax),
+    .i_y(vgay),
+    .i_blue(blue_handwrite),
+    .i_red(red_handwrite),
+    .i_green(green_handwrite),
+    .o_blue(blue),
+    .o_red(red),
+    .o_green(green),
+    .i_displacement(displacement),
+    .o_handwrite(handwrite),
+    .mouse_valid(mouse_valid),
+    .move_x(mouse_x),
+    .move_y(mouse_y),
+    .btn_left(lmb),
+    .btn_right(rmb)
+);
+
+// assign red  =   gray;
+// assign blue =   gray;
+// assign green=   gray;
+
+// Test t0(
+// 	.i_rst_n(reset),
+// 	.i_clk(clk25M),
+//     .i_x(vgax),
+//     .i_y(vgay),
+//     .o_blue(blue),
+//     .o_red(red),
+//     .o_green(green)
+// );
+
+// MARK: CNN
+
+logic [7:0] pixel_i;
+logic pixel_valid;
+logic [3:0] digit;
+logic digit_valid;
+
+// CNN_test cnn1(
+//     .clk(clk25M),
+//     .rst(reset),
+//     .pixel_i(pixel_i),
+//     .pixel_i_valid(pixel_valid)
+// );
+
+// CNN_top cnn0 (
+//     .clk(clk25M),
+//     .rst(reset),
+//     .pixel_i(pixel_i),
+//     .pixel_i_valid(pixel_valid),
+//     .digit_o(digit),
+//     .digit_o_valid(digit_valid)
+// );
+
+Magic_model magic_model0(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
+    .i_button_pressed_n(KEY[2]),
+    .handwrite(handwrite),
+    .digit_o(digit),
+    .digit_o_valid(digit_valid)
+);
+
+Input_transformer input_transformer0(
+    .clk(clk25M),
+    .rst(reset),
+    .button_pressed(key2down),
+    .handwrite(handwrite),
+    .pixel_i(pixel_i),
+    .pixel_i_valid(pixel_valid)
 );
 
 // you can decide key down settings on your own, below is just an example
@@ -220,12 +360,14 @@ altpll pll0( // generate with qsys, please follow lab2 tutorials
 //     .o_neg(key1down) 
 // );
 
-// Debounce deb2(
-//     .i_in(KEY[2]), // Stop
-//     .i_rst_n(KEY[3]),
-//     .i_clk(CLK_12M),
-//     .o_neg(key2down) 
-// );
+logic key2down;
+
+Debounce deb2(
+    .i_in(KEY[2]), // Stop
+    .i_rst_n(KEY[3]),
+    .i_clk(clk25M),
+    .o_neg(key2down) 
+);
 
 // Top top0(
 //     .i_rst_n(KEY[3]),
@@ -295,21 +437,66 @@ altpll pll0( // generate with qsys, please follow lab2 tutorials
 //     .o_seven(HEX6)
 // );
 
-seven_hex_16_4 seven_dec0(
-    .i_hex(0),
-    .o_seven_3(HEX7),
-    .o_seven_2(HEX6),
+// MARK: Util
+
+logic [7:0] digit_valid_cnt;
+logic [7:0] pixel_valid_cnt;
+
+Counter #(
+    .WIDTH(8),
+    .MAX_COUNT(255)
+) counter_valid (
+    .clk(clk25M),
+    .rst_n(reset),
+    .enable(digit_valid == 1'b1),
+    .count(digit_valid_cnt)
+);
+
+Counter #(
+    .WIDTH(8),
+    .MAX_COUNT(255)
+) counter_pixel (
+    .clk(clk25M),
+    .rst_n(reset),
+    .enable(pixel_valid == 1'b1),
+    .count(pixel_valid_cnt)
+);
+
+
+// MARK: DISPLAY
+
+seven_hex_16_1 seven_dec0(
+    .i_hex(KEY[2]),
+    .o_seven(HEX0)
+);
+seven_hex_16_2 seven_dec1(
+    .i_hex(digit_valid_cnt),
     .o_seven_1(HEX5),
     .o_seven_0(HEX4)
 );
-
-seven_hex_16_4 seven_dec1(
-    .i_hex(0),
-    .o_seven_3(HEX3),
-    .o_seven_2(HEX2),
-    .o_seven_1(HEX1),
-    .o_seven_0(HEX0)
+seven_hex_16_2 seven_dec2(
+    .i_hex(pixel_valid_cnt),
+    .o_seven_1(HEX7),
+    .o_seven_0(HEX6)
 );
+
+// seven_hex_16_4 seven_dec1(
+//     .i_hex(numaddr),
+//     .o_seven_3(HEX3),
+//     .o_seven_2(HEX2),
+//     .o_seven_1(HEX1),
+//     .o_seven_0(HEX0)
+// );
+
+// seven_hex_16_1 seven_dec2(
+//     .i_hex(mouse_display),
+//     .o_seven(HEX3)
+// );
+// seven_hex_16_2 seven_dec3(
+//     .i_hex(mouse_y),
+//     .o_seven_1(HEX5),
+//     .o_seven_0(HEX4)
+// );
 
 // seven_hex_16_4 seven_dec_3(
 //     .i_hex(end_address),
@@ -329,9 +516,9 @@ seven_hex_16_4 seven_dec1(
 
 // comment those are use for display
 // assign HEX0 = '1;
-// assign HEX1 = '1;
-// assign HEX2 = '1;
-// assign HEX3 = '1;
+assign HEX1 = '1;
+assign HEX2 = '1;
+assign HEX3 = '1;
 // assign HEX4 = '1;
 // assign HEX5 = '1;
 // assign HEX6 = '1;
