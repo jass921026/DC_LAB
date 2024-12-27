@@ -10,9 +10,13 @@ module Magic_model
 
 localparam S_IDLE = 0;
 localparam S_INPUT = 1;
-localparam S_OUTPUT = 2;
+localparam S_CMP1 = 2;
+localparam S_CMP2 = 3;
+localparam S_CMP3 = 4;
+localparam S_CMP4 = 5;
+localparam S_OUTPUT = 6;
 
-logic [1:0] state, state_next;
+logic [2:0] state, state_next;
 logic [4:0] x, x_next;
 logic [4:0] y, y_next;
 logic [10:0] idx;
@@ -23,12 +27,13 @@ logic [9:0][15:0] sons_next ;
 logic [9:0][15:0] moms ;
 logic [9:0][15:0] moms_next ;
 
-logic [3:0]  p1w_idx1, p1w_idx2, p1w_idx3, p1w_idx4, p1w_idx5, p2w_idx1, p2w_idx2, p3w_idx;
-logic [15:0] p1w_son1, p1w_son2, p1w_son3, p1w_son4, p1w_son5, p2w_son1, p2w_son2, p3w_son;
-logic [15:0] p1w_mom1, p1w_mom2, p1w_mom3, p1w_mom4, p1w_mom5, p2w_mom1, p2w_mom2, p3w_mom;
+logic [3:0]  p1w_idx1, p1w_idx2, p1w_idx3, p1w_idx4, p1w_idx5, p2w_idx1, p2w_idx2, p3w_idx, p4w_idx;
+logic [3:0]  p1w_idx1_n, p1w_idx2_n, p1w_idx3_n, p1w_idx4_n, p1w_idx5_n, p2w_idx1_n, p2w_idx2_n, p3w_idx_n, p4w_idx_n;
+
 
 assign idx = y * 30 + x;
 assign digit_o_valid = (state == S_OUTPUT);
+assign digit_o = p4w_idx;
 
 always_comb begin
     state_next = state;
@@ -76,7 +81,7 @@ always_comb begin
                 x_next = 0;
                 if (y == 5'd29) begin
                     y_next = 0;
-                    state_next = S_OUTPUT;
+                    state_next = S_CMP1;
                 end
                 else begin
                     y_next = y + 1;
@@ -85,6 +90,22 @@ always_comb begin
             else begin
                 x_next = x + 1;
             end
+        end
+
+        S_CMP1: begin
+            state_next = S_CMP2;
+        end
+
+        S_CMP2: begin
+            state_next = S_CMP3;
+        end
+
+        S_CMP3: begin
+            state_next = S_CMP4;
+        end
+
+        S_CMP4: begin
+            state_next = S_OUTPUT;
         end
 
         S_OUTPUT: begin
@@ -103,6 +124,15 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
                 sons[i] = 0;
                 moms[i] = 0;
             end
+            p1w_idx1 = 0;
+            p1w_idx2 = 0;
+            p1w_idx3 = 0;
+            p1w_idx4 = 0;
+            p1w_idx5 = 0;
+            p2w_idx1 = 0;
+            p2w_idx2 = 0;
+            p3w_idx = 0;
+            p4w_idx = 0;
     end
     else begin
         state <= state_next;
@@ -112,6 +142,15 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
             sons[i] = sons_next[i];
             moms[i] = moms_next[i];
         end
+        p1w_idx1 = p1w_idx1_n;
+        p1w_idx2 = p1w_idx2_n;
+        p1w_idx3 = p1w_idx3_n;
+        p1w_idx4 = p1w_idx4_n;
+        p1w_idx5 = p1w_idx5_n;
+        p2w_idx1 = p2w_idx1_n;
+        p2w_idx2 = p2w_idx2_n;
+        p3w_idx = p3w_idx_n;
+        p4w_idx = p4w_idx_n;
     end
 end
 
@@ -171,9 +210,7 @@ Magic_compare p1_1 (
     .son_b(sons[1]),
     .mom_a(moms[0]),
     .mom_b(moms[1]),
-    .idx_won(p1w_idx1),
-    .son_won(p1w_son1),
-    .mom_won(p1w_mom1)
+    .idx_won(p1w_idx1_n)
 );
 
 Magic_compare p1_2 (
@@ -183,9 +220,7 @@ Magic_compare p1_2 (
     .son_b(sons[3]),
     .mom_a(moms[2]),
     .mom_b(moms[3]),
-    .idx_won(p1w_idx2),
-    .son_won(p1w_son2),
-    .mom_won(p1w_mom2)
+    .idx_won(p1w_idx2_n)
 );
 
 Magic_compare p1_3 (
@@ -195,9 +230,7 @@ Magic_compare p1_3 (
     .son_b(sons[5]),
     .mom_a(moms[4]),
     .mom_b(moms[5]),
-    .idx_won(p1w_idx3),
-    .son_won(p1w_son3),
-    .mom_won(p1w_mom3)
+    .idx_won(p1w_idx3_n)
 );
 
 Magic_compare p1_4 (
@@ -207,9 +240,7 @@ Magic_compare p1_4 (
     .son_b(sons[7]),
     .mom_a(moms[6]),
     .mom_b(moms[7]),
-    .idx_won(p1w_idx4),
-    .son_won(p1w_son4),
-    .mom_won(p1w_mom4)
+    .idx_won(p1w_idx4_n)
 );
 
 Magic_compare p1_5 (
@@ -219,55 +250,47 @@ Magic_compare p1_5 (
     .son_b(sons[9]),
     .mom_a(moms[8]),
     .mom_b(moms[9]),
-    .idx_won(p1w_idx5),
-    .son_won(p1w_son5),
-    .mom_won(p1w_mom5)
+    .idx_won(p1w_idx5_n)
 );
 
 Magic_compare p2_1 (
     .idx_a(p1w_idx1),
     .idx_b(p1w_idx2),
-    .son_a(p1w_son1),
-    .son_b(p1w_son2),
-    .mom_a(p1w_mom1),
-    .mom_b(p1w_mom2),
-    .idx_won(p2w_idx1),
-    .son_won(p2w_son1),
-    .mom_won(p2w_mom1)
+    .son_a(sons[p1w_idx1]),
+    .son_b(sons[p1w_idx2]),
+    .mom_a(moms[p1w_idx1]),
+    .mom_b(moms[p1w_idx2]),
+    .idx_won(p2w_idx1_n)
 );
 
 Magic_compare p2_2 (
     .idx_a(p1w_idx3),
     .idx_b(p1w_idx4),
-    .son_a(p1w_son3),
-    .son_b(p1w_son4),
-    .mom_a(p1w_mom3),
-    .mom_b(p1w_mom4),
-    .idx_won(p2w_idx2),
-    .son_won(p2w_son2),
-    .mom_won(p2w_mom2)
+    .son_a(sons[p1w_idx3]),
+    .son_b(sons[p1w_idx4]),
+    .mom_a(moms[p1w_idx3]),
+    .mom_b(moms[p1w_idx4]),
+    .idx_won(p2w_idx2_n)
 );
 
 Magic_compare p3 (
     .idx_a(p2w_idx1),
     .idx_b(p2w_idx2),
-    .son_a(p2w_son1),
-    .son_b(p2w_son2),
-    .mom_a(p2w_mom1),
-    .mom_b(p2w_mom2),
-    .idx_won(p3w_idx),
-    .son_won(p3w_son),
-    .mom_won(p3w_mom)
+    .son_a(sons[p2w_idx1]),
+    .son_b(sons[p2w_idx2]),
+    .mom_a(moms[p2w_idx1]),
+    .mom_b(moms[p2w_idx2]),
+    .idx_won(p3w_idx_n)
 );
 
 Magic_compare p4 (
     .idx_a(p1w_idx5),
     .idx_b(p3w_idx),
-    .son_a(p1w_son5),
-    .son_b(p3w_son),
-    .mom_a(p1w_mom5),
-    .mom_b(p3w_mom),
-    .idx_won(digit_o)
+    .son_a(sons[p1w_idx5]),
+    .son_b(sons[p3w_idx]),
+    .mom_a(moms[p1w_idx5]),
+    .mom_b(moms[p3w_idx]),
+    .idx_won(p4w_idx_n)
 );
 
 endmodule
