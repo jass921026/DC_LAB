@@ -15,11 +15,13 @@ localparam S_CMP2 = 3;
 localparam S_CMP3 = 4;
 localparam S_CMP4 = 5;
 localparam S_OUTPUT = 6;
+localparam S_COOLDOWN = 7;
 
 logic [2:0] state, state_next;
 logic [4:0] x, x_next;
 logic [4:0] y, y_next;
 logic [10:0] idx;
+logic [30:0] wait_counter, wait_counter_next;
 
 logic [9:0][29:0][29:0] masks;
 logic [9:0][15:0] sons ;
@@ -39,6 +41,7 @@ always_comb begin
     state_next = state;
     x_next = x;
     y_next = y;
+    wait_counter_next = wait_counter;
 
 
     for (int i = 0; i < 10; i = i + 1) begin
@@ -52,6 +55,7 @@ always_comb begin
                 state_next = S_INPUT;
                 x_next = 0;
                 y_next = 0;
+                wait_counter_next = 0;
                 
                 for (int i = 0; i < 10; i = i + 1) begin
                     sons_next[i] = 0;
@@ -109,7 +113,16 @@ always_comb begin
         end
 
         S_OUTPUT: begin
-            state_next = S_IDLE;
+            state_next = S_COOLDOWN;
+        end
+
+        S_COOLDOWN: begin
+            if (wait_counter == 30'd50000000) begin
+                state_next = S_IDLE;
+            end
+            else begin
+                wait_counter_next = wait_counter + 1;
+            end
         end
 
     endcase
@@ -120,6 +133,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
             state <= S_IDLE;
             x <= 0;
             y <= 0;
+            wait_counter <= 0;
             for (int i = 0; i < 10; i = i + 1) begin
                 sons[i] = 0;
                 moms[i] = 0;
@@ -138,6 +152,7 @@ always_ff @(posedge i_clk or negedge i_rst_n) begin
         state <= state_next;
         x <= x_next;
         y <= y_next;
+        wait_counter <= wait_counter_next;
         for (int i = 0; i < 10; i = i + 1) begin
             sons[i] = sons_next[i];
             moms[i] = moms_next[i];
