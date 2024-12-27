@@ -255,6 +255,8 @@ logic[899:0] handwrite;
 
 
 add_hand_write handwrite0(
+    .i_clk(clk25M),
+    .i_rst_n(reset),
     .i_x(vgax),
     .i_y(vgay),
     .i_blue(blue_scroller),
